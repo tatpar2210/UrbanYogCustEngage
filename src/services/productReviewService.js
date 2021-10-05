@@ -1,5 +1,6 @@
 const productReviewModel = require("../models/productReviewModel");
 const Sequelize = require("sequelize")
+const {sequelize, queryInterface} = require("../database/connection")
 
 module.exports = {
     getAllReviewsData:function(req_info){
@@ -73,5 +74,10 @@ module.exports = {
                 attributes: ["review_id", "pid", "cust_name", "cust_email", "review_title", "review", "star_count", "cust_location", "created_at"]
             }
         )
+    },
+
+    storeReview: function(data){
+        console.log(data)
+        return queryInterface.bulkInsert("product_review", [data])
     }
 }

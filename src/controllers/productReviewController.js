@@ -43,7 +43,7 @@ module.exports = {
                 const fromTable = await productReviewService.getReviewsByQuery(req_info).then((result)=>{
                     if (result.length === 0){
                         res.status(404).json({
-                            statusCose: 404,
+                            statusCode: 404,
                             msg: "No data found"
                         })
                     }else{
@@ -59,6 +59,51 @@ module.exports = {
     },
     
     postReviews: async function(req, res){
+        const data = req.body
         
+        if (Object.keys(data).length === 0){
+            res.status(404).json({
+                statusCode: 404,
+                status: 'error',
+                message: "No data provided"
+            })
+        }else{
+            const schema = Joi.object().keys({
+                pId: Joi.number().required().error(new Error('Provide pId(number)')),
+                review: Joi.string().error(new Error('Provide review(string)')),
+                review_title: Joi.string().required().error(new Error('Provide reviewTitle(string)')),
+                star_count: Joi.number().error(new Error('Provide starCount(number)')),
+                cust_name: Joi.string().required().error(new Error('Provide custName(string)')),
+                cust_email: Joi.string().email().lowercase().error(new Error('Provide custEmail(string)')),
+                cust_location: Joi.string().error(new Error('Provide custlocation(string)')),
+                shopify_cust_id: null,
+                status: Joi.number().error(new Error('Provide status(number)')),
+                admin_reply: Joi.string().error(new Error("Provide admin_reply(string)"))
+            })
+
+            const schemaResult = schema.validate(data)
+            if (schemaResult.error){
+                // if validation fails
+                console.log(schemaResult.error.message)
+                res.status(422).json({
+                    statusCode: 422,
+                    status: 'error',
+                    message: 'Invalid request data',
+                    data: schemaResult.error.message
+                  });
+            }else{
+                await productReviewService.storeReview(data).then((result)=>{
+                    console.log(result)
+                    res.status(200).json({
+                        statusCode: 200,
+                        success: true,
+                        result: result
+                    })
+                }).catch((err)=>{
+                    res.status(400).json(err)
+                    console.log(err)
+                })
+            }
+        }
     }
 }
