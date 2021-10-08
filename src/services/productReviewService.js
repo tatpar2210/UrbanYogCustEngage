@@ -20,7 +20,7 @@ module.exports = {
                         [Sequelize.Op.not]: ""
                     },
                 },
-                attributes: ["review_id", "pid", "cust_name", "cust_email", "review_title", "review", "star_count", "cust_location", "created_at"]
+                attributes: ["review_id", "pid", "cust_name", "cust_email", "review_title", "review", "star_count", "cust_location", "status", "admin_reply",  "created_at"]
             }
         )
     },
