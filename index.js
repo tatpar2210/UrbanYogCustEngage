@@ -1,21 +1,48 @@
 const express = require("express")
 const app = express()
 
-const ProductReview = require("./src/controllers/productReviewController")
+const ProductReviewController = require("./src/controllers/productReviewController")
+const ProductReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
+const ProductMasterController = require("./src/controllers/productMasterController")
+const userMasterController = require("./src/controllers/userMasterController")
+
+
 app.use(express.json())
 
-app.use(function(req, res, next){
-    res.type('json')
-    res.header("Access-Control-Allow-Origin", ["*"]); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    res.set('Content-Type', 'application/json');
-    next()
-})
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers",
+      "Access-Control-Allow-Origin, Origin, X-Requeted-With, Content-Type, Accept, Authorization, RBR, responseType, observe, Content-Disposition");
+    if (req.headers.origin) {
+      res.header('Access-Control-Allow-Origin', req.headers.origin);
+    }
+    if (req.method === 'OPTIONS') {
+      res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+      return res.status(200).json({});
+    }
+    next();
+  });
 
-app.get('/getProductReview/:id', ProductReview.getAllReviews);
-app.post("/postProductReview/:id", ProductReview.postReviews)
+// app.use(function(req, res, next){
+//     res.type('json')
+//     res.header("Access-Control-Allow-Origin", ["*"]); // update to match the domain you will make the request from
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//     res.set('Content-Type', 'application/json');
+//     next()
+// })
+
+
+
+app.post("/getProductReview/:id", ProductReviewController.getAllReviews);
+app.post("/postProductReview/:id", ProductReviewController.postReviews)
+app.post("/getProductReviewImg/:id", ProductReview_fileUploadController.getProductReview_fileUpload)
+app.post("/getPid/:id", ProductMasterController.getPid)
+app.post("/getProducts", ProductMasterController.getAllProducts)
+app.post("/getProducts/:id", ProductMasterController.findByPid)
+app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
+app.post("/getUserMaster/:id", userMasterController.findById)
 
 
 app.listen(3000)
