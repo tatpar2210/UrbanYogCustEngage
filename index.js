@@ -39,8 +39,8 @@ app.post("/getProductReview/:id", ProductReviewController.getAllReviews);
 app.post("/postProductReview/:id", ProductReviewController.postReviews)
 app.post("/getProductReviewImg/:id", ProductReview_fileUploadController.getProductReview_fileUpload)
 app.post("/getPid/:id", ProductMasterController.getPid)
-app.post("/getProducts", ProductMasterController.getAllProducts)
-app.post("/getProducts/:id", ProductMasterController.findByPid)
+app.post("/getProductsMaster/all", ProductMasterController.getAllProducts)
+app.post("/getProductsMaster/:id", ProductMasterController.findByPid)
 app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
 app.post("/getUserMaster/:id", userMasterController.findById)
 

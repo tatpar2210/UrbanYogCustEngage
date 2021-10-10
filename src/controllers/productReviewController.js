@@ -14,9 +14,9 @@ module.exports = {
         if (Object.keys(req_info.query).length === 0){
             // if queries are not given
             const fromTable = await productReviewService.getAllReviewsData(req_info).then((result)=>{
-                res.status(200).send(result)
+                res.status(200).json({result})
             }).catch((err)=>{
-                res.status(400).send(err)
+                res.status(400).json({err})
             })
             
             console.log("\nMsg from productReviewController => getAllReviews: Data sent")
@@ -47,10 +47,10 @@ module.exports = {
                             msg: "No data found"
                         })
                     }else{
-                        res.status(200).send(result)
+                        res.status(200).json({result})
                     }
                 }).catch((err)=>{
-                    res.status(400).send(err)
+                    res.status(400).json({err})
                 })
     
                 console.log("\nMsg from productReviewController => getAllReviews => else : Data sent")
