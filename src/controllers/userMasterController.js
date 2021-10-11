@@ -69,5 +69,12 @@ module.exports = {
                 res.status(400).json({err})
             })
         }
+    },
+
+    addUser: async function(req, res){
+        const bodyData = req.body
+
+        
+
     }
 }

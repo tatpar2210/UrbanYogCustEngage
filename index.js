@@ -45,5 +45,6 @@ app.post("/getProductsMaster/:id", ProductMasterController.findByPid)
 app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
 app.post("/getUserMaster/id/:id", userMasterController.findById)
 app.post("/getUserMaster/email/:email", userMasterController.findByEmail)
+app.post("/addUser", userMasterController.addUser)
 
 app.listen(3000)
