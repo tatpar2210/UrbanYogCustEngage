@@ -77,5 +77,50 @@ module.exports = {
                 res.status(400).json({result})
             })
         }
+    },
+
+    createProduct: async function(req, res){
+        productData = req.body
+        
+        if (Object.keys(productData).length === 0){
+            res.status(404).json({
+                statusCode: 404,
+                status: 'error',
+                message: "No data provided"
+            })
+        }else{
+            const productMasterSchema = Joi.object().keys({
+                product_id: Joi.number().required().error(new Error("Provide product_idshopify_product_id(number(13))")),
+                product_name: Joi.string().required().error(new Error("Provide Product's Name(string)")),
+                product_handle: Joi.string().required().error(new Error("Provide Product's Handle(string)")),
+                product_category: Joi.string().required().error(new Error("Provide Product's Category(string)")),
+                product_img_url: Joi.string().required().error(new Error("Provide Product's Image URL(string)")),
+                store_name: Joi.string().required().error(new Error("Provide Store Name(string)")),
+            })
+    
+            const productMasterSchemaResult = productMasterSchema.validate(productData)
+            if (productMasterSchemaResult.error){
+                console.log(productMasterSchemaResult.error.message)
+                res.status(422).json({
+                    statusCode: 422,
+                    status: 'error',
+                    message: 'Invalid request data',
+                    data: productMasterSchemaResult.error.message
+                  });
+            }else{
+                await productMasterService.addProduct(productData).then((result)=>{
+                    console.log(result)
+                    res.status(200).json({
+                        statusCode: 200,
+                        success: true,
+                        result: result
+                    })
+                }).catch((err)=>{
+                    res.status(400).json(err)
+                    console.log(err)
+                })
+            }
+        }
+
     }
 }

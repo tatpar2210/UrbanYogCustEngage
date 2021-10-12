@@ -12,6 +12,13 @@ module.exports = {
             })
         }else{
             await productReview_fileUploadService.getFiles(review_id).then((result) =>{
+                if (!result){
+                    res.status(200).json({
+                        statuscode: 500,
+                        success: false,
+                        message: "No img_URLs found"
+                    })
+                }
                 res.status(200).json(result)
             }).catch((err)=>{
                 res.status(400).json(err)

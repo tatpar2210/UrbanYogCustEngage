@@ -42,6 +42,7 @@ app.post("/getProductReviewImg/:id", ProductReview_fileUploadController.getProdu
 app.post("/getPid/:id", ProductMasterController.getPid)
 app.post("/getProductsMaster/all", ProductMasterController.getAllProducts)
 app.post("/getProductsMaster/:id", ProductMasterController.findByPid)
+app.post("/addProduct", ProductMasterController.createProduct)
 app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
 app.post("/getUserMaster/id/:id", userMasterController.findById)
 app.post("/getUserMaster/email/:email", userMasterController.findByEmail)

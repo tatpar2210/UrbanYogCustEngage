@@ -70,15 +70,15 @@ module.exports = {
         }else{
             const schema = Joi.object().keys({
                 pId: Joi.number().required().error(new Error('Provide pId(number)')),
-                review: Joi.string().error(new Error('Provide review(string)')),
-                review_title: Joi.string().required().error(new Error('Provide reviewTitle(string)')),
+                review: Joi.string().optional().allow("").error(new Error('Provide review(string)')),
+                review_title: Joi.string().optional().allow("").error(new Error('Provide reviewTitle(string)')),
                 star_count: Joi.number().error(new Error('Provide starCount(number)')),
                 cust_name: Joi.string().required().error(new Error('Provide custName(string)')),
-                cust_email: Joi.string().email().lowercase().error(new Error('Provide custEmail(string)')),
-                cust_location: Joi.string().error(new Error('Provide custlocation(string)')),
+                cust_email: Joi.string().email().optional().allow("").lowercase().error(new Error('Provide custEmail(string)')),
+                cust_location: Joi.string().optional().allow("").error(new Error('Provide custlocation(string)')),
                 shopify_cust_id: null,
                 status: Joi.number().error(new Error('Provide status(number)')),
-                admin_reply: Joi.string().error(new Error("Provide admin_reply(string)"))
+                admin_reply: Joi.string().optional().allow("").error(new Error("Provide admin_reply(string)"))
             })
 
             const schemaResult = schema.validate(data)

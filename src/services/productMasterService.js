@@ -1,4 +1,6 @@
 const productMasterModle = require("../models/productMasterModle")
+const Sequelize = require("sequelize")
+const {sequelize, queryInterface} = require("../database/connection")
 
 
 module.exports = {
@@ -24,5 +26,12 @@ module.exports = {
                 pid: p_id
             }
         })
+    },
+
+    addProduct: function(data){
+        const ProductMaster = productMasterModle.productMaster()
+
+        return queryInterface.bulkInsert("product_master", [data])
+        
     }
 }
