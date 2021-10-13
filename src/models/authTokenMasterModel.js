@@ -2,8 +2,8 @@ const {Sequelize, DataTypes} = require("sequelize")
 const {sequelize, queryInterface} = require("../database/connection")
 
 module.exports = {
-    tokenMaster: function(){
-        const token_master = sequelize.define("token_master", {
+    authtoken_master: function(){
+        const authToken_master = sequelize.define("authToken_master", {
             user_id: {
                 allowNull: false,
                 type: DataTypes.INTEGER
@@ -21,18 +21,18 @@ module.exports = {
             }
         }, {
             freezeTableName: true,
-            timestamps: true
+            timestamps: false
         }
         )
-        token_master.associate = function (models) {
+        authToken_master.associate = function (models) {
             // associations can be defined here
         };
-        return token_master
+        return authToken_master
     }
 
 }
 
-//queryInterface.createTable("token_master", {
+//queryInterface.createTable("authToken_master", {
 //     user_id: {
 //         allowNull: false,
 //         type: DataTypes.INTEGER

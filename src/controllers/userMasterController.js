@@ -108,41 +108,10 @@ module.exports = {
             }else{
                 await userMasterService.addUser(userData).then( async (result)=>{
                     console.log(result)
-                    
-                    //generating token on adding user suucefully
-                    const token_expire = "240 days"
-                    const token = jwt.sign({first_name: userData.first_name, last_name: userData.last_name, email: userData.email}, "thisistatparwhomadethisbackend", {expiresIn: token_expire})
-                    console.log(token, "\n", token_expire)
-                    
-                    var storeData = {
-                        user_id: null,
-                        auth_token: "",
-                        expires_in: "" 
-                    }
-                    //find by email to store token 
-                    console.log(token)
-                    await userMasterService.findOneByEmail(userData.email).then((success)=>{
-                            storeData.user_id = success.user_id,
-                            storeData.auth_token = token,
-                            storeData.expires_in = token_expire
-                        }).catch((faliure)=>{
-                                console.log(faliure)
-                            })
-                            
-                    //sending token to database
-                    await authMasterService.storeAuth(storeData).then((result)=>{
-                        console.log(result)
-                    }).catch((err)=>{
-                        console.log(err)
-                    })
-                    res.cookie("authenticationTokenCookie", JSON.stringify(token), {
-                        //secure: true,
-                        httpOnly: true,
-                    })
                     res.status(200).json({
                         statusCode: 200,
                         success: true,
-                        result: [result, storeData]
+                        result: result
                     })
                     
                 }).catch((err)=>{

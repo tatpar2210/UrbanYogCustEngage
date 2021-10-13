@@ -1,5 +1,5 @@
 const userMasterModel = require("../models/userMasterModel")
-const tokenMasterModel = require("../models/tokenMasterModel")
+const authTokenMasterModel = require("../models/authTokenMasterModel")
 const Sequelize = require("sequelize")
 const {sequelize, queryInterface} = require("../database/connection")
 
@@ -42,15 +42,15 @@ module.exports = {
         return msg
     },
 
-    authToken: async function(auth_token){
-        const tokenMaster = tokenMasterModel.tokenMaster()
+    authToken: async function (auth_token){
+        const authToken_master = authTokenMasterModel.authtoken_master()
         var msg = {
             statuscode: Number,
             token_authorization : Boolean,
             message : String
         }
 
-        tokenMaster.findOne({where:{
+        await authToken_master.findOne({where:{
             auth_token: auth_token
         }}).then((result)=>{
             if (!result){
@@ -69,9 +69,9 @@ module.exports = {
     },
 
     storeAuth: async function(storeData){
-        const tokenMaster = tokenMasterModel.tokenMaster()
+        const authToken_master = authTokenMasterModel.authtoken_master()
 
 
-        return queryInterface.bulkInsert("token_master", [storeData])
+        return queryInterface.bulkInsert("authToken_master", [storeData])
     }
 }
