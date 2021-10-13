@@ -1,5 +1,7 @@
 const userMasterModel = require("../models/userMasterModel")
-
+const tokenMasterModel = require("../models/tokenMasterModel")
+const Sequelize = require("sequelize")
+const {sequelize, queryInterface} = require("../database/connection")
 
 module.exports = {
     authLogic: async function(email, password){
@@ -38,5 +40,38 @@ module.exports = {
             console.log("Error: \n", err)
         })
         return msg
+    },
+
+    authToken: async function(auth_token){
+        const tokenMaster = tokenMasterModel.tokenMaster()
+        var msg = {
+            statuscode: Number,
+            token_authorization : Boolean,
+            message : String
+        }
+
+        tokenMaster.findOne({where:{
+            auth_token: auth_token
+        }}).then((result)=>{
+            if (!result){
+                msg.statuscode = 400
+                msg.token_authorization = false
+                msg.message = "No token found"
+            }else{
+                msg.statuscode = 200
+                msg.token_authorization = true
+                msg.message = "token found"
+            }
+        }).catch((err)=>{
+            console.log("Error: \n", err)
+        })
+        return msg
+    },
+
+    storeAuth: async function(storeData){
+        const tokenMaster = tokenMasterModel.tokenMaster()
+
+
+        return queryInterface.bulkInsert("token_master", [storeData])
     }
 }

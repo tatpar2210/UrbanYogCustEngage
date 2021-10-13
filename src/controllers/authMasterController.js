@@ -5,6 +5,7 @@ module.exports = {
         const req_cred = req.body
         const email = req_cred.email
         const pswd = req_cred.password
+        console.log(pswd)
 
         //validation is already done by angular login component
 
@@ -14,5 +15,13 @@ module.exports = {
 
         res.status(200).json({auth})
 
+    },
+
+    authorizeToken: async function(req, res){
+        const auth_token = req.body.cookie
+        const auth_token_func = await authMasterService.authToken()
+        console.log(auth_token)
+
+        res.status(200).json({auth_token_result})
     }
 }

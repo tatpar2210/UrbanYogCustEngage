@@ -1,3 +1,4 @@
+const e = require("express")
 const Joi = require("joi")
 const productMasterService = require("../services/productMasterService")
 
@@ -61,7 +62,7 @@ module.exports = {
                 message: "Please provide a valid p_id( number )"
             })
         }else{
-            await productMasterService.findOne(p_id).then((result)=>{
+            await productMasterService.findOneByPID(p_id).then((result)=>{
                 if (!result){
                     res.status(200).json({
                         statuscode: 200,
@@ -121,6 +122,54 @@ module.exports = {
                 })
             }
         }
+    },
 
+    findByshopifyProdId: async function(req, res){
+        const shopifyID = req.params.id
+
+        if (shopifyID.length === 0){
+            res.status(400).json({
+                statuscode: 400,
+                succeed: false,
+                message: "Please provide a valid shopify_ID( number )"
+            })
+        }else{
+            await productMasterService.findOneByShopifyID(shopifyID).then((result)=>{
+                if (!result){
+                    res.status(200).json({
+                        statuscode: 200,
+                        success: true,
+                        message: "No data found"
+                    })
+                }else{
+                    console.log(result)
+                    res.status(200).json({result})
+                }
+            }).catch((err)=>{
+                console.log(err)
+                res.status(400).json({result})
+            })
+        }
+    },
+
+    fetchFromShopify: async function(req, res){
+        const productArr = req.body
+
+        const result = await productMasterService.checkForMissingData(productArr)
+        if (result.length === 0){
+            res.status(200).json({
+                statusCode: 200,
+                missingData: false,
+                message: "No missing data found",
+                result: result
+            })
+        }else{
+            res.status(200).json({
+                statusCode: 200,
+                missingData: true,
+                message: "missing data found",
+                result: result
+            })
+        }
     }
 }

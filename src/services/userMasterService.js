@@ -1,5 +1,7 @@
 const userMasterModel = require("../models/userMasterModel")
-
+const Sequelize = require("sequelize")
+const {sequelize, queryInterface} = require("../database/connection")
+const jwt = require("jsonwebtoken")
 
 module.exports = {
     findAll: function(){
@@ -7,7 +9,7 @@ module.exports = {
 
         return userMaster.findAll()
     },
-
+    
     findOneById: function(user_id){
         const userMaster = userMasterModel.userMaster()
 
@@ -26,5 +28,9 @@ module.exports = {
                 email: email
             }
         })
+    },
+
+    addUser: async function(data){
+        return queryInterface.bulkInsert("user_master", [data])
     }
 }
