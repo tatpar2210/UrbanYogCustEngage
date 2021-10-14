@@ -1,5 +1,6 @@
 const express = require("express")
 const app = express()
+require('dotenv').config()
 const cookieParser = require("cookie-parser")
 
 const ProductReviewController = require("./src/controllers/productReviewController")
@@ -52,4 +53,8 @@ app.post("/getUserMaster/email/:email", userMasterController.findByEmail)
 app.post("/addUser", userMasterController.addUser)
 app.post("/fetch-from-shopify/products", ProductMasterController.fetchFromShopify)
 
-app.listen(3000)
+const port = process.env.PORT
+const host = process.env.HOST
+app.listen(port, ()=>{
+    console.log(`Server is listening on ${host}:${port}`)
+})
