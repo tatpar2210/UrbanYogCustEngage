@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 require('dotenv').config()
 const cookieParser = require("cookie-parser")
+const path = require("path")
 
 const ProductReviewController = require("./src/controllers/productReviewController")
 const ProductReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
@@ -12,6 +13,11 @@ const authMasterController = require("./src/controllers/authMasterController")
 
 app.use(express.json())
 app.use(cookieParser())
+
+//runnung angular
+const path_to_static = path.join(__dirname, "dist/cust-engage-app")
+app.use(express.static(path_to_static))
+
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
