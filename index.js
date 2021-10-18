@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 //runnung angular
-const path_to_static = path.join(__dirname, "dist/cust-engage-app")
+const path_to_static = path.join(__dirname, "dist/custo-engage-app")
 app.use(express.static(path_to_static))
 
 
