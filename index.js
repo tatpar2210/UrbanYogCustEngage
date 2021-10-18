@@ -3,12 +3,14 @@ const app = express()
 require('dotenv').config()
 const cookieParser = require("cookie-parser")
 const path = require("path")
+const multer = require("multer")
 
 const ProductReviewController = require("./src/controllers/productReviewController")
 const ProductReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
 const ProductMasterController = require("./src/controllers/productMasterController")
 const userMasterController = require("./src/controllers/userMasterController")
 const authMasterController = require("./src/controllers/authMasterController")
+const fileUploadController = require("./src/controllers/fileUploadController")
 
 
 app.use(express.json())
@@ -33,22 +35,13 @@ app.use((req, res, next) => {
     next();
   });
 
-// app.use(function(req, res, next){
-//     res.type('json')
-//     res.header("Access-Control-Allow-Origin", ["*"]); // update to match the domain you will make the request from
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     res.set('Content-Type', 'application/json');
-//     next()
-// })
-
 
 app.post("/auth", authMasterController.authorizeCredentials)
 app.post("/auth-token", authMasterController.authorizeToken)
 app.post("/getProductReview/:id", ProductReviewController.getAllReviews);
 app.post("/postProductReview/:id", ProductReviewController.postReviews)
 app.post("/getProductReviewImg/:id", ProductReview_fileUploadController.getProductReview_fileUpload)
+app.post("/postProductReviewImg/:id", ProductReview_fileUploadController.postProductReview_fileUpload)
 app.post("/getPid/:id", ProductMasterController.getPid)
 app.post("/getProductsMaster/all", ProductMasterController.getAllProducts)
 app.post("/getProductsMaster/:id", ProductMasterController.findByPid)
@@ -58,6 +51,31 @@ app.post("/getUserMaster/id/:id", userMasterController.findById)
 app.post("/getUserMaster/email/:email", userMasterController.findByEmail)
 app.post("/addUser", userMasterController.addUser)
 app.post("/fetch-from-shopify/products", ProductMasterController.fetchFromShopify)
+
+
+//File uploads
+const upload = multer({
+    dest: "src/assets/File_Uploads",
+    limits: {
+        fieldSize: 1000000
+    },
+
+    fileFilter(req, file, cb){
+
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)){
+            return cb(new Error("Provide jpg, jpeg, png files only"))
+        }
+        
+        cb(undefined, true)
+    }
+})
+app.post("/uploads", upload.single("profile"), (req, res) => {
+    res.send()
+})
+
+
+
+
 
 const port = process.env.PORT
 const host = process.env.HOST

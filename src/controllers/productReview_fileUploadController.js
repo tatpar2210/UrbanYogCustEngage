@@ -25,5 +25,10 @@ module.exports = {
             })
         }
 
+    },
+
+    postProductReview_fileUpload: function(req, res){
+        const reqData = req.body
     }
+
 }
