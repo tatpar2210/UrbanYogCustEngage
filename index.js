@@ -16,8 +16,8 @@ const fileUploadController = require("./src/controllers/fileUploadController")
 app.use(express.json())
 app.use(cookieParser())
 
-//runnung angular
-const path_to_static = path.join(__dirname, "dist/custo-engage-app")
+//running angular
+const path_to_static = path.join(__dirname, "dist/custo-engage-frontend")
 app.use(express.static(path_to_static))
 
 
@@ -54,25 +54,25 @@ app.post("/fetch-from-shopify/products", ProductMasterController.fetchFromShopif
 
 
 //File uploads
-const upload = multer({
-    dest: "src/assets/File_Uploads",
-    limits: {
-        fieldSize: 1000000
-    },
-
-    fileFilter(req, file, cb){
-
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)){
-            return cb(new Error("Provide jpg, jpeg, png files only"))
-        }
-        
-        cb(undefined, true)
-    }
-})
-app.post("/uploads", upload.single("profile"), (req, res) => {
-    res.send()
-})
-
+//const upload = multer({
+//    dest: "src/assets/File_Uploads",
+//    limits: {
+//        fieldSize: 1000000
+//    },
+//
+//    fileFilter(req, file, cb){
+//
+//        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)){
+//            return cb(new Error("Provide jpg, jpeg, png files only"))
+//        }
+//        
+//        cb(undefined, true)
+//    }
+//})
+//app.post("/uploads", upload.single("profile"), (req, res) => {
+//    res.send()
+//})
+//
 
 
 
