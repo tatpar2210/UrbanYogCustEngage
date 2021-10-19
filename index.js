@@ -77,7 +77,7 @@ app.post("/fetch-from-shopify/products", ProductMasterController.fetchFromShopif
 
 
 
-const port = process.env.PORT
+const port = process.env.PORT || 3000
 const host = process.env.HOST
 app.listen(port, ()=>{
     console.log(`Server is listening on ${host}:${port}`)
