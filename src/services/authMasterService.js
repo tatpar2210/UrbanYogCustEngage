@@ -9,7 +9,8 @@ module.exports = {
         var msg = {
             statuscode: Number,
             user_confirmation : Boolean,
-            message : String
+            message : String,
+            err_message: String
         }
         
         const userMasterDatabase = userMaster.findOne({
@@ -38,6 +39,7 @@ module.exports = {
             }
         }).catch((err)=>{
             console.log("Error: \n", err)
+            msg.err_message = err
         })
         return msg
     },
@@ -64,6 +66,7 @@ module.exports = {
             }
         }).catch((err)=>{
             console.log("Error: \n", err)
+            msg.message = err
         })
         return msg
     },

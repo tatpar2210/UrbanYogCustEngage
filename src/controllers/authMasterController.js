@@ -39,16 +39,39 @@ module.exports = {
                     console.log(result)
                 }).catch((err)=>{
                     console.log(err)
+                    res.status(404).json({
+                        statusCode: 404,
+                        success: false,
+                        from: "storeAuth",
+                        result: err
+                    })
                 })
             }else{
                 //pass
             }
             
             console.log("\nMsg from authController: \n", result)
-            res.status(200).json({
-                statusCode: 200,
-                success: true,
-                result: [result, storeData]
+            if (!storeData){
+                res.status(404).json({
+                    statusCode: 404,
+                    success: false,
+                    message: "Database connection error",
+                    from: "authLogic",
+                    result: [result, storeData],
+                })
+            }else{
+                res.status(200).json({
+                    statusCode: 200,
+                    success: true,
+                    result: [result, storeData]
+                })
+            }
+        }).catch(err => {
+            res.status(404).json({
+                statusCode: 404,
+                success: flase,
+                from: "authLogic",
+                result: err
             })
         })
         

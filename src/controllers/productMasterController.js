@@ -27,7 +27,7 @@ module.exports = {
                 }
             }).catch((err)=>{
                 console.log(err)
-                res.status(400).json({result})
+                res.status(400).json({err})
             })
         }
 
@@ -48,7 +48,7 @@ module.exports = {
             }
         }).catch((err)=>{
             console.log(err)
-            res.status(400).json({result})
+            res.status(400).json({err})
         })
     },
 
@@ -75,7 +75,7 @@ module.exports = {
                 }
             }).catch((err)=>{
                 console.log(err)
-                res.status(400).json({result})
+                res.status(400).json({err})
             })
         }
     },
@@ -147,7 +147,7 @@ module.exports = {
                 }
             }).catch((err)=>{
                 console.log(err)
-                res.status(400).json({result})
+                res.status(400).json({err})
             })
         }
     },
