@@ -1,12 +1,11 @@
 const Joi = require("joi")
 const userMasterService = require("../services/userMasterService")
-const authMasterService = require("../services/authMasterService")
-const jwt = require("jsonwebtoken")
+const user_masterService = new userMasterService()
 
 
 module.exports = {
     findAllUserMaster: async function(req, res){
-       await userMasterService.findAll().then((result) => {
+       await user_masterService.findAll().then((result) => {
             if (!result){
                 res.status(200).json({
                     codestatus: 200,
@@ -31,7 +30,7 @@ module.exports = {
                 message: "Provide a valid user_id( number )"
             })
         }else{
-           await userMasterService.findOneById(user_id).then((result) => {
+           await user_masterService.findOneById(user_id).then((result) => {
                 if (!result){
                     res.status(200).json({
                         statuscode: 200,
@@ -59,7 +58,7 @@ module.exports = {
                 message: "Provide a valid user_id( number )"
             })
         }else{
-           await userMasterService.findOneByEmail(req_email).then((result) => {
+           await user_masterService.findOneByEmail(req_email).then((result) => {
                 if (!result){
                     res.status(200).json({
                         statuscode: 200,
@@ -106,7 +105,7 @@ module.exports = {
                     data: userMasterSchemaResult.error.message
                   });
             }else{
-                await userMasterService.addUser(userData).then( async (result)=>{
+                await user_masterService.addUser(userData).then( async (result)=>{
                     console.log(result)
                     res.status(200).json({
                         statusCode: 200,

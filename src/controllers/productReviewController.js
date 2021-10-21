@@ -1,7 +1,6 @@
-const Sequelize = require("sequelize")
 const Joi = require("joi")
-const productReviewModel = require("../models/productReviewModel")
 const productReviewService = require("../services/productReviewService")
+const product_reviewService = new productReviewService()
 
 module.exports = {
     getAllReviews: async function(req, res){
@@ -13,7 +12,7 @@ module.exports = {
 
         if (Object.keys(req_info.query).length === 0){
             // if queries are not given
-            const fromTable = await productReviewService.getAllReviewsData(req_info).then((result)=>{
+            const fromTable = await product_reviewService.getAllReviewsData(req_info).then((result)=>{
                 res.status(200).json({result})
             }).catch((err)=>{
                 res.status(400).json({err})
@@ -40,7 +39,7 @@ module.exports = {
                   });
             }else{
                 // if validation passes 
-                const fromTable = await productReviewService.getReviewsByQuery(req_info).then((result)=>{
+                const fromTable = await product_reviewService.getReviewsByQuery(req_info).then((result)=>{
                     if (result.length === 0){
                         res.status(404).json({
                             statusCode: 404,
@@ -92,7 +91,7 @@ module.exports = {
                     data: schemaResult.error.message
                   });
             }else{
-                await productReviewService.storeReview(data).then((result)=>{
+                await product_reviewService.storeReview(data).then((result)=>{
                     console.log(result)
                     res.status(200).json({
                         statusCode: 200,

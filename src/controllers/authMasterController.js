@@ -1,6 +1,8 @@
 const authMasterService = require("../services/authMasterService")
+const auth_masterService = new authMasterService() 
 const jwt = require("jsonwebtoken")
 const userMasterService = require("../services/userMasterService")
+const user_masterService = new userMasterService()
 
 
 module.exports = {
@@ -12,7 +14,7 @@ module.exports = {
 
         //validation is already done by angular login component
 
-        await authMasterService.authLogic(email, pswd).then( async (result)=>{
+        await auth_masterService.authLogic(email, pswd).then( async (result)=>{
             if (result.user_confirmation === true){
                 //generating token on adding user suucefully
                 const token_expire = "240 days"
@@ -26,7 +28,7 @@ module.exports = {
                 }
                 //find by email to store token 
                 console.log(token)
-                await userMasterService.findOneByEmail(req_cred.email).then((success)=>{
+                await user_masterService.findOneByEmail(req_cred.email).then((success)=>{
                         storeData.user_id = success.user_id,
                         storeData.auth_token = token,
                         storeData.expires_in = token_expire
@@ -35,7 +37,7 @@ module.exports = {
                         })
                         
                 //sending token to database
-                await authMasterService.storeAuth(storeData).then((result)=>{
+                await auth_masterService.storeAuth(storeData).then((result)=>{
                     console.log(result)
                 }).catch((err)=>{
                     console.log(err)
@@ -81,7 +83,7 @@ module.exports = {
 
     authorizeToken: async function(req, res){
         const auth_token = req.body.cookie
-        const auth_token_func = await authMasterService.authToken(auth_token).then((result)=>{
+        const auth_token_func = await auth_masterService.authToken(auth_token).then((result)=>{
             console.log(result)
     
             res.status(200).json({result})

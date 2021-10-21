@@ -1,11 +1,9 @@
-const userMasterModel = require("../models/userMasterModel")
-const authTokenMasterModel = require("../models/authTokenMasterModel")
-const Sequelize = require("sequelize")
-const {sequelize, queryInterface} = require("../database/connection")
+const userMasterModel = require("../models").user_master
+const authTokenMasterModel = require("../models").authToken_master
 
-module.exports = {
-    authLogic: async function(email, password){
-        const userMaster = userMasterModel.userMaster()
+class authService{
+    async authLogic(email, password){
+        //const userMaster = userMasterModel
         var msg = {
             statuscode: Number,
             user_confirmation : Boolean,
@@ -13,7 +11,7 @@ module.exports = {
             err_message: String
         }
         
-        const userMasterDatabase = userMaster.findOne({
+        const userMasterDatabase = userMasterModel.findOne({
             where: {
                 email: email
             }
@@ -42,17 +40,17 @@ module.exports = {
             msg.err_message = err
         })
         return msg
-    },
+    }
 
-    authToken: async function (auth_token){
-        const authToken_master = authTokenMasterModel.authtoken_master()
+    async authToken(){
+        //const authToken_master = authTokenMasterModel
         var msg = {
             statuscode: Number,
             token_authorization : Boolean,
             message : String
         }
 
-        await authToken_master.findOne({where:{
+        await authTokenMasterModel.findOne({where:{
             auth_token: auth_token
         }}).then((result)=>{
             if (!result){
@@ -69,12 +67,11 @@ module.exports = {
             msg.message = err
         })
         return msg
-    },
+    }
 
-    storeAuth: async function(storeData){
-        const authToken_master = authTokenMasterModel.authtoken_master()
-
-
-        return queryInterface.bulkInsert("authToken_master", [storeData])
+    storeAuth(data){
+        return authTokenMasterModel.create(data)
     }
 }
+
+module.exports = authService

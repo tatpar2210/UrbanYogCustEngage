@@ -1,12 +1,12 @@
-const Sequelize = require("sequelize")
-const {sequelize, queryInterface} = require("../database/connection")
-const qr_batchMasterModel = require("../models/qr_batchMasterModel").qr_batchMasterModel()
-const productMasterModel = require("../models/productMasterModle").productMaster()
-const productVarientMaster = require("../models/product-varientMasterModel").productVarientMaster()
+const qr_batchMasterModel = require("../models").qr_batch_master
+
+const productMasterModel = require("../models").product_master
+
+const productVarientMaster = require("../models").product_variant_master
 
 
-module.exports = {
-    getbatchMasterDetails: function(data){
+class qr_batch_masterService{
+    getbatchMasterDetails(data){
         return new Promise(function(){
             const where = {}
 
@@ -57,3 +57,5 @@ module.exports = {
         })
     }
 }
+
+module.exports = qr_batch_masterService

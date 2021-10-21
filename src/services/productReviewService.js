@@ -1,40 +1,39 @@
-const productReviewModel = require("../models/productReviewModel");
-const Sequelize = require("sequelize")
-const {sequelize, queryInterface} = require("../database/connection")
+const productReviewModel = require("../models").product_review
 
-module.exports = {
-    getAllReviewsData:function(req_info){
+const Op = require("sequelize").Op;
+
+
+class product_reviewService{
+    getAllReviewsData(req_info){
         const P_id = req_info.P_id
         const query = req_info.query
-        
-        const ProductReviewTable = productReviewModel.productReviewSchema()
 
-        return ProductReviewTable.findAll(
+        return productReviewModel.findAll(
             {
                 where: {
                     pid: P_id,
                     cust_email: {
-                        [Sequelize.Op.not]: ""
+                        [Op.not]: ""
                     },
                     cust_location: {
-                        [Sequelize.Op.not]: ""
+                        [Op.not]: ""
                     },
                 },
                 attributes: ["review_id", "pid", "cust_name", "cust_email", "review_title", "review", "star_count", "cust_location", "status", "admin_reply",  "created_at"]
             }
         )
-    },
+    }
 
-    getReviewsByQuery: function(req_info){
+    getReviewsByQuery(req_info){
         const P_id = req_info.P_id
         const query = req_info.query
         var demands_json = {
             pid: P_id,
             cust_email: {
-                [Sequelize.Op.not]: ""
+                [Op.not]: ""
             },
             cust_location: {
-                [Sequelize.Op.not]: ""
+                [Op.not]: ""
             },
         }
 
@@ -49,7 +48,7 @@ module.exports = {
             demands_json = {
                 ...demands_json,
                 cust_img: {
-                    [Sequelize.Op.not]: ""
+                    [Op.not]: ""
                 }
             }
         }
@@ -59,25 +58,25 @@ module.exports = {
                 ...demands_json,
                 cust_vid: {
                     cust_vid: {
-                        [Sequelize.Op.not]: ""
+                        [Op.not]: ""
                     }
                 }
             }
         }
         console.log(demands_json, "\n")
-
-        const ProductReviewTable = productReviewModel.productReviewSchema()
          
-        return ProductReviewTable.findAll(
+        return productReviewModel.findAll(
             {
                 where: demands_json,
                 attributes: ["review_id", "pid", "cust_name", "cust_email", "review_title", "review", "star_count", "cust_location", "created_at"]
             }
         )
-    },
+    }
 
-    storeReview: function(data){
+    storeReview(data){
         console.log(data)
-        return queryInterface.bulkInsert("product_review", [data])
+        return productReviewModel.create(data)
     }
 }
+
+module.exports = product_reviewService

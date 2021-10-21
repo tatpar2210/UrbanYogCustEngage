@@ -1,36 +1,32 @@
-const userMasterModel = require("../models/userMasterModel")
-const Sequelize = require("sequelize")
-const {sequelize, queryInterface} = require("../database/connection")
-const jwt = require("jsonwebtoken")
+const userMasterModel = require("../models").user_master
 
-module.exports = {
-    findAll: function(){
-        const userMaster = userMasterModel.userMaster()
+class userService{
+    findAll(){
 
-        return userMaster.findAll()
-    },
-    
-    findOneById: function(user_id){
-        const userMaster = userMasterModel.userMaster()
+        return userMasterModel.findAll()
+    }
 
-        return userMaster.findOne({
+    findOneById(user_id){
+
+        return userMasterModel.findOne({
             where: {
                 user_id: user_id
             }
         })
-    },
+    }
 
-    findOneByEmail: function(email){
-        const userMaster = userMasterModel.userMaster()
+    findOneByEmail(email){
 
-        return userMaster.findOne({
+        return userMasterModel.findOne({
             where: {
                 email: email
             }
         })
-    },
+    }
 
-    addUser: async function(data){
-        return queryInterface.bulkInsert("user_master", [data])
+    addUser(data){
+        return userMasterModel.create(data)       
     }
 }
+
+module.exports = userService

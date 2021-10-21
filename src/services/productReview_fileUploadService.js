@@ -1,12 +1,14 @@
-const productReview_fileUploadModel = require("../models/productReview_fileUploadModle")
+const productReview_fileUploadModel = require("../models").product_review_upload
 
-module.exports = {
-    getFiles: function(id){
-        const ProductReview_fileUpload = productReview_fileUploadModel.productReview_fileUpload()
-
-        return ProductReview_fileUpload.findOne({where: {
+class product_review_file_uploadService{
+    getFiles(id){
+        return productReview_fileUploadModel.findOne({where: {
             review_id : id
-        }})
+            }
+        })
 
     }
 }
+
+
+module.exports = product_review_file_uploadService

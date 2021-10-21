@@ -1,4 +1,5 @@
 const productReview_fileUploadService = require("../services/productReview_fileUploadService")
+const product_review_file_uploadService = new productReview_fileUploadService()
 
 module.exports = {
     getProductReview_fileUpload: async function(req, res){
@@ -11,7 +12,7 @@ module.exports = {
                 message: "Provide review id(number)"
             })
         }else{
-            await productReview_fileUploadService.getFiles(review_id).then((result) =>{
+            await product_review_file_uploadService.getFiles(review_id).then((result) =>{
                 if (!result){
                     res.status(200).json({
                         statuscode: 500,

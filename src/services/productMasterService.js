@@ -1,58 +1,42 @@
-const productMasterModle = require("../models/productMasterModle")
-const Sequelize = require("sequelize")
-const {sequelize, queryInterface} = require("../database/connection")
+const productMasterModle = require("../models").product_master
 
+class productMasterModleService{
+    getPidFromDatabae(shopify_pr_id){
 
-module.exports = {
-    getPidFromDatabae: function(shopify_pr_id){
-        const ProductMaster = productMasterModle.productMaster()
-
-        return ProductMaster.findOne({where: {
+        return productMasterModle.findOne({where: {
             product_id: shopify_pr_id
         }})
-    },
-    
-    findAll: function(){
-        const ProductMaster = productMasterModle.productMaster()
-        
-        return ProductMaster.findAll()
-    },
+    }
 
-    findOneByPID: function(p_id){
-        const ProductMaster = productMasterModle.productMaster()
+    findAll(){
+        return productMasterModle.findAll()
+    }
 
-        return ProductMaster.findOne({
+    findOneByPID(p_id){
+        return productMasterModle.findOne({
             where: {
                 pid: p_id
             }
         })
-    },
+    }
 
-    findOneByShopifyID: function(prod_id){
-        const ProductMaster = productMasterModle.productMaster()
-
-        return ProductMaster.findOne({
+    findOneByShopifyID(prod_id){
+        return productMasterModle.findOne({
             where: {
                 product_id: prod_id
             }
         })
-    },
+    }
 
-    addProduct: function(data){
-        const ProductMaster = productMasterModle.productMaster()
+    addProduct(data){
+        return productMasterModle.create(data)
+    }
 
-        return queryInterface.bulkInsert("product_master", [data])
-        
-    },
+    addMissingProduct(data){
+        return productMasterModle.create(data)
+    }
 
-    addMissingProduct: function(data){
-        const ProductMaster = productMasterModle.productMaster()
-
-        return queryInterface.bulkInsert("product_master", data)
-        
-    },
-
-    checkForMissingData: async function(array){
+    async checkForMissingData(array){
         const shopify_prod_arr = array
         var msg = ""
         var missing_data = []
@@ -61,18 +45,16 @@ module.exports = {
                 await this.findOneByShopifyID(shopify_prod_arr[i].product_id).then((result)=>{
                     if (!result){
                         missing_data.push(shopify_prod_arr[i])
-                        console.log(missing_data)
-
+                        //insert in database
+                        this.addMissingProduct(shopify_prod_arr[i])
                     }else{
-                        msg = "No missing data"
+                        msg = "No missing data found"
                     }
                 })
             }
-            
-            //insert in database
-            this.addMissingProduct(missing_data)
-
-
+            console.log(missing_data)
             return missing_data
     }
 }
+
+module.exports = productMasterModleService

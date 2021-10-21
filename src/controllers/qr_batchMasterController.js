@@ -1,4 +1,5 @@
 const qr_batchMasterService = require("../services/qr_batchMasterService")
+const qr_batch_masterService = new qr_batchMasterService()
 const Joi = require("joi")
 
 module.exports  = {
@@ -25,7 +26,7 @@ module.exports  = {
                 });           
         }else{
             //if validation passes
-            const fromTable = await qr_batchMasterService.getbatchMasterDetails(body_data)
+            const fromTable = await qr_batch_masterService.getbatchMasterDetails(body_data)
         }
         
     }

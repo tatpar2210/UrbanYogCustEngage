@@ -1,6 +1,6 @@
-const e = require("express")
 const Joi = require("joi")
 const productMasterService = require("../services/productMasterService")
+const product_masterService = new productMasterService()
 
 module.exports = {
     getPid: async function(req, res){
@@ -14,7 +14,7 @@ module.exports = {
                 message: "Please provide a valid shopify_pr_id( 13 digit number )"
             })
         }else{
-            await productMasterService.getPidFromDatabae(shopify_pr_id).then((result)=>{
+            await product_masterService.getPidFromDatabae(shopify_pr_id).then((result)=>{
                 if (!result){
                     res.status(200).json({
                         statuscode: 200,
@@ -35,7 +35,7 @@ module.exports = {
     },
 
     getAllProducts: async function(req, res){
-        await productMasterService.findAll().then((result)=>{
+        await product_masterService.findAll().then((result)=>{
             if (!result){
                 res.status(200).json({
                     statuscode: 200,
@@ -62,7 +62,7 @@ module.exports = {
                 message: "Please provide a valid p_id( number )"
             })
         }else{
-            await productMasterService.findOneByPID(p_id).then((result)=>{
+            await product_masterService.findOneByPID(p_id).then((result)=>{
                 if (!result){
                     res.status(200).json({
                         statuscode: 200,
@@ -109,7 +109,7 @@ module.exports = {
                     data: productMasterSchemaResult.error.message
                   });
             }else{
-                await productMasterService.addProduct(productData).then((result)=>{
+                await product_masterService.addProduct(productData).then((result)=>{
                     console.log(result)
                     res.status(200).json({
                         statusCode: 200,
@@ -134,7 +134,7 @@ module.exports = {
                 message: "Please provide a valid shopify_ID( number )"
             })
         }else{
-            await productMasterService.findOneByShopifyID(shopifyID).then((result)=>{
+            await product_masterService.findOneByShopifyID(shopifyID).then((result)=>{
                 if (!result){
                     res.status(200).json({
                         statuscode: 200,
@@ -155,7 +155,7 @@ module.exports = {
     fetchFromShopify: async function(req, res){
         const productArr = req.body
 
-        const result = await productMasterService.checkForMissingData(productArr)
+        const result = await product_masterService.checkForMissingData(productArr)
         if (result.length === 0){
             res.status(200).json({
                 statusCode: 200,

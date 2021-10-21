@@ -10,7 +10,7 @@ const ProductReview_fileUploadController = require("./src/controllers/productRev
 const ProductMasterController = require("./src/controllers/productMasterController")
 const userMasterController = require("./src/controllers/userMasterController")
 const authMasterController = require("./src/controllers/authMasterController")
-const fileUploadController = require("./src/controllers/fileUploadController")
+const fileUploadController = require("./src/controllers/productReview_fileUploadController")
 
 
 app.use(express.json())
