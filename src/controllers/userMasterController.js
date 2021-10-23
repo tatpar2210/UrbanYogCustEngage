@@ -13,7 +13,12 @@ module.exports = {
                     message: "No data found"
                 })
             }else{
-                res.status(200).json({result})
+                res.status(200).json({
+                    statusCode: 100,
+                    status: true,
+                    message: "User Details",
+                    data: result
+                })
             }
         }).catch((err) => {
             res.status(400).json({err})
@@ -38,7 +43,12 @@ module.exports = {
                         message: "No data found"
                     })      
                 }else{
-                    res.status(200).json({result})
+                    res.status(200).json({
+                    statusCode: 100,
+                    status: true,
+                    message: "User Details by pid",
+                    data: result
+                })
                 }
             }).catch((err) => {
                 res.status(400).json({err})
@@ -66,7 +76,12 @@ module.exports = {
                         message: "No data found"
                     })      
                 }else{
-                    res.status(200).json({result})
+                    res.status(200).json({
+                    statusCode: 100,
+                    status: true,
+                    message: "User Details by email",
+                    data: result
+                })
                 }
             }).catch((err) => {
                 res.status(400).json({err})
@@ -108,9 +123,10 @@ module.exports = {
                 await user_masterService.addUser(userData).then( async (result)=>{
                     console.log(result)
                     res.status(200).json({
-                        statusCode: 200,
-                        success: true,
-                        result: result
+                        statusCode: 100,
+                        status: true,
+                        message: "Added user Details",
+                        data: result
                     })
                     
                 }).catch((err)=>{

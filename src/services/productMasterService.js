@@ -1,19 +1,27 @@
-const productMasterModle = require("../models").product_master
+const productMasterModel = require("../models").product_master
+const productVarientModel = require("../models").product_variant_master
 
-class productMasterModleService{
+class productMasterModelService{
     getPidFromDatabae(shopify_pr_id){
 
-        return productMasterModle.findOne({where: {
+        productMasterModel.hasMany(productVarientModel, {
+            foreignKey: "pid"
+        })
+
+        return productMasterModel.findAndCountAll({where: {
             product_id: shopify_pr_id
-        }})
+        },
+        include: {model: productVarientModel}
+    })
     }
 
     findAll(){
-        return productMasterModle.findAll()
+        return productMasterModel.findAndCountAll()
     }
 
     findOneByPID(p_id){
-        return productMasterModle.findOne({
+
+        return productMasterModel.findOne({
             where: {
                 pid: p_id
             }
@@ -21,7 +29,7 @@ class productMasterModleService{
     }
 
     findOneByShopifyID(prod_id){
-        return productMasterModle.findOne({
+        return productMasterModel.findOne({
             where: {
                 product_id: prod_id
             }
@@ -29,11 +37,11 @@ class productMasterModleService{
     }
 
     addProduct(data){
-        return productMasterModle.create(data)
+        return productMasterModel.create(data)
     }
 
     addMissingProduct(data){
-        return productMasterModle.create(data)
+        return productMasterModel.create(data)
     }
 
     async checkForMissingData(array){
@@ -57,4 +65,4 @@ class productMasterModleService{
     }
 }
 
-module.exports = productMasterModleService
+module.exports = productMasterModelService

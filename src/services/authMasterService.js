@@ -42,7 +42,7 @@ class authService{
         return msg
     }
 
-    async authToken(){
+    async authToken(auth_token){
         //const authToken_master = authTokenMasterModel
         var msg = {
             statuscode: Number,

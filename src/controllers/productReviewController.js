@@ -3,7 +3,20 @@ const productReviewService = require("../services/productReviewService")
 const product_reviewService = new productReviewService()
 
 module.exports = {
+
     getAllReviews: async function(req, res){
+        await product_reviewService.getAllReviewsData().then((result)=>{
+            res.status(200).json({
+                statuscode: 200,
+                message: "All product reviews without filter",
+                data: result
+            })
+        }).catch((err)=>{
+            res.status(400).json({err})
+        })
+    },
+
+    getAllReviewsByPID: async function(req, res){
  
         const req_info = {
             P_id: req.params.id,
@@ -11,15 +24,20 @@ module.exports = {
         }
 
         if (Object.keys(req_info.query).length === 0){
-            // if queries are not given
-            const fromTable = await product_reviewService.getAllReviewsData(req_info).then((result)=>{
-                res.status(200).json({result})
+            // if queries are not given but Pid is given
+            await product_reviewService.getAllReviewsDataByPid(req_info).then((result)=>{
+                res.status(200).json({
+                    statuscode: 200,
+                    message: "Product reviews without filter",
+                    data: result
+                })
             }).catch((err)=>{
                 res.status(400).json({err})
             })
             
             console.log("\nMsg from productReviewController => getAllReviews: Data sent")
-        }else{
+        }
+        else{
             // if queries are given
             const schema = Joi.object().keys({
                 star_count: Joi.number().max(5).error(new Error("Provide star_count(number(upto value 5 only))")),
@@ -39,14 +57,18 @@ module.exports = {
                   });
             }else{
                 // if validation passes 
-                const fromTable = await product_reviewService.getReviewsByQuery(req_info).then((result)=>{
+                await product_reviewService.getReviewsByQuery(req_info).then((result)=>{
                     if (result.length === 0){
                         res.status(404).json({
                             statusCode: 404,
                             msg: "No data found"
                         })
                     }else{
-                        res.status(200).json({result})
+                        res.status(200).json({
+                            statuscode: 200,
+                            message: "Product reviews with filter",
+                            data: result
+                        })
                     }
                 }).catch((err)=>{
                     res.status(400).json({err})
@@ -96,7 +118,8 @@ module.exports = {
                     res.status(200).json({
                         statusCode: 200,
                         success: true,
-                        result: result
+                        message: "stored product review details",
+                        data: result
                     })
                 }).catch((err)=>{
                     res.status(400).json(err)

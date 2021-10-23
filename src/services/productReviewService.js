@@ -4,11 +4,13 @@ const Op = require("sequelize").Op;
 
 
 class product_reviewService{
-    getAllReviewsData(req_info){
-        const P_id = req_info.P_id
-        const query = req_info.query
+    getAllReviewsData(){
+        return productReviewModel.findAndCountAll()
+    }
 
-        return productReviewModel.findAll(
+    getAllReviewsDataByPid(req_info){
+        const P_id = req_info.P_id
+        return productReviewModel.findAndCountAll(
             {
                 where: {
                     pid: P_id,
@@ -65,7 +67,7 @@ class product_reviewService{
         }
         console.log(demands_json, "\n")
          
-        return productReviewModel.findAll(
+        return productReviewModel.findAndCountAll(
             {
                 where: demands_json,
                 attributes: ["review_id", "pid", "cust_name", "cust_email", "review_title", "review", "star_count", "cust_location", "created_at"]

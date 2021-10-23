@@ -11,7 +11,9 @@ const ProductMasterController = require("./src/controllers/productMasterControll
 const userMasterController = require("./src/controllers/userMasterController")
 const authMasterController = require("./src/controllers/authMasterController")
 const fileUploadController = require("./src/controllers/productReview_fileUploadController")
-
+const product_varientController = require("./src/controllers/product_varientController")
+const product_uspController = require("./src/controllers/product_uspController")
+const productSuggestionController = require("./src/controllers/productSuggestionController")
 
 app.use(express.json())
 app.use(cookieParser())
@@ -36,20 +38,42 @@ app.use((req, res, next) => {
   });
 
 
+//auth
 app.post("/auth", authMasterController.authorizeCredentials)
 app.post("/auth-token", authMasterController.authorizeToken)
-app.post("/getProductReview/:id", ProductReviewController.getAllReviews);
+
+//product-reviews
+app.post("/getProductReview/all", ProductReviewController.getAllReviews);
+app.post("/getProductReview/:id", ProductReviewController.getAllReviewsByPID);
 app.post("/postProductReview/:id", ProductReviewController.postReviews)
 app.post("/getProductReviewImg/:id", ProductReview_fileUploadController.getProductReview_fileUpload)
 app.post("/postProductReviewImg/:id", ProductReview_fileUploadController.postProductReview_fileUpload)
-app.post("/getPid/:id", ProductMasterController.getPid)
+
+//product-master
+app.post("/getPid", ProductMasterController.getPid)
 app.post("/getProductsMaster/all", ProductMasterController.getAllProducts)
 app.post("/getProductsMaster/:id", ProductMasterController.findByPid)
 app.post("/addProduct", ProductMasterController.createProduct)
+
+//product-varient master
+app.post("/getProductVarientMaster/all", product_varientController.getAllVarients)
+app.post("/getProductVarientMaster/:id", product_varientController.get_varientsByPid)
+
+//product-usp
+app.post("/getProductUSP/all", product_uspController.getAllProductUsp)
+app.post("/getProductUSP/:id", product_uspController.getProductUspByPid)
+
+//product-suggestion
+app.post("/getProductSuggestion/all", productSuggestionController.getAllProductSuggestion)
+app.post("/getProductSuggestion/:id", productSuggestionController.getProductSuggestionByPid)
+
+//user-master
 app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
 app.post("/getUserMaster/id/:id", userMasterController.findById)
 app.post("/getUserMaster/email/:email", userMasterController.findByEmail)
 app.post("/addUser", userMasterController.addUser)
+
+//shopify
 app.post("/fetch-from-shopify/products", ProductMasterController.fetchFromShopify)
 
 

@@ -20,7 +20,12 @@ module.exports = {
                         message: "No img_URLs found"
                     })
                 }
-                res.status(200).json(result)
+                res.status(200).json({
+                    statusCode: 100,
+                    status: true,
+                    message: "Product Details by getProductReview_fileUpload",
+                    data: result
+                })
             }).catch((err)=>{
                 res.status(400).json(err)
             })

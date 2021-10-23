@@ -4,47 +4,57 @@ const product_masterService = new productMasterService()
 
 module.exports = {
     getPid: async function(req, res){
-        const shopify_pr_id = req.params.id
-        
-
-        if (shopify_pr_id.length != 13){
+        const shopify_pr_id = req.query.shopify_id
+        console.log(shopify_pr_id)        
+        await product_masterService.getPidFromDatabae(shopify_pr_id).then((result)=>{
+            if (!result.count){
+                res.status(400).json({
+                    statuscode: 400,
+                    success: true,
+                    message: "No P_id found with provided shopify_product_id"
+                })
+            }else{
+                console.log(result)
+                res.status(200).json({
+                    statusCode: 100,
+                    status: true,
+                    message: "Product Details by pid ",
+                    data: result
+                })
+            }
+        }).catch((err)=>{
+            console.log("Error is this: ",err)
             res.status(400).json({
                 statuscode: 400,
-                succeed: false,
-                message: "Please provide a valid shopify_pr_id( 13 digit number )"
+                data_obt: {
+                    query: req.query,
+                    body: req.body,
+                    params: req.params
+                },
+                err: err
             })
-        }else{
-            await product_masterService.getPidFromDatabae(shopify_pr_id).then((result)=>{
-                if (!result){
-                    res.status(200).json({
-                        statuscode: 200,
-                        success: true,
-                        message: "No P_id found with provided shopify_product_id"
-                    })
-                }else{
-                    console.log(result)
-                    res.status(200).json({result})
-                }
-            }).catch((err)=>{
-                console.log(err)
-                res.status(400).json({err})
-            })
-        }
+        })
+        
 
-        console.log(shopify_pr_id.length, typeof(shopify_pr_id))    
+        //console.log(shopify_pr_id.length, typeof(shopify_pr_id))    
     },
 
     getAllProducts: async function(req, res){
         await product_masterService.findAll().then((result)=>{
             if (!result){
-                res.status(200).json({
-                    statuscode: 200,
+                res.status(400).json({
+                    statuscode: 100,
                     success: true,
                     message: "No data found"
                 })
             }else{
                 console.log(result)
-                res.status(200).json({result})
+                res.status(200).json({
+                    statusCode: 100,
+                    status: true,
+                    message: "All product Details",
+                    data: result
+                })
             }
         }).catch((err)=>{
             console.log(err)
@@ -57,7 +67,7 @@ module.exports = {
 
         if (p_id.length === 0){
             res.status(400).json({
-                statuscode: 400,
+                statuscode: 100,
                 succeed: false,
                 message: "Please provide a valid p_id( number )"
             })
@@ -71,7 +81,12 @@ module.exports = {
                     })
                 }else{
                     console.log(result)
-                    res.status(200).json({result})
+                    res.status(200).json({
+                        statusCode: 100,
+                        status: true,
+                        message: "Product Details by pid",
+                        data: result
+                    })
                 }
             }).catch((err)=>{
                 console.log(err)
@@ -84,8 +99,8 @@ module.exports = {
         productData = req.body
         
         if (Object.keys(productData).length === 0){
-            res.status(404).json({
-                statusCode: 404,
+            res.status(400).json({
+                statusCode: 100,
                 status: 'error',
                 message: "No data provided"
             })
@@ -102,8 +117,8 @@ module.exports = {
             const productMasterSchemaResult = productMasterSchema.validate(productData)
             if (productMasterSchemaResult.error){
                 console.log(productMasterSchemaResult.error.message)
-                res.status(422).json({
-                    statusCode: 422,
+                res.status(400).json({
+                    statusCode: 100,
                     status: 'error',
                     message: 'Invalid request data',
                     data: productMasterSchemaResult.error.message
@@ -112,9 +127,10 @@ module.exports = {
                 await product_masterService.addProduct(productData).then((result)=>{
                     console.log(result)
                     res.status(200).json({
-                        statusCode: 200,
-                        success: true,
-                        result: result
+                        statusCode: 100,
+                        status: true,
+                        message: "Created Product Details",
+                        data: result
                     })
                 }).catch((err)=>{
                     res.status(400).json(err)
@@ -129,7 +145,7 @@ module.exports = {
 
         if (shopifyID.length === 0){
             res.status(400).json({
-                statuscode: 400,
+                statuscode: 100,
                 succeed: false,
                 message: "Please provide a valid shopify_ID( number )"
             })
@@ -143,7 +159,12 @@ module.exports = {
                     })
                 }else{
                     console.log(result)
-                    res.status(200).json({result})
+                    res.status(200).json({
+                        statusCode: 100,
+                        status: true,
+                        message: "Product Details by findByshopifyProdId",
+                        data: result
+                    })
                 }
             }).catch((err)=>{
                 console.log(err)
@@ -161,14 +182,14 @@ module.exports = {
                 statusCode: 200,
                 missingData: false,
                 message: "No missing data found",
-                result: result
+                data: result
             })
         }else{
             res.status(200).json({
                 statusCode: 200,
                 missingData: true,
                 message: "missing data found",
-                result: result
+                data: result
             })
         }
     }

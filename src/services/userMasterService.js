@@ -3,7 +3,7 @@ const userMasterModel = require("../models").user_master
 class userService{
     findAll(){
 
-        return userMasterModel.findAll()
+        return userMasterModel.findAndCountAll()
     }
 
     findOneById(user_id){
