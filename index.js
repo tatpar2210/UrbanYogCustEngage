@@ -14,6 +14,8 @@ const fileUploadController = require("./src/controllers/productReview_fileUpload
 const product_varientController = require("./src/controllers/product_varientController")
 const product_uspController = require("./src/controllers/product_uspController")
 const productSuggestionController = require("./src/controllers/productSuggestionController")
+const product_faqController = require("./src/controllers/product_faqController")
+const product_videoController = require("./src/controllers/product_videoController")
 
 app.use(express.json())
 app.use(cookieParser())
@@ -66,6 +68,15 @@ app.post("/getProductUSP/:id", product_uspController.getProductUspByPid)
 //product-suggestion
 app.post("/getProductSuggestion/all", productSuggestionController.getAllProductSuggestion)
 app.post("/getProductSuggestion/:id", productSuggestionController.getProductSuggestionByPid)
+
+
+//product-faq
+app.post("/getProductFAQ/all", product_faqController.getAll_Product_Faq)
+app.post("/getProductFAQ/:id", product_faqController.getProductFaqByPid)
+
+//product-video
+app.post("/getProductVideos/all", product_videoController.getAll_ProductVids)
+app.post("/getProductVideos/:id", product_videoController.getProductVideoByPid)
 
 //user-master
 app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
