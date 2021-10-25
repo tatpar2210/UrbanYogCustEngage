@@ -112,6 +112,8 @@ module.exports = {
                 product_category: Joi.string().required().error(new Error("Provide Product's Category(string)")),
                 product_img_url: Joi.string().required().error(new Error("Provide Product's Image URL(string)")),
                 store_name: Joi.string().required().error(new Error("Provide Store Name(string)")),
+                created_at: Joi.string().optional().allow("").error(new Error('Provide created_at')),
+                updated_at: Joi.string().optional().allow("").error(new Error('Provide updated_at')),
             })
     
             const productMasterSchemaResult = productMasterSchema.validate(productData)

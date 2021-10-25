@@ -81,7 +81,18 @@ module.exports = {
     
     postReviews: async function(req, res){
         const data = req.body
-        
+        // const date = new Date()
+        // const create_date = {
+        //     year: date.getFullYear(),
+        //     month: date.getMonth(),
+        //     date: date.getDate(),
+
+        //     hours: date.getHours(),
+        //     min: date.getMinutes(),
+        //     sec: date.getSeconds(),
+        // }
+
+
         if (Object.keys(data).length === 0){
             res.status(404).json({
                 statusCode: 404,
@@ -90,7 +101,7 @@ module.exports = {
             })
         }else{
             const schema = Joi.object().keys({
-                pId: Joi.number().required().error(new Error('Provide pId(number)')),
+                pid: Joi.number().required().error(new Error('Provide pId(number)')),
                 review: Joi.string().optional().allow("").error(new Error('Provide review(string)')),
                 review_title: Joi.string().optional().allow("").error(new Error('Provide reviewTitle(string)')),
                 star_count: Joi.number().error(new Error('Provide starCount(number)')),
@@ -99,7 +110,9 @@ module.exports = {
                 cust_location: Joi.string().optional().allow("").error(new Error('Provide custlocation(string)')),
                 shopify_cust_id: null,
                 status: Joi.number().error(new Error('Provide status(number)')),
-                admin_reply: Joi.string().optional().allow("").error(new Error("Provide admin_reply(string)"))
+                admin_reply: Joi.string().optional().allow("").error(new Error("Provide admin_reply(string)")),
+                created_at: Joi.string().optional().allow("").error(new Error('Provide created_at')),
+                updated_at: Joi.string().optional().allow("").error(new Error('Provide updated_at')),
             })
 
             const schemaResult = schema.validate(data)
@@ -127,5 +140,32 @@ module.exports = {
                 })
             }
         }
+    },
+
+    getReviewStarCount: async function(req, res){
+        const P_id = req.params.id
+        const star_count = 5
+        const review_array = []
+
+
+        for(var i = 1; i<6; i++){
+            await product_reviewService.getProductReviews_star_count(P_id, i).then((result)=>{
+                const review_data_json = {
+                    COUNT: result.count,
+                    star_count: i
+                }
+    
+                review_array.push(review_data_json)
+            })
+        }
+
+
+        res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Product Review Count",
+            data: review_array
+        })
+
     }
 }

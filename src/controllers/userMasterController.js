@@ -91,6 +91,16 @@ module.exports = {
 
     addUser: async function(req, res){
         const userData = req.body
+        // const date = new Date()
+        // const create_date = {
+        //     year: date.getFullYear(),
+        //     month: date.getMonth(),
+        //     date: date.getDate(),
+
+        //     hours: date.getHours(),
+        //     min: date.getMinutes(),
+        //     sec: date.getSeconds(),
+        // }
 
 
         if (Object.keys(userData).length === 0){
@@ -106,7 +116,8 @@ module.exports = {
                 email: Joi.string().email().required().error(new Error("Provide Email address")),
                 password: Joi.string().lowercase().required().error(new Error("Provide password")),
                 contact_no: Joi.number().required().error(new Error("Provide Contact no.")),
-                created_at: Joi.string().error(new Error("Provide provide date in created_at(string)")),
+                created_at: Joi.string().optional().allow("").error(new Error('Provide created_at')),
+                updated_at: Joi.string().optional().allow("").error(new Error('Provide updated_at')),
             })
 
 

@@ -4,10 +4,12 @@ const product_usp_service = new product_uspService()
 module.exports = {
     getAllProductUsp: async function(req, res){
         await product_usp_service.getAll_usp().then((result)=>{
+            
             res.status(200).json({
                 statusCode: 200,
                 status: true,
                 message: "All product USPs",
+                //fetched_at: `${create_date.date}-${create_date.month}-${create_date.year} ${create_date.hours}:${create_date.min}:${create_date.sec}`,
                 data: result
             })
         }).catch((err)=>{

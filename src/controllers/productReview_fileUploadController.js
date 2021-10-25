@@ -4,6 +4,7 @@ const product_review_file_uploadService = new productReview_fileUploadService()
 module.exports = {
     getProductReview_fileUpload: async function(req, res){
         const review_id = req.params.id
+        console.log(review_id)
         
         if (review_id.length = 0){
             res.status(400).json({

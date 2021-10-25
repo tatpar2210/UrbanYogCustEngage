@@ -76,8 +76,19 @@ class product_reviewService{
     }
 
     storeReview(data){
-        console.log(data)
+        console.log("\nFrom service: ", data, "\n")
         return productReviewModel.create(data)
+    }
+
+    getProductReviews_star_count(pid, star_count){
+        return productReviewModel.findAndCountAll({
+            where: {
+                pid: pid,
+                star_count: star_count
+            },
+
+            attributes: ["star_count"]
+        })
     }
 }
 
