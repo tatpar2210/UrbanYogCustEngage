@@ -40,9 +40,18 @@ module.exports = {
         else{
             // if queries are given
             const schema = Joi.object().keys({
-                star_count: Joi.number().max(5).error(new Error("Provide star_count(number(upto value 5 only))")),
-                img: Joi.boolean().error(new Error("Set img as true to show reviews having images")),
-                vid: Joi.boolean().error(new Error("Set vid as true to show reviews having videos"))
+                reviewId: Joi.number().optional().allow("").error(new Error('Provide reviewId(number)')),
+                star_count: Joi.number().optional().allow("").max(5).error(new Error("Provide star_count(number(upto value 5 only))")),
+                custName: Joi.string().optional().allow("").error(new Error('Provide custName(string)')),
+                custEmail: Joi.string().optional().allow("").error(new Error('Provide custEmail(string)')),
+                review: Joi.string().optional().allow("").error(new Error('Provide review(string)')),
+                reviewTitle: Joi.string().optional().allow("").error(new Error('Provide reviewTitle(string)')),
+                status: Joi.number().optional().allow("").error(new Error('Provide status(number)')),
+                limit: Joi.number().optional().allow("").error(new Error('Provide limit(number)')),
+                offset: Joi.number().optional().allow("").error(new Error('Provide offset(number)')),
+                sortBy: Joi.string().optional().allow("").error(new Error('Provide sortBy(string)')),
+                img: Joi.boolean().optional().allow("").error(new Error("Set img as true to show reviews having images")),
+                vid: Joi.boolean().optional().allow("").error(new Error("Set vid as true to show reviews having videos"))
             })
     
             const schemaResult = schema.validate(req_info.query)
@@ -57,7 +66,8 @@ module.exports = {
                   });
             }else{
                 // if validation passes 
-                await product_reviewService.getReviewsByQuery(req_info).then((result)=>{
+                console.log("queries:", req_info.query)
+                product_reviewService.getReviewsByQuery(req_info).then((result)=>{
                     if (result.length === 0){
                         res.status(404).json({
                             statusCode: 404,
@@ -164,7 +174,7 @@ module.exports = {
             statusCode: 200,
             success: true,
             message: "Product Review Count",
-            data: review_array
+            data: [review_array, review_array]
         })
 
     }
