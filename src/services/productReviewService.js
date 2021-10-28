@@ -72,6 +72,8 @@ class product_reviewService{
 
         var demands_json = {}
 
+        where.pid = P_id
+
         if(query.reviewId){
             where.review_id = query.reviewId
         }

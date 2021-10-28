@@ -74,6 +74,7 @@ module.exports = {
         })
     },
 
+
     postProductReview_fileUpload: async function(req, res){
         const reqData = req.body
         const review_id = req.params.id
@@ -138,6 +139,31 @@ module.exports = {
 
             //console.log(store_json_arr)
 
+        })
+    },
+
+    postSingleREvImg: async function(req, res){
+        const reqData = req.body
+        const review_id = req.params.id
+        const storage_loc= path.join(__dirname, "../../public/File_Uploads/Product-review/"+ review_id +"/img")
+
+        const storage = multer.diskStorage({
+            destination: storage_loc,
+            filename: function(req, file, cb){
+                cb(null, Date.now() + "_" +  file.originalname)
+                //console.log(file.buffer)
+            }
+        })
+
+
+        // const upload = multer({dest: storage_loc}).single("product-review-img")
+        // upload(req, res, (err)=>{
+        //     res.json(req.file.buffer)
+        // })
+
+        const upload = multer({storage: storage}).single("product-review-img")
+        upload(req, res, (err)=>{
+            res.json(req.file.buffer)
         })
     }
 }

@@ -66,7 +66,7 @@ module.exports = {
                   });
             }else{
                 // if validation passes 
-                console.log("queries:", req_info.query)
+                console.log("queries:", req_info)
                 product_reviewService.getReviewsByQuery(req_info).then((result)=>{
                     if (result.length === 0){
                         res.status(404).json({

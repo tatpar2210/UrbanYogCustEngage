@@ -73,7 +73,8 @@ app.post("/getProductSuggestion/:id", productSuggestionController.getProductSugg
 
 //product-review-img
 app.post("/postProductReview_img/:id", productReview_fileUploadController.postProductReview_fileUpload)
-app.post("/getProductReviewImages", productReview_fileUploadController.getProductReviewImages)
+app.post("/getProductReviewImages", productReview_fileUploadController.getProductReview_fileUpload)
+app.post("/postProductReviewImagesOnly/:id", productReview_fileUploadController.postSingleREvImg)
 
 //product-faq
 app.post("/getProductFAQ/all", product_faqController.getAll_Product_Faq)

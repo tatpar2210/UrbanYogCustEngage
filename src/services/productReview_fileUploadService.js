@@ -10,8 +10,18 @@ class product_review_file_uploadService{
         })
     }
 
+    getImageOnlyAsResult(req_info){
+        return productReview_fileUploadModel.findAndCountAll({
+            where: {
+                review_id: req_info.review_id,
+                file_id: req_info.file_id
+            }
+        })
+    }
+
     //by harish sir
     getProductReviewImages(req, res){
+        //console.log(req.body)
         return new Promise((resolve, reject) => {
 
             return ProductReviewFileUpload.findAndCountAll({
