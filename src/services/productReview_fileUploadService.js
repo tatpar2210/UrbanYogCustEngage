@@ -14,7 +14,7 @@ class product_review_file_uploadService{
     getProductReviewImages(req, res){
         return new Promise((resolve, reject) => {
 
-            return ProductReviewFileUpload.findAndCountAll({
+            return productReview_fileUploadModel.findAndCountAll({
                 where: { review_id: req.body.reviewId },
                 attributes: ['file_id', 'review_id', 'file_type', 'file_path', 'created_at', 'updated_at'],
             }).then(result => {

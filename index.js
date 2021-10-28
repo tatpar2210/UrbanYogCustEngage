@@ -56,6 +56,8 @@ app.post("/getProductReviewStarCount/:id", ProductReviewController.getReviewStar
 app.post("/getProductReviewImg/:id", ProductReview_fileUploadController.getProductReview_fileUpload)
 app.post("/postProductReviewImg/:id", ProductReview_fileUploadController.postProductReview_fileUpload)
 app.post("/postSingleProductReviewImg/:id", ProductReview_fileUploadController.postSingleRevImg)
+//api by harish
+app.post("/get_product_rev_img", ProductReview_fileUploadController.getProductReviewImages)
 
 //product-master
 app.post("/getPid", ProductMasterController.getPid)

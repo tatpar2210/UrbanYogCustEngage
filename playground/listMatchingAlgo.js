@@ -195,15 +195,15 @@ function showProductReviewForm() {
         var textTotalCount = "";
         var textAvrageStarCount = "";
   var productId = 0;
- //        productId = document.getElementById('productIdForRef').value;
-   productId = '6891972427972';
+       productId = document.getElementById('productIdForRef').value;
+   //productId = '6891972427972';
     var pid = 0;
       var starCnt = 0;
         var strcntvalue = 0;
         var totalAvrage = 0;
         var multiple = 0;
         var count = 0;
-    console.log(productId);
+    
     $.ajax({
             url: "https://urbanyogcustoengage.uglifestyle.in/getPid?shopify_id="+productId,
             type: "POST",
@@ -212,24 +212,21 @@ function showProductReviewForm() {
  //            },
             success: function(resultprdid) {
               
-              console.log(resultprdid);
-              
-              
               pid = resultprdid.data.rows[0].pid;
               document.getElementById("productpId").value = pid;
- console.log(pid);
+ 
               
        
               
                 $.ajax({
                     url: "http://urbanyogcustoengage.uglifestyle.in/getProductReviewStarCount/"+pid,
                     type: "POST",
-                    data: {
-                        "pId": pid,
-                    },
+ //                    data: {
+ //                        "pId": '1',
+ //                    },
                     success: function(resultprdcnt) {
  
-                      console.log(resultprdcnt);
+                     
                         var totalcount = 0;
  
                         const finalResultArray = [{
@@ -258,9 +255,10 @@ function showProductReviewForm() {
                         var arrayForStarCount = finalResultArray.map(obj => resultprdcnt.data[0].find(o => o.star_count === obj.star_count) || obj);
  
                         resultprdcnt.data[0].forEach(function(item, index, result) {
-                            totalcount = totalcount + item.COUNT;
+                        totalcount = totalcount + item.COUNT;
  
                         })
+                        
  
                         arrayForStarCount.forEach(function(item, index, result) {
  
@@ -374,28 +372,26 @@ function showProductReviewForm() {
            var productId = document.getElementById('productIdForRef').value;
  //           var productId= '6891972427972';
  
-        // pid = document.getElementById("productpId").value;
+       pid = document.getElementById("productpId").value;
           
-          pid='1';
+         // pid='1';
           
-          console.log(pid);
+         
  
             $.ajax({
-                url: "https://urbanyogcustoengage.uglifestyle.in/getProductReview/"+pid,
+                url: "http://urbanyogcustoengage.uglifestyle.in/getProductReview/"+pid+"?offset="+offset+"&limit="+limit+"&sortBy=Most Recent",
                 async: true,
                 dataType: 'json',
-                data: {
-                    "pId": pid,
- //                    "sortBy": sortBY,
- //                    "status": 1,
- //                    offset: offset || 0,
- //                    limit: limit || 12
-                },
+ //                data: {
+ //                    "pId": pid,
+ // //                    "sortBy": sortBY,
+ // //                    "status": 1,
+ // //                    offset: offset || 0,
+ // //                    limit: limit || 12
+ //                },
                 type: "post",
                 success: function(data) {
                   
-                  console.log(data);
- 
                     if (data.data.name == "SequelizeDatabaseError") {
                         swal("Oops! Something Went Wrong.", data.data.parent.sqlMessage, "danger");
                     }
@@ -427,8 +423,7 @@ function showProductReviewForm() {
  //                                                },
                                                 success: function(resultprdimg) {
                                                   
-                                                  
-                                                  console.log(resultprdimg);
+                                             
  
  //                                                    resultprdimg.data.forEach(function(itemimage, indeximage, resultimage) {
  
@@ -501,6 +496,8 @@ function showProductReviewForm() {
                             var str = itemimage.toString();
                         
                             let last3 = str.slice(-3);
+                          console.log(last3);
+                          
                             if (index == 0) {
                                 if (last3 == 'jpg' || last3 == 'png') {
                                     textProductReview += "<a href='" + itemimage + "' data-lightbox='image-1' data-title=''><img src='" + itemimage + "' class='img-responsive' loading='lazy' style='padding: 5px; '></a>";
@@ -577,6 +574,8 @@ function showProductReviewForm() {
  
                                 var str = itemimage.toString();
                                 let last3 = str.slice(-3);
+                              
+                              
  
                                 if (last3 == 'jpg' || last3 == 'png') {
  

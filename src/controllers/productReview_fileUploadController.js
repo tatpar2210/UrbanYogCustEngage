@@ -24,6 +24,8 @@ module.exports = {
                         message: "No img_URLs found"
                     })
                 }
+                //console.log("Content-Type: ", result.file_type)
+                //res.set("Content-Type", result.file_type)
                 res.status(200).json({
                     statusCode: 100,
                     status: true,
@@ -112,7 +114,8 @@ module.exports = {
                 const store_json = {
                     review_id: review_id,
                     file_type: file.mimetype,
-                    file_path: ("http://urbanyogcustoengage.uglifestyle.in" + file.path),
+                    file_path: ("http://urbanyogcustoengage.uglifestyle.in" + "/File_Uploads/Product-review/" + review_id + "/img/" + file.filename),
+                    //file_path: ("http://localhost:3000" + "/File_Uploads/Product-review/" + review_id + "/img/" + file.filename),
                     created_at: `${create_date.date}-${create_date.month}-${create_date.year} ${create_date.hours}:${create_date.min}:${create_date.sec}`,
                     updated_at: `${create_date.date}-${create_date.month}-${create_date.year} ${create_date.hours}:${create_date.min}:${create_date.sec}`
                 }
