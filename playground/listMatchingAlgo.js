@@ -413,26 +413,26 @@ function showProductReviewForm() {
                         reviewIdArray.push(reviewId);
  
                     });
- 
+ console.log(reviewIdArray);
  
                  $.ajax({
-                                                url: "http://urbanyogcustoengage.uglifestyle.in/getProductReviewImg/2",
+                                                url: "http://urbanyogcustoengage.uglifestyle.in/get_product_rev_img/"+reviewIdArray,
                                                 type: "POST",
  //                                                data: {
  //                                                    "reviewId": reviewIdArray,
  //                                                },
                                                 success: function(resultprdimg) {
                                                   
-                                             
+                                             console.log(resultprdimg)
  
- //                                                    resultprdimg.data.forEach(function(itemimage, indeximage, resultimage) {
+                                                   resultprdimg.data.forEach(function(itemimage, indeximage, resultimage) {
  
- //                                                        let resulOfProductReviewFileObj = {};
- //                                                        resulOfProductReviewFileObj = itemimage;
+                                                        let resulOfProductReviewFileObj = {};
+                                                        resulOfProductReviewFileObj = itemimage;
  
- //                                                        resulOfProductReviewFile.push(resulOfProductReviewFileObj);
+                                                        resulOfProductReviewFile.push(resulOfProductReviewFileObj);
  
- //                                                    });
+                                                    });
  
                                                     merged = [];
                                                     

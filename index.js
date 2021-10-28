@@ -3,7 +3,8 @@ const app = express()
 require('dotenv').config()
 const cookieParser = require("cookie-parser")
 const path = require("path")
-const multer = require("multer")
+const bodyParser = require("body-parser")
+
 
 const ProductReviewController = require("./src/controllers/productReviewController")
 const ProductReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
@@ -19,6 +20,9 @@ const product_videoController = require("./src/controllers/product_videoControll
 const productReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
 
 app.use(express.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+
 app.use(cookieParser())
 
 //running angular

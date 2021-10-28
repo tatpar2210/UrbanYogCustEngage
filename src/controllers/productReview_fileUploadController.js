@@ -50,7 +50,7 @@ module.exports = {
 
         product_review_file_uploadService.getProductReviewImages(req, res).then(dataReview => {
 
-            if (dataReview) {
+            if (dataReview.length != 0) {
             res.status(200).send({
                 statusCode: 100,
                 status: true,

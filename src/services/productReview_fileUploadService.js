@@ -13,12 +13,12 @@ class product_review_file_uploadService{
     //by harish sir
     getProductReviewImages(req, res){
         return new Promise((resolve, reject) => {
-
+            
             return productReview_fileUploadModel.findAndCountAll({
                 where: { review_id: req.body.reviewId },
                 attributes: ['file_id', 'review_id', 'file_type', 'file_path', 'created_at', 'updated_at'],
             }).then(result => {
-
+                //console.log(req.params.id, "type: ", typeof(req.params.id))
                 let resultarraydemo = [];
                 let resultArr = result.rows;
                 let returData = resultArr.map(data => {
