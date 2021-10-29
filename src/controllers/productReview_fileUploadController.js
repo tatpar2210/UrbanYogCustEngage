@@ -7,13 +7,12 @@ const Joi = require("joi")
 module.exports = {
     getProductReview_fileUpload: async function(req, res){
         const review_id = req.params.id
-        console.log(review_id)
         
         if (review_id.length = 0){
             res.status(400).json({
                 statuscode: 400,
                 success: false,
-                message: "Provide review id(number)"
+                message: "Provide P_id id(number)"
             })
         }else{
             await product_review_file_uploadService.getFiles(review_id).then((result) =>{

@@ -64,6 +64,8 @@ class product_review_file_uploadService{
         console.log(data)
         return productReview_fileUploadModel.create(data)
     }
+
+    
 }
 
 
