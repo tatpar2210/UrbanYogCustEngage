@@ -6,16 +6,27 @@ const Joi = require("joi")
 
 module.exports = {
     getProductReview_fileUpload: async function(req, res){
-        const review_id = req.params.id
-        
-        if (review_id.length = 0){
-            res.status(400).json({
-                statuscode: 400,
-                success: false,
-                message: "Provide P_id id(number)"
-            })
+        const req_data = req.body
+
+        const schema = Joi.object().keys({
+            p_id: Joi.number().optional().allow("").error(new Error("p_id must be a number")),
+            review_id: Joi.number().optional().allow("").error(new Error("review_id must be a number")),
+            file_id: Joi.number().optional().allow("").error(new Error("file_id must be a number")),
+            limit: Joi.number().optional().allow("").error(new Error('Provide limit(number)')),
+            offset: Joi.number().optional().allow("").error(new Error('Provide offset(number)')),
+        })
+
+        const schema_result = schema.validate(req_data)
+        if (schema_result.error){
+            console.log(schema_result.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+                });
         }else{
-            await product_review_file_uploadService.getFiles(review_id).then((result) =>{
+            await product_review_file_uploadService.getFiles(req_data).then((result) =>{
                 if (!result){
                     res.status(200).json({
                         statuscode: 500,
@@ -35,7 +46,6 @@ module.exports = {
                 res.status(400).json(err)
             })
         }
-
     },
 
     //Get images by harish sir

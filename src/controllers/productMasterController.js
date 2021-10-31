@@ -40,37 +40,66 @@ module.exports = {
     },
 
     getAllProducts: async function(req, res){
-        await product_masterService.findAll().then((result)=>{
-            if (!result){
-                res.status(400).json({
-                    statuscode: 100,
-                    success: true,
-                    message: "No data found"
-                })
-            }else{
-                console.log(result)
-                res.status(200).json({
-                    statusCode: 100,
-                    status: true,
-                    message: "All product Details",
-                    data: result
-                })
-            }
-        }).catch((err)=>{
-            console.log(err)
-            res.status(400).json({err})
+
+        const req_data = req.body
+        console.log("req_data: ", req_data)
+        const prod_rev_schema = Joi.object().keys({
+            statuscode:Joi.optional().allow(""), 
+            success:Joi.optional().allow(""), 
+            message: Joi.optional().allow(""), 
+            p_id: Joi.optional().allow("").error(new Error("p_id must be a number")),
+            prod_name: Joi.string().optional().allow("").error(new Error("prod_name must be string")),
+            prod_cat: Joi.string().optional().allow("").error(new Error("prod_cat must be string")),
+            prod_handle: Joi.string().optional().allow("").error(new Error("prod_handle must be string")),
+            from_date: Joi.date().optional().allow("").error(new Error("from_date must be a date")),
+            till_date: Joi.date().optional().allow("").error(new Error("till_date must be a date")),
+            limit: Joi.number().optional().allow("").error(new Error("limit must be number")),
+            offset: Joi.number().optional().allow("").error(new Error("offset must be number")),
         })
+
+        const prod_rev_schema_result = prod_rev_schema.validate(req_data)
+
+        if (prod_rev_schema_result.error){
+            res.status(400).json({
+                statusCode: 100,
+                status: 'error',
+                message: 'Invalid request data',
+                data: prod_rev_schema_result.error.message
+              });
+        }else{
+            await product_masterService.findAll(req_data).then((result)=>{
+                if (!result){
+                    res.status(400).json({
+                        statuscode: 100,
+                        success: true,
+                        message: "No data found"
+                    })
+                }else{
+                    //console.log(result)
+                    res.status(200).json({
+                        statusCode: 100,
+                        status: true,
+                        message: "All product Details",
+                        data: result
+                    })
+                }
+            }).catch((err)=>{
+                console.log(err)
+                res.status(400).json({err})
+            })
+        }
     },
 
     findByPid: async function(req, res){
         const p_id = req.params.id
 
-        if (p_id.length === 0){
+        
+        if (!p_id){
             res.status(400).json({
-                statuscode: 100,
-                succeed: false,
-                message: "Please provide a valid p_id( number )"
-            })
+                statusCode: 100,
+                status: 'error',
+                message: 'Provide p_id',
+              });
         }else{
             await product_masterService.findOneByPID(p_id).then((result)=>{
                 if (!result){

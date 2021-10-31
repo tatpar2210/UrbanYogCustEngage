@@ -57,7 +57,7 @@ app.post("/getProductReview/all", ProductReviewController.getAllReviews);
 app.post("/getProductReview/:id", ProductReviewController.getAllReviewsByPID);
 app.post("/postProductReview/:id", ProductReviewController.postReviews)
 app.post("/getProductReviewStarCount/:id", ProductReviewController.getReviewStarCount)
-app.post("/getProductReviewImg/:id", ProductReview_fileUploadController.getProductReview_fileUpload)
+app.post("/getProductReviewImg/all", ProductReview_fileUploadController.getProductReview_fileUpload)
 app.post("/postProductReviewImg/:id", ProductReview_fileUploadController.postProductReview_fileUpload)
 app.post("/postSingleProductReviewImg/:id", ProductReview_fileUploadController.postSingleRevImg)
 //api by harish

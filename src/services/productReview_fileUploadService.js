@@ -1,12 +1,27 @@
 const productReview_fileUploadModel = require("../models").product_review_file_upload
 
 class product_review_file_uploadService{
-    getFiles(id){
-        console.log("from serviede: ", id)
+    getFiles(req_data){
+        //console.log("from serviede: ", id)
+        var where = {}
+
+        if (req_data.p_id){
+            where.pid = req_data.p_id
+        }
+
+        if (req_data.review_id){
+            where.review_id = req_data.review_id
+        }
+
+        if (req_data.file_id){
+            where.file_id = req_data.file_id
+        }
+
         return productReview_fileUploadModel.findAndCountAll({
-            where: {
-                review_id: id
-            }
+            where: where,
+            order: [
+                ['created_at', 'DESC']
+            ]
         })
     }
 

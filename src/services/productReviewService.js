@@ -1,15 +1,67 @@
 const productReviewModel = require("../models").product_review
+const productMasterModel = require("../models").product_master
 
 const Op = require("sequelize").Op;
 
 
 class product_reviewService{
-    getAllReviewsData(){
-        return productReviewModel.findAndCountAll()
+    getAllReviewsData(req_data){
+        var where = {}
+        var limit = 0
+        var offset = 0
+        if(req_data.reviewId){
+            where.review_id = req_data.reviewId
+        }
+
+        if(req_data.star_count){
+            where.star_count =  req_data.star_count
+        }
+
+        if(req_data.custName){
+            where.cust_name = req_data.custName   
+        }
+
+        if(req_data.custEmail){
+            where.cust_email = req_data.custEmail    
+        }
+
+        if(req_data.review){
+            where.review = req_data.review    
+        }
+
+        if(req_data.reviewTitle){
+            where.review_title = req_data.reviewTitle    
+        }
+
+        if(req_data.status){
+            where.status = req_data.status    
+        }
+        
+        if(req_data.limit){
+            limit = parseInt(req_data.limit)
+        }
+
+        if(req_data.offset){
+            offset = parseInt(req_data.offset)
+        }
+
+
+        return productReviewModel.findAndCountAll({
+            where: where,
+            limit : limit || 20,
+            offset: offset,
+            order: [
+                ['created_at', 'DESC'],
+                ['review_id', 'DESC']
+            ],
+        })
     }
 
     getAllReviewsDataByPid(req_info){
         const P_id = req_info.P_id
+
+        var where = {}
+
         return productReviewModel.findAndCountAll(
             {
                 where: {
@@ -21,7 +73,10 @@ class product_reviewService{
                         [Op.not]: ""
                     },
                 },
-                attributes: ["review_id", "pid", "cust_name", "cust_email", "review_title", "review", "star_count", "cust_location", "status", "admin_reply",  "created_at"]
+                attributes: ["review_id", "pid", "cust_name", "cust_email", "review_title", "review", "star_count", "cust_location", "status", "admin_reply",  "created_at"],
+                order: [
+                    ['created_at', 'DESC']
+                ]
             }
         )
     }

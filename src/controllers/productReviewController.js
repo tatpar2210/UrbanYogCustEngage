@@ -5,15 +5,44 @@ const product_reviewService = new productReviewService()
 module.exports = {
 
     getAllReviews: async function(req, res){
-        await product_reviewService.getAllReviewsData().then((result)=>{
-            res.status(200).json({
-                statuscode: 200,
-                message: "All product reviews without filter",
-                data: result
-            })
-        }).catch((err)=>{
-            res.status(400).json({err})
+        const req_data = req.body
+
+        const schema = Joi.object().keys({
+            reviewId: Joi.number().optional().allow("").error(new Error('Provide reviewId(number)')),
+            star_count: Joi.number().optional().allow("").max(5).error(new Error("Provide star_count(number(upto value 5 only))")),
+            custName: Joi.string().optional().allow("").error(new Error('Provide custName(string)')),
+            custEmail: Joi.string().optional().allow("").error(new Error('Provide custEmail(string)')),
+            review: Joi.string().optional().allow("").error(new Error('Provide review(string)')),
+            reviewTitle: Joi.string().optional().allow("").error(new Error('Provide reviewTitle(string)')),
+            status: Joi.number().optional().allow("").error(new Error('Provide status(number)')),
+            limit: Joi.number().optional().allow("").error(new Error('Provide limit(number)')),
+            offset: Joi.number().optional().allow("").error(new Error('Provide offset(number)')),
+            //sortBy: Joi.string().optional().allow("").error(new Error('Provide sortBy(string)')),
+            img: Joi.boolean().optional().allow("").error(new Error("Set img as true to show reviews having images")),
+            vid: Joi.boolean().optional().allow("").error(new Error("Set vid as true to show reviews having videos"))
         })
+
+        const schema_result = schema.validate(req_data)
+        if (schema_result.error){
+            console.log(schema_result.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+              });
+        }else{
+            await product_reviewService.getAllReviewsData(req_data).then((result)=>{
+                res.status(200).json({
+                    statuscode: 200,
+                    message: "All product reviews",
+                    data: result
+                })
+            }).catch((err)=>{
+                res.status(400).json({err})
+            })
+        }
+
     },
 
     getAllReviewsByPID: async function(req, res){

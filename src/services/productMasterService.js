@@ -15,8 +15,33 @@ class productMasterModelService{
     })
     }
 
-    findAll(){
-        return productMasterModel.findAndCountAll()
+    findAll(req_data){
+
+        var where = {}
+
+        if(req_data.p_id){
+            where.pid = req_data.p_id
+        }
+
+        if (req_data.prod_name){
+            where.product_name = req_data.prod_name
+        }
+
+        if (req_data.prod_cat){
+            where.product_category = req_data.prod_cat
+        }
+
+        if (req_data.prod_handle){
+            where.product_handle = req_data.prod_handle
+        }
+
+
+        return productMasterModel.findAndCountAll({
+            where: where,
+            order: [
+                ['created_at', 'DESC']
+            ]
+        })
     }
 
     findOneByPID(p_id){
