@@ -12,6 +12,10 @@ class product_uspService{
             }
         })
     }
+
+    storeUSP(data){
+        return product_usp.create(data)
+    }
 }
 
 module.exports = product_uspService

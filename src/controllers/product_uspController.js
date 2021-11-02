@@ -1,3 +1,4 @@
+const Joi = require("joi")
 const product_uspService = require("../services/product_uspService")
 const product_usp_service = new product_uspService()
 
@@ -48,5 +49,38 @@ module.exports = {
                 err: err
             })
         })
+    },
+
+    createUsp: async function(){
+        const data = req.body
+
+        const schema = Joi.object().keys({
+            usp_title: Joi.string().required().error(new Error("Provide usp_title(string)")),
+            p_id: Joi.number().required().error(new Error("Provide p_id(number)")),
+            product_id: Joi.number().required().error(new Error("Provide product_id(number)")),
+            created_at: Joi.string().error(new Error("Provide created_at(date | string)")),
+            updated_at: Joi.string().error(new Error("Provide created_at(date | string)"))
+        })
+
+        const schema_result = schema.validate(data)
+        if (schema_result.error){
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+              });
+        }else{
+            await product_usp_service.storeUSP(data).then((result)=>{
+                res.status(200).json({
+                    statuscode: 200,
+                    message: "stored usp details",
+                    data: result
+                })
+            }).catch((err)=>{
+                res.status(400).json({err})
+            })
+        }
     }
+
 }

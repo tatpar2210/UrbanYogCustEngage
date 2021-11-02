@@ -35,7 +35,6 @@ class productMasterModelService{
             where.product_handle = req_data.prod_handle
         }
 
-
         return productMasterModel.findAndCountAll({
             where: where,
             order: [

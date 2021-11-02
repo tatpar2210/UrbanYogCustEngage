@@ -18,6 +18,8 @@ const productSuggestionController = require("./src/controllers/productSuggestion
 const product_faqController = require("./src/controllers/product_faqController")
 const product_videoController = require("./src/controllers/product_videoController")
 const productReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
+const qrController = require("./src/controllers/qrgenerate")
+const batchMasterController = require("./src/controllers/batchmaster")
 
 app.use(express.json())
 app.use(bodyParser.json());
@@ -32,6 +34,8 @@ app.use(express.static(path_to_static))
 const path_to_public = path.join(__dirname, "public")
 app.use(express.static(path_to_public))
 
+const path_to_assets_pdf = path.join(__dirname, "assets/pdf")
+app.use(express.static(path_to_assets_pdf))
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -63,6 +67,14 @@ app.post("/postSingleProductReviewImg/:id", ProductReview_fileUploadController.p
 //api by harish
 app.post("/get_product_rev_img", ProductReview_fileUploadController.getProductReviewImages)
 
+//generate qr controller end points
+app.post('/generateQRText', qrController.generateQRText);
+app.post('/generateQRProduct', qrController.generateQRProduct);
+app.post('/getQrBatchDetails', qrController.getQrBatchDetails);
+app.post('/getQrDetails', qrController.getQrDetails);
+app.post('/downloadPDF', qrController.downloadPDF);
+
+
 //product-master
 app.post("/getPid", ProductMasterController.getPid)
 app.post("/getProductsMaster/all", ProductMasterController.getAllProducts)
@@ -76,6 +88,7 @@ app.post("/getProductVarientMaster/:id", product_varientController.get_varientsB
 //product-usp
 app.post("/getProductUSP/all", product_uspController.getAllProductUsp)
 app.post("/getProductUSP/:id", product_uspController.getProductUspByPid)
+app.post("/postProductUSP", product_uspController.createUsp)
 
 //product-suggestion
 app.post("/getProductSuggestion/all", productSuggestionController.getAllProductSuggestion)
@@ -92,6 +105,10 @@ app.post("/getProductFAQ/:id", product_faqController.getProductFaqByPid)
 //product-video
 app.post("/getProductVideos/all", product_videoController.getAll_ProductVids)
 app.post("/getProductVideos/:id", product_videoController.getProductVideoByPid)
+
+//product-batchmaster
+app.post("/getBatchMaster", batchMasterController.getBatchDetails)
+
 
 //user-master
 app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
