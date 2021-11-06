@@ -84,7 +84,7 @@ exports.downloadPDF = (req, res) => {
           .createQRPDF(req, res)
           .then((data) => {
             // download pdf
-            var downloaded_pdf_loc = "localhost:3000/"+ req.body.batchName + "/" + req.body.batchName + ".pdf"
+            var downloaded_pdf_loc = "http://urbanyogcustoengage.uglifestyle.in/"+ req.body.batchName + "/" + req.body.batchName + ".pdf"
             res.json({
                 statusCode: 100,
                 status: true,
@@ -109,7 +109,7 @@ exports.downloadPDF = (req, res) => {
           });
       } else {
         // download pdf directly if not any error occured
-        var downloaded_pdf_loc = "localhost:3000/"+ req.body.batchName + "/" + req.body.batchName + ".pdf"
+        var downloaded_pdf_loc = "http://urbanyogcustoengage.uglifestyle.in/"+ req.body.batchName + "/" + req.body.batchName + ".pdf"
         res.json({
             statusCode: 100,
             status: true,

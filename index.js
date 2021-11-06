@@ -69,10 +69,10 @@ app.post("/get_product_rev_img", ProductReview_fileUploadController.getProductRe
 
 //generate qr controller end points
 app.post('/generateQRText', qrController.generateQRText);
-app.post('/generateQRProduct', qrController.generateQRProduct);
+// app.post('/generateQRProduct', qrController.generateQRProduct);
 app.post('/getQrBatchDetails', qrController.getQrBatchDetails);
 app.post('/getQrDetails', qrController.getQrDetails);
-app.post('/downloadPDF', qrController.downloadPDF);
+//app.post('/downloadPDF', qrController.downloadPDF);
 
 
 //product-master

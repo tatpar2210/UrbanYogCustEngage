@@ -84,7 +84,7 @@ exports.downloadPDF = (req, res) => {
           .createQRPDF(req, res)
           .then((data) => {
             // download pdf
-            var downloaded_pdf_loc = "http://localhost:3000/"+ req.body.batchName + "/" + req.body.batchName + ".pdf"
+            var downloaded_pdf_loc = "http://urbanyogcustoengage.uglifestyle.in/"+ req.body.batchName + "/" + req.body.batchName + ".pdf"
             res.json({
                 statusCode: 100,
                 status: true,
@@ -108,7 +108,7 @@ exports.downloadPDF = (req, res) => {
           });
       } else {
         // download pdf directly if not any error occured
-        var downloaded_pdf_loc = "localhost:3000/"+ req.body.batchName + "/" + req.body.batchName + ".pdf"
+        var downloaded_pdf_loc = "http://urbanyogcustoengage.uglifestyle.in/"+ req.body.batchName + "/" + req.body.batchName + ".pdf"
         res.json({
             statusCode: 100,
             status: true,
@@ -137,23 +137,23 @@ exports.downloadPDF = (req, res) => {
   }
 };
 
-exports.generateQRProduct = (req, res) => {
-  const data = req.body;
-  const schema = Joi.object().keys({
-    pId: Joi.number().error(new Error("Provide pId(number)")),
-  });
+// exports.generateQRProduct = (req, res) => {
+//   const data = req.body;
+//   const schema = Joi.object().keys({
+//     pId: Joi.number().error(new Error("Provide pId(number)")),
+//   });
 
-  const schema_result = schema.validate(data)
+//   const schema_result = schema.validate(data)
 
-  if(schema_result.error){
-    res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: schema_result.error.message,
-      });
-  }else{}
-};
+//   if(schema_result.error){
+//     res.status(422).json({
+//         statusCode: 422,
+//         status: "error",
+//         message: "Invalid request data",
+//         data: schema_result.error.message,
+//       });
+//   }else{}
+// };
 
 exports.getQrBatchDetails = (req, res) => {
   const data = req.body;
