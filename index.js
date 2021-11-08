@@ -20,6 +20,7 @@ const product_videoController = require("./src/controllers/product_videoControll
 const productReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
 const qrController = require("./src/controllers/qrgenerate")
 const batchMasterController = require("./src/controllers/batchmaster")
+const tpmController = require('./src/controllers/tpm');
 
 app.use(express.json())
 app.use(bodyParser.json());
@@ -115,6 +116,12 @@ app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
 app.post("/getUserMaster/id/:id", userMasterController.findById)
 app.post("/getUserMaster/email/:email", userMasterController.findByEmail)
 app.post("/addUser", userMasterController.addUser)
+
+//TPM controller endpoints
+app.post('/getTPMDetails', tpmController.gettpmDetails);
+app.post('/createTPM', tpmController.createTPM);
+app.post('/updateTPM', tpmController.updateTPM);
+app.post('/deleteTPM', tpmController.deleteTPM);
 
 //shopify
 app.post("/fetch-from-shopify/products", ProductMasterController.fetchFromShopify)

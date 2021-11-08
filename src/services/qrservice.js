@@ -15,6 +15,7 @@ const ImageDataURI = require("image-data-uri");
 const PdfPrinter = require('pdfmake');
 const imgPath = path.join(__dirname, "../../assets/img/");
 const pdfPath = path.join(__dirname, "../../assets/pdf/");
+// console.log("path = ", pdfPath)
 
 
 // fs.mkdir(imgPath, { recursive: true }, function (err) {
