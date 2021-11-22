@@ -47,14 +47,10 @@ module.exports = {
 
     getAllReviewsByPID: async function(req, res){
  
-        const req_info = {
-            P_id: req.params.id,
-            query: req.query
-        }
-
-        if (Object.keys(req_info.query).length === 0){
+        req_data = req.body
+        if (Object.keys(req_data).length === 0){
             // if queries are not given but Pid is given
-            await product_reviewService.getAllReviewsDataByPid(req_info).then((result)=>{
+            await product_reviewService.getAllReviewsDataByPid(req_data).then((result)=>{
                 res.status(200).json({
                     statuscode: 200,
                     message: "Product reviews without filter",
@@ -70,6 +66,7 @@ module.exports = {
             // if queries are given
             const schema = Joi.object().keys({
                 reviewId: Joi.number().optional().allow("").error(new Error('Provide reviewId(number)')),
+                pId: Joi.string().error(new Error('Provide pId(string)')),
                 star_count: Joi.number().optional().allow("").max(5).error(new Error("Provide star_count(number(upto value 5 only))")),
                 custName: Joi.string().optional().allow("").error(new Error('Provide custName(string)')),
                 custEmail: Joi.string().optional().allow("").error(new Error('Provide custEmail(string)')),
@@ -83,7 +80,7 @@ module.exports = {
                 vid: Joi.boolean().optional().allow("").error(new Error("Set vid as true to show reviews having videos"))
             })
     
-            const schemaResult = schema.validate(req_info.query)
+            const schemaResult = schema.validate(req_data)
             if (schemaResult.error){
                 // if validation fails
                 console.log(schemaResult.error.message)
@@ -95,8 +92,8 @@ module.exports = {
                   });
             }else{
                 // if validation passes 
-                console.log("queries:", req_info.query)
-                product_reviewService.getReviewsByQuery(req_info).then((result)=>{
+                console.log("queries:", req_data)
+                product_reviewService.getReviewsByQuery(req_data).then((result)=>{
                     if (result.length === 0){
                         res.status(404).json({
                             statusCode: 404,
@@ -140,7 +137,7 @@ module.exports = {
             })
         }else{
             const schema = Joi.object().keys({
-                pid: Joi.number().required().error(new Error('Provide pId(number)')),
+                pid: Joi.number().required().error(new Error('Provide pid(number)')),
                 review: Joi.string().optional().allow("").error(new Error('Provide review(string)')),
                 review_title: Joi.string().optional().allow("").error(new Error('Provide reviewTitle(string)')),
                 star_count: Joi.number().error(new Error('Provide starCount(number)')),

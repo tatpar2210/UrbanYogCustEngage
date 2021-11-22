@@ -57,8 +57,8 @@ class product_reviewService{
         })
     }
 
-    getAllReviewsDataByPid(req_info){
-        const P_id = req_info.P_id
+    getAllReviewsDataByPid(req_data){
+        const P_id = req_data.pId
 
         var where = {}
 
@@ -81,9 +81,9 @@ class product_reviewService{
         )
     }
 
-    getReviewsByQuery(req_info){
-        const P_id = req_info.P_id
-        const query = req_info.query
+    getReviewsByQuery(req_data){
+        const P_id = req_data.pId
+        const data = req_data
         var where = {}
         // var demands_json = {
         //     pid: P_id,
@@ -95,14 +95,14 @@ class product_reviewService{
         //     },
         // }
 
-        // if (query.star_count){
+        // if (data.star_count){
         //     demands_json = {
         //         ...demands_json,
-        //         star_count: query.star_count
+        //         star_count: data.star_count
         //     }
         // }
 
-        // if (query.img){
+        // if (data.img){
         //     demands_json = {
         //         ...demands_json,
         //         cust_img: {
@@ -111,7 +111,7 @@ class product_reviewService{
         //     }
         // }
 
-        // if (query.vid){
+        // if (data.vid){
         //     demands_json = {
         //         ...demands_json,
         //         cust_vid: {
@@ -127,48 +127,49 @@ class product_reviewService{
 
         var demands_json = {}
 
-        if(query.reviewId){
-            where.review_id = query.reviewId
+        where.pid = P_id
+        if(data.reviewId){
+            where.review_id = data.reviewId
         }
 
-        if(query.star_count){
-            where.star_count =  query.star_count
+        if(data.star_count){
+            where.star_count =  data.star_count
         }
 
-        if(query.custName){
-            where.cust_name = query.custName   
+        if(data.custName){
+            where.cust_name = data.custName   
         }
 
-        if(query.custEmail){
-            where.cust_email = query.custEmail    
+        if(data.custEmail){
+            where.cust_email = data.custEmail    
         }
 
-        if(query.review){
-            where.review = query.review    
+        if(data.review){
+            where.review = data.review    
         }
 
-        if(query.reviewTitle){
-            where.review_title = query.reviewTitle    
+        if(data.reviewTitle){
+            where.review_title = data.reviewTitle    
         }
 
-        if(query.status){
-            where.status = query.status    
+        if(data.status){
+            where.status = data.status    
         }
         
-        if(query.limit){
-            limit = parseInt(query.limit)
+        if(data.limit){
+            limit = parseInt(data.limit)
         }
 
-        if(query.offset){
-            offset = parseInt(query.offset)
+        if(data.offset){
+            offset = parseInt(data.offset)
         }
 
 
-        // if(query.img){
+        // if(data.img){
         //     where.    
         // }
 
-        // if(query.vid){
+        // if(data.vid){
         //     where.    
         // }
 
@@ -176,7 +177,7 @@ class product_reviewService{
 
         console.log(where, "\n")
         
-        if(query.sortBy == "Most Recent"){
+        if(data.sortBy == "Most Recent"){
             return productReviewModel.findAndCountAll({
                 where: where,
                 offset: offset,
@@ -189,7 +190,7 @@ class product_reviewService{
             })
         }
 
-        else if(query.sortBy == "Highest Rating"){
+        else if(data.sortBy == "Highest Rating"){
             return productReviewModel.findAndCountAll({
                 where: where,
                 offset: offset,
@@ -202,7 +203,7 @@ class product_reviewService{
             })
         }
 
-        else if(query.sortBy == "Lowest Rating"){
+        else if(data.sortBy == "Lowest Rating"){
             return productReviewModel.findAndCountAll({
                 where: where,
                 offset: offset,

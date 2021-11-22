@@ -1,49 +1,52 @@
 const product_faqService = require("../services/product_faqService")
 const product_faq_service = new product_faqService()
+const Joi = require('joi');
 
 module.exports = {
     getAll_Product_Faq: async function(req, res){
-        await product_faq_service.getAll_productFaq().then((result)=>{
-            res.status(200).json({
-                statusCode: 200,
-                status: true,
-                message: "All product FAQs",
-                data: result
-            })
-        }).catch((err)=>{
-            console.log("Error is this: ",err)
-            res.status(400).json({
-                statuscode: 400,
-                data_obt: {
-                    query: req.query,
-                    body: req.body,
-                    params: req.params
-                },
-                err: err
-            })
-        })
-    },
+        const data = req.body;
+        const schema = Joi.object().keys({      
+            faqId: Joi.number().error(new Error('Provide faqId(number)')),
+            pId: Joi.number().error(new Error('Provide pId(number)')),
+            question: Joi.string().error(new Error('Provide question(string)')),
+            limit: Joi.number().error(new Error('Provide limit(number)')),
+            offset: Joi.number().error(new Error('Provide offset(number)'))
+        });
 
-    getProductFaqByPid: async function(req, res){
-        const Pid = req.params.id
-        await product_faq_service.getProductFAQByPid(Pid).then((result)=>{
-            res.status(200).json({
-                statusCode: 200,
-                status: true,
-                message: "All product USPs",
-                data: result
+        const schema_result = schema.validate(data)
+
+        if(schema_result.error){
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+            });
+        }else{
+            product_faq_service.getAll_productFaq(req, res).then(data => {
+                if (data.count > 0) {
+                    res.status(200).send({
+                        statusCode: 100,
+                        status: true,
+                        message: 'Product FAQs',
+                        data: data
+                    })
+                } else {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: 'Product FAQs not found',
+                        data: data
+                    })
+                }
+            }).catch(err => {
+                res.status(200).send({
+                    statusCode: 101,
+                    status: false,
+                    message: err,
+                    data: []
+                })
             })
-        }).catch((err)=>{
-            console.log("Error is this: ",err)
-            res.status(400).json({
-                statuscode: 400,
-                data_obt: {
-                    query: req.query,
-                    body: req.body,
-                    params: req.params
-                },
-                err: err
-            })
-        })
+        }
     }
 }

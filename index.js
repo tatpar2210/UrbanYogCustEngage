@@ -3,7 +3,9 @@ const app = express()
 require('dotenv').config()
 const cookieParser = require("cookie-parser")
 const path = require("path")
+const cors = require('cors');
 const bodyParser = require("body-parser")
+
 
 
 const ProductReviewController = require("./src/controllers/productReviewController")
@@ -18,13 +20,16 @@ const productSuggestionController = require("./src/controllers/productSuggestion
 const product_faqController = require("./src/controllers/product_faqController")
 const product_videoController = require("./src/controllers/product_videoController")
 const productReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
-// const qrController = require("./src/controllers/qrgenerate")
+const qrController = require("./src/controllers/qrgenerate")
 const batchMasterController = require("./src/controllers/batchmaster")
 const tpmController = require('./src/controllers/tpm');
+const TPMReview = require('./src/controllers/tpmReview');
 
 app.use(express.json())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+app.use(cors());
+
 
 app.use(cookieParser())
 
@@ -69,11 +74,10 @@ app.post("/postSingleProductReviewImg/:id", ProductReview_fileUploadController.p
 app.post("/get_product_rev_img", ProductReview_fileUploadController.getProductReviewImages)
 
 //generate qr controller end points
-// app.post('/generateQRText', qrController.generateQRText);
-// app.post('/generateQRProduct', qrController.generateQRProduct);
-// app.post('/getQrBatchDetails', qrController.getQrBatchDetails);
-// app.post('/getQrDetails', qrController.getQrDetails);
-// app.post('/downloadPDF', qrController.downloadPDF);
+app.post('/getQrBatchDetails', qrController.getQrBatchDetails);
+app.post('/getQrDetails', qrController.getQrDetails);
+app.post('/updateQRDetails', qrController.updateQRDetails);
+app.post('/downloadPDF', qrController.downloadPDF);
 
 
 //product-master
@@ -84,11 +88,9 @@ app.post("/addProduct", ProductMasterController.createProduct)
 
 //product-varient master
 app.post("/getProductVarientMaster/all", product_varientController.getAllVarients)
-app.post("/getProductVarientMaster/:id", product_varientController.get_varientsByPid)
 
 //product-usp
 app.post("/getProductUSP/all", product_uspController.getAllProductUsp)
-app.post("/getProductUSP/:id", product_uspController.getProductUspByPid)
 app.post("/postProductUSP", product_uspController.createUsp)
 
 //product-suggestion
@@ -101,7 +103,6 @@ app.post("/getProductReviewImages", productReview_fileUploadController.getProduc
 
 //product-faq
 app.post("/getProductFAQ/all", product_faqController.getAll_Product_Faq)
-app.post("/getProductFAQ/:id", product_faqController.getProductFaqByPid)
 
 //product-video
 app.post("/getProductVideos/all", product_videoController.getAll_ProductVids)
@@ -123,33 +124,15 @@ app.post('/createTPM', tpmController.createTPM);
 app.post('/updateTPM', tpmController.updateTPM);
 app.post('/deleteTPM', tpmController.deleteTPM);
 
+
+// Product Third Party Review Controller Endpoints
+app.post('/getTPMReview', TPMReview.getTPMReview);
+app.post('/createTPMReview', TPMReview.createTPMReview);
+app.post('/updateTPMReview', TPMReview.updateTPMReview);
+app.post('/deleteTPMReview', TPMReview.deleteTPMReview);
+
 //shopify
 app.post("/fetch-from-shopify/products", ProductMasterController.fetchFromShopify)
-
-
-//File uploads
-//const upload = multer({
-//    dest: "src/assets/File_Uploads",
-//    limits: {
-//        fieldSize: 1000000
-//    },
-//
-//    fileFilter(req, file, cb){
-//
-//        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)){
-//            return cb(new Error("Provide jpg, jpeg, png files only"))
-//        }
-//        
-//        cb(undefined, true)
-//    }
-//})
-//app.post("/uploads", upload.single("profile"), (req, res) => {
-//    res.send()
-//})
-//
-
-
-
 
 const port = process.env.PORT || 3000
 const host = process.env.HOST

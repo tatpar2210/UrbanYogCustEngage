@@ -1,50 +1,52 @@
 const productVarientService = require("../services/product_varientService")
 const product_varient_service = new productVarientService()
+const Joi = require('joi');
 
 module.exports = {
     getAllVarients: async function(req, res){
-        await product_varient_service.getAll_ProductVarients().then((result)=>{
-            res.status(200).json({
-                statusCode: 200,
-                status: true,
-                message: "All product Varients",
-                data: result
+        const data = req.body;
+        const schema = Joi.object().keys({
+            pId: Joi.number().error(new Error('Provide pId(pId)')),
+            variantId: Joi.number().error(new Error('Provide variantId(number)')),
+            limit: Joi.number().error(new Error('Provide limit(number)')),
+            offset: Joi.number().error(new Error('Provide offset(number)'))
+        });
+
+        const schema_result = schema.validate(data)
+        if(schema_result.error){
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+            });
+        }else{
+            await product_varient_service.getAll_ProductVarients(req, res).then(data => {
+                if (data.count > 0) {
+                    res.status(200).send({
+                        statusCode: 100,
+                        status: true,
+                        message: 'Variant details',
+                        data: data
+                    })
+                } else {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: 'Variant details not found',
+                        data: data
+                    })
+                }
             })
-        }).catch((err)=>{
-            console.log("Error is this: ",err)
-            res.status(400).json({
-                statuscode: 400,
-                data_obt: {
-                    query: req.query,
-                    body: req.body,
-                    params: req.params
-                },
-                err: err
-            })
-        })
+                .catch(err => {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: err,
+                        data: []
+                    })
+                })
+        }
     },
 
-    get_varientsByPid: async function(req, res){
-        const Pid = req.params.id
-
-        await product_varient_service.getProductVarientByPid(Pid).then((result)=>{
-            res.status(200).json({
-                statusCode: 200,
-                status: true,
-                message: "Product Varients by Pid",
-                data: result
-            })
-        }).catch((err)=>{
-            console.log("Error is this: ",err)
-            res.status(400).json({
-                statuscode: 400,
-                data_obt: {
-                    query: req.query,
-                    body: req.body,
-                    params: req.params
-                },
-                err: err
-            })
-        })
-    }
 }
