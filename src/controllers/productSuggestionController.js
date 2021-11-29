@@ -48,7 +48,7 @@ module.exports = {
                 data: error.message
             });
         }else{
-            product_suggestion_master.getProductSuggestionDetails(req, res).then(data => {
+            product_suggestion_master.getProductSuggestionByPid(req, res).then(data => {
                 if (data.count > 0) {
                     res.status(200).send({
                         statusCode: 100,

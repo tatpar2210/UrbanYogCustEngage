@@ -50,7 +50,7 @@ class TPMReviewService {
             })
     }
 
-    createTPMReview(req) {
+    async createTPMReview(req) {
 
         var date = new Date();
         var dateStr =

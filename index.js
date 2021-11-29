@@ -24,6 +24,7 @@ const qrController = require("./src/controllers/qrgenerate")
 const batchMasterController = require("./src/controllers/batchmaster")
 const tpmController = require('./src/controllers/tpm');
 const TPMReview = require('./src/controllers/tpmReview');
+const cust_qr_scan_orderController = require("./src/controllers/cust_qr_scan_orderController")
 
 app.use(express.json())
 app.use(bodyParser.json());
@@ -130,6 +131,11 @@ app.post('/getTPMReview', TPMReview.getTPMReview);
 app.post('/createTPMReview', TPMReview.createTPMReview);
 app.post('/updateTPMReview', TPMReview.updateTPMReview);
 app.post('/deleteTPMReview', TPMReview.deleteTPMReview);
+
+//cust_qr_scan_order api
+app.post('/getCust_qr_scan_order', cust_qr_scan_orderController.getAll_cust_qrscanned_order);
+app.post('/createCust_qr_scan_order', cust_qr_scan_orderController.create_cust_qr_scanned_order);
+
 
 //shopify
 app.post("/fetch-from-shopify/products", ProductMasterController.fetchFromShopify)

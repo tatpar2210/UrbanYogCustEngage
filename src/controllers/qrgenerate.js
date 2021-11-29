@@ -202,13 +202,13 @@ exports.getQrBatchDetails = (req, res) => {
       const update_data = req.body
       console.log("hit hua updateQRDetails")
       const schema = Joi.object().keys({
-        qrBatchId: Joi.number().error(new Error("Provide qrBatchId(number)")),
-        batchId: Joi.number().error(new Error("Provide batchId(number)")),
-        qrId: Joi.string().error(new Error("Provide qrId(number)")),
+        // qrBatchId: Joi.number().error(new Error("Provide qrBatchId(number)")),
+        // batchId: Joi.number().error(new Error("Provide batchId(number)")),
+        // qrId: Joi.string().error(new Error("Provide qrId(number)")),
         qrCode: Joi.string().required().error(new Error("qrCode(number) is required for updating data in DB.")),
-        pId: Joi.number().error(new Error("Provide pId(number)")),
-        offset: Joi.number().error(new Error("Provide offset(number)")),
-        limit: Joi.number().error(new Error("Provide limit(number)")),
+        // pId: Joi.number().error(new Error("Provide pId(number)")),
+        // created_at: Joi.string().error(new Error("created_at(string)")),
+        updated_at: Joi.string().error(new Error("updated_at(string)")),
       });
     
       const schema_result = schema.validate(update_data)

@@ -64,8 +64,9 @@ exports.createTPMReview = (req, res) => {
 
         tpId: Joi.number().required().error(new Error('Provide tpId(number)')),
         pId: Joi.number().required().error(new Error('Provide pId(number)')),
-        tpmProductUrl: Joi.string().required().error(new Error('Provide tpmProductUrl(number)')),
-
+        tpmProductUrl: Joi.string().required().error(new Error('Provide tpmProductUrl(string)')),
+        created_at: Joi.string().allow("").optional().error(new Error('Provide created_at(string)')),
+        updated_at: Joi.string().allow("").optional().error(new Error('Provide updated_at(string)')),
     });
 
     const schemaresult = schema.validate(data)

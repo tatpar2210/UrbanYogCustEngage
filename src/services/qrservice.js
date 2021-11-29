@@ -2,7 +2,7 @@ const BatchMaster = require("../models").batch_master;
 const QRMaster = require("../models").qr_master;
 const QRBatchMaster = require("../models").qr_batch_master;
 const Productmaster = require("../models").product_master;
-const { QueryTypes } = require('sequelize');
+const { QueryTypes, where } = require('sequelize');
 // const db = require('../models');
 
 const Op = require("sequelize").Op;
@@ -154,14 +154,15 @@ class qrSerrvice {
         msg: "",
         data: {}
       }
+   
       await QRMaster.findOne({
-          where: {qr_code: update_data.qrCode}
+          where: where
       }).then(async(result)=>{
           if(!result){
             resp_data.msg = "Provided QR Code not found."
           }else{
               await QRMaster.update(
-                  {status : 1},
+                  {status : 1, updated_at: update_data.updated_at},
                   {where: {qr_code: update_data.qrCode}}
               ).then((result)=>{
                 resp_data.msg = "QR Status Changed to 1 successfully"
@@ -232,7 +233,7 @@ function generateQrPDF(result, folderPath, qrPosition) {
         },
       ],
     }).then((batchQrData) => {
-
+        console.log(batchQrData)
         console.log("batchQrData length: ", batchQrData.length)
         if(batchQrData.length === 0){
             var msg = "from generatePDF: batchQrData is empty"
