@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = (sequelize, DataTypes) => {
     const product_review = sequelize.define("product_review", {
         review_id: {

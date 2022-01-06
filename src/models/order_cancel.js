@@ -1,24 +1,25 @@
 'use strict';
-
 module.exports = (sequelize, DataTypes) => {
-    const product_review_file_upload = sequelize.define('product_review_file_upload', {
-        file_id: {
+    const order_cancel = sequelize.define('order_cancel', {
+        cancel_order_id : {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
             type: DataTypes.INTEGER
         },
-        review_id: DataTypes.INTEGER,
-        file_type: DataTypes.INTEGER,
-        file_path: DataTypes.STRING,
+        store_order_id: DataTypes.INTEGER,
+        store_order_number: DataTypes.INTEGER,
+        store_cust_id: DataTypes.INTEGER,
+        cancel_reason: DataTypes.STRING,
+        store_id: DataTypes.INTEGER,
         created_at: DataTypes.STRING,
         updated_at: DataTypes.STRING,
     }, {
         freezeTableName: true,
         timestamps: false
     });
-    product_review_file_upload.associate = function (models) {
+    order_cancel.associate = function (models) {
         // associations can be defined here
     };
-    return product_review_file_upload;
-}
+    return order_cancel;
+};

@@ -1,24 +1,24 @@
 'use strict';
-
 module.exports = (sequelize, DataTypes) => {
-    const product_review_file_upload = sequelize.define('product_review_file_upload', {
-        file_id: {
+    const call_request = sequelize.define('call_request', {
+        call_req_id : {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
             type: DataTypes.INTEGER
         },
-        review_id: DataTypes.INTEGER,
-        file_type: DataTypes.INTEGER,
-        file_path: DataTypes.STRING,
+        contact_no: DataTypes.STRING,
+        cust_name: DataTypes.STRING,
+        cust_email: DataTypes.STRING,
+        status: DataTypes.STRING,
         created_at: DataTypes.STRING,
         updated_at: DataTypes.STRING,
     }, {
         freezeTableName: true,
         timestamps: false
     });
-    product_review_file_upload.associate = function (models) {
+    call_request.associate = function (models) {
         // associations can be defined here
     };
-    return product_review_file_upload;
-}
+    return call_request;
+};
