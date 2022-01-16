@@ -36,6 +36,7 @@ const customerWalletHistoryController = require("./src/controllers/customerWalle
 const customerWalletController = require("./src/controllers/customerWalletController")
 const customerWalletOrderController = require("./src/controllers/customerWalletOrderController")
 const websiteWalletController = require("./src/controllers/websiteWalletController")
+const custFeedbackController = require('./src/controllers/custFeedbackController');
 
 app.use(express.json())
 app.use(bodyParser.json());
@@ -241,6 +242,10 @@ app.post('/convertRewardToDiscount', customerWalletOrderController.convertReward
 //wallet api for website
 app.post('/getWalletCountForWebsite', websiteWalletController.getWalletCountForWebsite);
 app.post('/getDiscountList', websiteWalletController.getDiscountList);
+
+//customer feedback 
+app.post('/getCustFeedback', custFeedbackController.getCustFeedback);
+app.post('/createCustFeedback', custFeedbackController.createCustFeedback);
 
 
 const port = process.env.PORT || 3000
