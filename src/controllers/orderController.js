@@ -84,7 +84,7 @@ exports.getCancelOrderDetails = (req, res) => {
     OrderService
       .getCancelOrderDetails(req, res)
       .then((data) => {
-        if (data && data.count > 0) {
+        if (data.count > 0) {
           res.status(200).send({
             statusCode: 100,
             status: true,

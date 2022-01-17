@@ -37,6 +37,7 @@ const customerWalletController = require("./src/controllers/customerWalletContro
 const customerWalletOrderController = require("./src/controllers/customerWalletOrderController")
 const websiteWalletController = require("./src/controllers/websiteWalletController")
 const custFeedbackController = require('./src/controllers/custFeedbackController');
+const seoMetaKeywordController = require('./src/controllers/seoMetaKeywordController');
 
 app.use(express.json())
 app.use(bodyParser.json());
@@ -76,6 +77,15 @@ app.use((req, res, next) => {
 //auth
 app.post("/auth", authMasterController.authorizeCredentials)
 app.post("/auth-token", authMasterController.authorizeToken)
+
+
+// dashboard API's
+app.post('/getCustomerCount', customerController.getCustomerCount);
+app.post('/getQrCount', qrController.getQrCount);
+app.post("/getProductsCount", ProductMasterController.getAllProducts)
+app.post("/getUserCount", userMasterController.findAllUserMaster)
+
+
 
 
 
@@ -247,6 +257,11 @@ app.post('/getDiscountList', websiteWalletController.getDiscountList);
 app.post('/getCustFeedback', custFeedbackController.getCustFeedback);
 app.post('/createCustFeedback', custFeedbackController.createCustFeedback);
 
+//product meta-keyword api endpoint
+app.post('/getMetaKeyword', seoMetaKeywordController.getMetaKeyword);
+app.post('/createMetaKeyword', seoMetaKeywordController.createMetaKeyword);
+app.post('/updateMetaKeyword', seoMetaKeywordController.updateMetaKeyword);
+app.post('/deleteMetaKeyword', seoMetaKeywordController.deleteMetaKeyword);
 
 const port = process.env.PORT || 3000
 const host = process.env.HOST

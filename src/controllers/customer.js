@@ -17,6 +17,59 @@ fs.mkdir(imgPath, { recursive: true }, function (err) {
   }
 });
 
+
+exports.getCustomerCount = (req, res) => {
+    const data = req.body;
+    const schema = Joi.object().keys({
+      custId: Joi.number().error(new Error("Provide custId(number)")),
+      custName: Joi.string().error(new Error("Provide custName(string)")),
+      custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
+      custMoNo: Joi.string().error(new Error("Provide custMoNo(number)")),
+      limit: Joi.number().error(new Error("Provide limit(number)")),
+      offset: Joi.number().error(new Error("Provide offset(number)")),
+    });
+  
+    const schema_result = schema.validate(data)
+  
+    if(schema_result.error){
+      res.status(422).json({
+          statusCode: 422,
+          status: "error",
+          message: "Invalid request data",
+          data: schema_result.error.message,
+        });
+    }else {
+      customerService
+        .getCustomerCount(data)
+        .then((data) => {
+          if (data > 0) {
+            res.status(200).send({
+              statusCode: 100,
+              status: true,
+              message: "Customer details",
+              data: data,
+            });
+          } else {
+            res.status(200).send({
+              statusCode: 101,
+              status: false,
+              message: "Customer details not found",
+              data: data,
+            });
+          }
+        })
+        .catch((err) => {
+          res.status(200).send({
+            statusCode: 101,
+            status: false,
+            message: err,
+            data: [],
+          });
+        });
+    }
+  };
+  
+
 exports.getCustomerDetails = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({

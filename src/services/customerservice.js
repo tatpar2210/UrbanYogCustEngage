@@ -5,6 +5,42 @@ const CustomerProfileImg = require("../models").customer_profile_img;
 const Op = require("sequelize").Op;
 
 class customerMasterService {
+    getCustomerCount(data) {
+        return new Promise((resolve, reject) => {
+          let where = {};
+    
+          if (data.custId) {
+            where.cust_id = data.custId;
+          }
+    
+          if (data.custEmail) {
+            // where.email = req.body.custEmail;
+            where.email = data.custEmail
+          }
+    
+          if (data.custName) {
+            where.first_name = data.custName
+          }
+    
+          if (data.custMoNo) {
+            where.phone = data.custMoNo
+          }
+          return CustomerMaster.count({
+            where: where,
+          })
+            .then((result) => {
+              resolve(result);
+            })
+            .catch((error) => {
+              console.log(error);
+              reject(error)
+            });
+        }).catch((err) => {
+          console.log(err);
+          return err;
+        });
+      }
+    
   getCustomerDetails(req, res) {
     return new Promise((resolve, reject) => {
       let where = {};

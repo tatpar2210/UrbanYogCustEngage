@@ -45,6 +45,42 @@ class qrSerrvice {
     });
   }
 
+  getQrCount(data) {
+    var where = {};
+
+    if (data.batchId) {
+      where.batch_id = data.batchId;
+    }
+
+    if (data.qrId) {
+      where.qr_id = data.qrId;
+    }
+
+    if (data.qrCode) {
+      where.qr_code = data.qrCode;
+    }
+
+    if (data.qrBatchId) {
+      where.qr_batch_id = data.qrBatchId;
+    }
+
+    if (data.pId) {
+      where.pid = data.pId;
+    }
+
+    if (data.status) {
+        where.status = data.status;
+      }
+
+    if (data.qrCode) {
+      where.qr_code = { [Op.like]: `%${data.qrCode}%` };
+    }
+
+    return QRMaster.count({
+      where: where,
+    })
+  }
+
   getQrDetails(data) {
     var where = {};
 
@@ -67,6 +103,10 @@ class qrSerrvice {
     if (data.pId) {
       where.pid = data.pId;
     }
+
+    if (data.status) {
+        where.status = data.status;
+      }
 
     if (data.qrCode) {
       where.qr_code = { [Op.like]: `%${data.qrCode}%` };
