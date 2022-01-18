@@ -6,7 +6,8 @@ const path = require("path")
 const cors = require('cors');
 const bodyParser = require("body-parser")
 
-
+const authmaster = require("./src/controllers/authMasterController")
+const jwtauth = require("./src/middleware/jwtauth")
 const customerController = require('./src/controllers/customer');
 const ProductReviewController = require("./src/controllers/productReviewController")
 const ProductReview_fileUploadController = require("./src/controllers/productReview_fileUploadController")
@@ -74,11 +75,15 @@ app.use((req, res, next) => {
 
 
 
-//auth
-app.post("/auth", authMasterController.authorizeCredentials)
-app.post("/auth-token", authMasterController.authorizeToken)
-
-
+//aut API
+app.post("/login", authmaster.genrateAuthToken)
+app.post('/verifyToken', jwtauth.verifyToken, (req, res)=>{
+    res.status(200).send({
+        statusCode: 100,
+        status: 'true',
+        message: 'Token verified'
+    });
+});
 // dashboard API's
 app.post('/getCustomerCount', customerController.getCustomerCount);
 app.post('/getQrCount', qrController.getQrCount);
@@ -140,6 +145,11 @@ app.post("/postProductUSP", product_uspController.createUsp)
 //product-suggestion
 app.post("/getProductSuggestion/all", productSuggestionController.getAllProductSuggestion)
 app.post("/getProductSuggestion/:id", productSuggestionController.getProductSuggestionByPid)
+app.post('/createProductSuggestionDetails', productSuggestionController.createProductSuggestionDetails);
+app.post('/updateProductSuggestionDetails', productSuggestionController.updateProductSuggestionDetails);
+app.post('/deleteProductSuggestionDetails', productSuggestionController.deleteProductSuggestionDetails);
+app.post('/createFrequentlyBroughtCounter', productSuggestionController.createFrequentlyBroughtCounter);
+app.post('/getFrequentlyBroughtCounter', productSuggestionController.getFrequentlyBroughtCounter);
 
 //product-review-img
 app.post("/postProductReview_img/:id", productReview_fileUploadController.postProductReview_fileUpload)
@@ -147,10 +157,16 @@ app.post("/getProductReviewImages", productReview_fileUploadController.getProduc
 
 //product-faq
 app.post("/getProductFAQ/all", product_faqController.getAll_Product_Faq)
+app.post('/createProductFAQs', product_faqController.createProductFAQs);
+app.post('/updateProductFAQs', product_faqController.updateProductFAQs);
+app.post('/deleteProductFAQs', product_faqController.deleteProductFAQs);
 
 //product-video
 app.post("/getProductVideos/all", product_videoController.getAll_ProductVids)
 app.post("/getProductVideos/:id", product_videoController.getProductVideoByPid)
+app.post('/createProductVideo', product_videoController.createProductVideo);
+app.post('/updateProductVideo', product_videoController.updateProductVideo);
+app.post('/deleteProductVideo', product_videoController.deleteProductVideo);
 
 //product-batchmaster
 app.post("/getBatchMaster", batchMasterController.getBatchDetails)

@@ -20,5 +20,7 @@
     "database": "uglifest_custoengage_urbanyog",
     "host": "localhost",
     "dialect": "mysql"
-  }
+  },
+
+  "secret": "thisisDeaDKilleRwhomadethisbackend"
 }

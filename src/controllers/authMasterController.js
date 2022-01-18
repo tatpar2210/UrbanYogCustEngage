@@ -1,94 +1,53 @@
-const authMasterService = require("../services/authMasterService")
-const auth_masterService = new authMasterService() 
 const jwt = require("jsonwebtoken")
-const userMasterService = require("../services/userMasterService")
-const user_masterService = new userMasterService()
-
+const UserMaster = require("../models").user_master
+const Joi = require("joi")
+const config = require("../config/config.json")
 
 module.exports = {
-    authorizeCredentials: async function(req, res){
-        const req_cred = req.body
-        const email = req_cred.email
-        const pswd = req_cred.password
-        console.log(pswd)
+    async genrateAuthToken(req, res){
+        const body_data = req.body
 
-        //validation is already done by angular login component
+        const schema = Joi.object().keys({
+            email: Joi.string().required().error(new Error('Provide email(string)')),
+            password: Joi.string().required().error(new Error('Provide password(string)')),
+        });
 
-        await auth_masterService.authLogic(email, pswd).then( async (result)=>{
-            if (result.user_confirmation === true){
-                //generating token on adding user suucefully
-                const token_expire = "240 days"
-                const token = jwt.sign({email: req_cred.email}, "thisistatparwhomadethisbackend", {expiresIn: token_expire})
-                console.log(token, "\n", token_expire)
-                
-                var storeData = {
-                    user_id: null,
-                    auth_token: "",
-                    expires_in: "" 
-                }
-                //find by email to store token 
-                console.log(token)
-                await user_masterService.findOneByEmail(req_cred.email).then((success)=>{
-                        storeData.user_id = success.user_id,
-                        storeData.auth_token = token,
-                        storeData.expires_in = token_expire
-                    }).catch((faliure)=>{
-                            console.log(faliure)
-                        })
-                        
-                //sending token to database
-                await auth_masterService.storeAuth(storeData).then((result)=>{
-                    console.log(result)
-                }).catch((err)=>{
-                    console.log(err)
-                    res.status(404).json({
-                        statusCode: 404,
-                        success: false,
-                        from: "storeAuth",
-                        result: err
-                    })
+        await UserMaster.findAndCountAll({
+            where: {
+                email: body_data.email,
+                password: body_data.password
+            },
+            attributes: ["first_name", "last_name", "contact_no", "email"]
+        }).then((result)=>{
+            if(result.count === 0){
+                res.status(200).send({
+                    statusCode: 101,
+                    status: 'false',
+                    message: 'Invalid credentials',
+                    data: result
                 })
             }else{
-                //pass
-            }
-            
-            console.log("\nMsg from authController: \n", result)
-            if (!storeData){
-                res.status(404).json({
-                    statusCode: 404,
-                    success: false,
-                    message: "Database connection error",
-                    from: "authLogic",
-                    result: [result, storeData],
+                console.log(result.rows[0].dataValues)
+                var token = jwt.sign({
+                    user_id: result.rows[0].dataValues.user_id,
+                    email: result.rows[0].dataValues.email,
+                    first_name: result.rows[0].dataValues.first_name,
+                    last_name: result.rows[0].dataValues.last_name,
+                    contact_no: result.rows[0].dataValues.contact_no,
+                    status: result.rows[0].dataValues.status
+                }, config.secret, {
+                    expiresIn: 864000 // expires in 240 hours(value is total seconds)
                 })
-            }else{
-                res.status(200).json({
-                    statusCode: 200,
-                    success: true,
-                    result: [result, storeData]
+
+                res.status(200).send({
+                    statusCode: 100,
+                    status: 'true',
+                    message: 'Logged in successfully',
+                    data: result,
+                    token: token
                 })
             }
-        }).catch(err => {
-            res.status(404).json({
-                statusCode: 404,
-                success: flase,
-                from: "authLogic",
-                result: err
-            })
         })
-        
 
-
-    },
-
-    authorizeToken: async function(req, res){
-        const auth_token = req.body.cookie
-        const auth_token_func = await auth_masterService.authToken(auth_token).then((result)=>{
-            console.log(result)
-    
-            res.status(200).json({result})
-        }).catch((err)=>{
-            console.log(err)
-        })
     }
 }

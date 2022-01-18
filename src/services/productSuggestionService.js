@@ -102,6 +102,203 @@ class productSuggestionService{
                 reject(err.message)
             })
     }
+
+    getFrequentlyBroughtCounter(req, res) {
+        return new Promise((resolve, reject) => {
+
+            let where = {}
+
+            if (req.body.fbcId) {
+                where.fbc_id = req.body.fbcId;
+            }
+
+            if (req.body.pId) {
+                where.pid = req.body.pId;
+            }
+
+            if (req.body.pageUrl) {
+                where.page_url = { [Op.like]: `%${req.body.pageUrl}%` };
+            }
+
+            if (req.body.pageType) {
+                where.page_type = { [Op.like]: `%${req.body.pageType}%` };
+            }
+
+            if (req.body.createdAt) {
+                where.created_at = { [Op.like]: `%${req.body.createdAt}%` };
+            }
+
+
+            Productmaster.hasMany(ProductFrequentlyBoughtCount, { foreignKey: 'pid' })
+            ProductFrequentlyBoughtCount.belongsTo(Productmaster, { foreignKey: 'pid', targetKey: 'pid' })
+
+            return ProductFrequentlyBoughtCount.findAndCountAll({
+                where: where,
+                offset: req.body.offset || 0,
+                limit: req.body.limit || 10,
+                order: [
+                    ['fbc_id', 'DESC'],
+                ],
+                attributes: ['fbc_id', 'pid', 'page_url', 'page_type', 'click_count', 'created_at'],
+                include: [{
+                    model: Productmaster,
+                    required: true,
+                    attributes: ['pid', 'product_name'],
+                }],
+                
+            }).then(result => resolve(result))
+                .catch(error => resolve(error));
+        })
+            .catch(err => {
+                reject(err.message)
+            })
+    }
+
+
+    createProductSuggestionDetails(req) {
+        var date = new Date();
+        var dateStr =
+            ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("00" + date.getDate()).slice(-2) + "-" +
+            date.getFullYear() + " " +
+            ("00" + date.getHours()).slice(-2) + ":" +
+            ("00" + date.getMinutes()).slice(-2) + ":" +
+            ("00" + date.getSeconds()).slice(-2);
+
+        let arraySuggestPid = req.body.suggstPid;
+
+        return new Promise((resolve, reject) => {
+            let where = [];
+            let arrayDuplicates = [];
+
+            arraySuggestPid.forEach(function (item, index) {
+
+                let cnd =
+                {
+                    where: {
+                        pid: req.body.pId,
+                        suggst_pid: item.suggst_pid,
+                        suggst_product_id: item.suggst_pid,
+                    }
+                }
+
+                return ProductSuggestion.findAll(cnd).then((result) => {
+
+                    if (result.length <= 0) {
+                        return ProductSuggestion.create({
+                            pid: req.body.pId,
+                            suggst_pid: item.suggst_pid,
+                            suggst_product_id: item.suggst_pid,
+                            created_at: dateStr
+                        })
+
+                    } else {
+
+                        let duplicates = {};
+                        duplicates.pid = req.body.pId;
+                        duplicates.suggst_pid = item.suggst_pid;
+                    }
+                    arrayDuplicates.push(duplicates);
+
+                })
+
+                    .catch(error => resolve(error));
+
+            })
+                .then(result => resolve(result))
+                .catch(error => resolve(error));
+        })
+            .catch(err => {
+                reject(err.message)
+            })
+    }
+
+
+    createFrequentlyBroughtCounter(req) {
+        var date = new Date();
+        var dateStr =
+            ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("00" + date.getDate()).slice(-2) + "-" +
+            date.getFullYear() + " " +
+            ("00" + date.getHours()).slice(-2) + ":" +
+            ("00" + date.getMinutes()).slice(-2) + ":" +
+            ("00" + date.getSeconds()).slice(-2);
+
+        return new Promise((resolve, reject) => {
+
+            return ProductFrequentlyBoughtCount.create({
+                pid: req.body.pId,
+                page_url: req.body.pageUrl,
+                page_type: req.body.pageType,
+                click_count: 1,
+                created_at: dateStr
+            }).then(result => resolve(result))
+                .catch(error => resolve(error));
+
+            })
+                .catch(error => resolve(error));
+        }
+           
+
+    updateProductSuggestionDetails(req, res) {
+        var date = new Date();
+        var dateStr =
+            ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("00" + date.getDate()).slice(-2) + "-" +
+            date.getFullYear() + " " +
+            ("00" + date.getHours()).slice(-2) + ":" +
+            ("00" + date.getMinutes()).slice(-2) + ":" +
+            ("00" + date.getSeconds()).slice(-2);
+
+        return new Promise((resolve, reject) => {
+
+            let where = {};
+            let data = {};
+
+            if (req.body.sugstId) {
+                where.sugst_id = req.body.sugstId;
+            }
+
+            if (req.body.pId) {
+                data.pid = req.body.pId;
+            }
+
+            if (req.body.suggstPid) {
+                data.suggst_pid = req.body.suggstPid;
+            }
+
+            if (req.body.sugstProductid) {
+                data.suggst_product_id = req.body.sugstProductid;
+            }
+
+            return ProductSuggestion.update(data, {
+                where: where
+            }).then(result => resolve(result))
+                .catch(error => resolve(error));
+        })
+            .catch(err => {
+                reject(err.message)
+            })
+    }
+
+    deleteProductSuggestionDetails(req, res) {
+        return new Promise((resolve, reject) => {
+
+            let where = {};
+
+            if (req.body.sugstId) {
+                where.sugst_id = req.body.sugstId;
+            }
+
+            return ProductSuggestion.destroy({
+                where: where
+            }).then(result => resolve(result))
+                .catch(error => resolve(error));
+        })
+            .catch(err => {
+                reject(err.message)
+            })
+    }
 }
 
 module.exports = productSuggestionService

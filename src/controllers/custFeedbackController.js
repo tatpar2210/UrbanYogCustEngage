@@ -61,39 +61,39 @@ exports.createCustFeedback = (req, res) => {
         phone: Joi.number().required().error(new Error("Provide phone(number)")),
         feedback: Joi.string().required().error(new Error("Provide feedback(string)")),
     });
-    Joi.validate(data, schema, (error, value) => {
-        if (error) {
-            // send a 422 error response if validation fails
-            res.status(422).json({
-                statusCode: 422,
-                status: "error",
-                message: "Invalid request data",
-                data: error.message,
-            });
-        } else {
-            custFeedbackService
-                .createCustFeedback(req, res)
-                .then((data) => {
-                    if (data) {
-                        res.status(200).send({
-                            statusCode: 100,
-                            status: true,
-                            message: "Thanks for your feedback",
-                            data: data,
-                        });
-                    } if (data.statusCode == 101) {
-                        res.status(200).send(data);
-                    } 
-                })
-                .catch((err) => {
+
+    const schema_result = schema.validate(data)
+    if(schema_result.error){
+        // send a 422 error response if validation fails
+        res.status(422).json({
+            statusCode: 422,
+            status: "error",
+            message: "Invalid request data",
+            data: schema_result.error.message,
+        });
+    }else {
+        custFeedbackService
+            .createCustFeedback(req, res)
+            .then((data) => {
+                if (data) {
                     res.status(200).send({
-                        statusCode: 101,
-                        status: false,
-                        message: err,
-                        data: [],
+                        statusCode: 100,
+                        status: true,
+                        message: "Thanks for your feedback",
+                        data: data,
                     });
+                } if (data.statusCode == 101) {
+                    res.status(200).send(data);
+                } 
+            })
+            .catch((err) => {
+                res.status(200).send({
+                    statusCode: 101,
+                    status: false,
+                    message: err,
+                    data: [],
                 });
-        }
-    });
+            });
+    }
 };
 

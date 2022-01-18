@@ -70,5 +70,162 @@ module.exports = {
                 err: err
             })
         })
+    },
+
+    createProductVideo: async function(req, res){
+        const data = req.body;
+        const schema = Joi.object().keys({
+
+            pId: Joi.number().required().error(new Error('Provide pId(number)')),
+            videoUrl: Joi.string().required().error(new Error('Provide videoUrl(number)')),
+            videoType: Joi.string().required().error(new Error('Provide videoType(number)')),
+
+        });
+
+        const schema_result = schema.validate(data)
+
+        if (schema_result.error){
+            console.log(schema_result.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+                });
+        }else {
+
+            product_video_service.createProductVideo(req, res).then((data) => {
+                if (data.dataValues) {
+                  res.status(200).send({
+                    statusCode: 100,
+                    status: true,
+                    message: "Product Video created successfully",
+                    data: {
+                      id: data.dataValues.tp_id,
+                      tpName: data.dataValues.tp_name,
+                    },
+                  });
+                } else if (data.statusCode == 101) {
+                  res.status(200).send(data);
+                } else {
+                  res.status(200).send({
+                    statusCode: 101,
+                    status: false,
+                    message: "Failed to create Product Video",
+                    data: data,
+                  });
+                }
+              })
+              .catch((err) => {
+                res.status(200).send({
+                  statusCode: 101,
+                  status: false,
+                  message: err,
+                  data: [],
+                });
+              });
+          }
+    },
+
+    updateProductVideo: async function(req, res){
+        const data = req.body;
+        const schema = Joi.object().keys({
+
+            videoId: Joi.number().required().error(new Error('Provide videoId(number)')),
+            pId: Joi.number().error(new Error('Provide pId(number)')),
+            videoUrl: Joi.string().error(new Error('Provide videoUrl(number)')),
+            videoType: Joi.string().error(new Error('Provide videoType(number)')),
+        
+        });
+
+        const schema_result = schema.validate(data)
+
+        if (schema_result.error){
+            console.log(schema_result.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+                });
+        }else {
+            product_video_service
+              .updateProductVideo(req, res)
+              .then((data) => {
+                if (data[0] > 0) {
+                  res.status(200).send({
+                    statusCode: 100,
+                    status: true,
+                    message: "Record updated successfully",
+                    data: [],
+                  });
+                } else {
+                  res.status(200).send({
+                    statusCode: 101,
+                    status: false,
+                    message: "Record not updated",
+                    data: [],
+                  });
+                }
+              })
+              .catch((err) => {
+                res.status(200).send({
+                  statusCode: 101,
+                  status: false,
+                  message: err,
+                  data: [],
+                });
+              });
+          }
+    },
+
+    deleteProductVideo: async function(req, res){
+        const data = req.body;
+
+        const schema = Joi.object().keys({
+
+        videoId: Joi.number().required().error(new Error("Provide videoId(number)")),
+
+        });
+
+        const schema_result = schema.validate(data)
+
+        if (schema_result.error){
+            console.log(schema_result.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+                });
+        }else {
+            product_video_service
+              .deleteProductVideo(req, res)
+              .then((data) => {
+                if (data > 0) {
+                  res.status(200).send({
+                    statusCode: 100,
+                    status: true,
+                    message: "Product Video deleted successfully",
+                    data: [],
+                  });
+                } else {
+                  res.status(200).send({
+                    statusCode: 101,
+                    status: false,
+                    message: "Failed to delete record",
+                    data: [],
+                  });
+                }
+              })
+              .catch((err) => {
+                res.status(200).send({
+                  statusCode: 101,
+                  status: false,
+                  message: err,
+                  data: [],
+                });
+              });
+          }
     }
 }
