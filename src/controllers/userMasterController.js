@@ -146,5 +146,99 @@ module.exports = {
                 })
             }
         }
+    },
+
+    updateUser: async function(req, res){
+        const data = req.body;
+        const schema = Joi.object().keys({
+            firstName: Joi.string().error(new Error('Provide firstName(string)')),
+            lastName: Joi.string().error(new Error('Provide lastName(string)')),
+            email: Joi.string().error(new Error('Provide email(string)')),
+            password: Joi.string().error(new Error('Provide password(string)')),
+            contactNo: Joi.number().error(new Error('Provide contactNo(string)')),
+            userId: Joi.number().required().error(new Error('Provide userId(number)')),
+            status: Joi.number().error(new Error('Provide status (number)'))
+        });
+
+        const userMasterSchemaResult = schema.validate(data)
+        if (userMasterSchemaResult.error){
+            console.log(userMasterSchemaResult.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: userMasterSchemaResult.error.message
+              });
+        }else {
+            user_masterService.updateUser(req, res).then(data => {
+                if (data[0] > 0) {
+                    res.status(200).send({
+                        statusCode: 100,
+                        status: true,
+                        message: 'Record updated successfully',
+                        data: []
+                    })
+                } else {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: 'Record not updated',
+                        data: []
+                    })
+                }
+            })
+                .catch(err => {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: err,
+                        data: []
+                    })
+                })
+        }
+    },
+
+    deleteUser: async function(req, res){
+        const data = req.body;
+        const schema = Joi.object().keys({
+            userId: Joi.number().required().error(new Error('Provide userId(number)'))
+        });
+
+        const userMasterSchemaResult = schema.validate(data)
+        if (userMasterSchemaResult.error){
+            console.log(userMasterSchemaResult.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: userMasterSchemaResult.error.message
+              });
+        } else {
+            user_masterService.deleteUser(req, res).then(data => {                
+                if (data > 0) {
+                    res.status(200).send({
+                        statusCode: 100,
+                        status: true,
+                        message: 'User deleted successfully',
+                        data: []
+                    })
+                } else {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: 'Failed to delete record',
+                        data: []
+                    })
+                }
+            })
+                .catch(err => {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: err,
+                        data: []
+                    })
+                })
+        }
     }
 }

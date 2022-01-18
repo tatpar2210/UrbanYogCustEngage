@@ -245,6 +245,126 @@ class product_reviewService{
             attributes: ["star_count"]
         })
     }
+
+    updateProductReview(req, res) {
+
+        var date = new Date();
+        var dateStr =
+            ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("00" + date.getDate()).slice(-2) + "-" +
+            date.getFullYear() + " " +
+            ("00" + date.getHours()).slice(-2) + ":" +
+            ("00" + date.getMinutes()).slice(-2) + ":" +
+            ("00" + date.getSeconds()).slice(-2);
+
+        return new Promise((resolve, reject) => {
+
+            let where = {};
+            let data = {};
+
+            if (req.body.reviewId) {
+                where.review_id = req.body.reviewId;
+            }
+
+            if (req.body.pId) {
+                data.pid = req.body.pId;
+            }
+
+            if (req.body.status == 0 || req.body.status == 1) {
+                data.status = req.body.status;
+            }
+
+            if (req.body.reviewDate) {
+                data.created_at = req.body.reviewDate;
+            }
+
+            if (req.body.review) {
+                data.review = req.body.review;
+            }
+            if (req.body.reviewTitle) {
+                data.review_title = req.body.reviewTitle;
+            }
+
+            if (req.body.starCount) {
+                data.star_count = req.body.starCount;
+            }
+
+            if (req.body.custName) {
+                data.cust_name = req.body.custName;
+            }
+
+            if (req.body.custEmail) {
+                data.cust_email = req.body.custEmail;
+            }
+
+            if (req.body.adminReply) {
+                data.admin_reply = req.body.adminReply;
+            }
+
+            data.updated_at = dateStr;
+         
+            console.log(data);
+            return productReviewModel.update(data, {
+                where: where
+            }).then(result => resolve(result))
+                .catch(error => resolve(error));
+        })
+            .catch(err => {
+                reject(err.message)
+            })
+    }
+
+    deleteProductReview(req, res) {
+        return new Promise((resolve, reject) => {
+
+            let where = {};
+
+            if (req.body.reviewId) {
+                where.review_id = req.body.reviewId;
+            }
+
+            let cnd = {
+                where: {
+                    review_id: req.body.reviewId,
+                }
+            }
+
+            return productReviewModel.destroy({
+                where: where
+            }).then(result => {
+
+                ProductReviewFileUpload.findOne(cnd).then((resultData) => {
+                
+                if (resultData > 0) {
+
+                    // const storage_loc= path.join(__dirname, "../../public/File_Uploads/Product-review/"+ review_id +"/img")
+                    // let abcd = "D:/Customer Engmnt/custoengage-backend/public/product_review/images/"+req.body.reviewId;
+
+
+                    let abcd = path.join(__dirname, "../../public/File_Uploads/Product-review/"+ review_id)
+
+                    var rimraf = require("rimraf");
+                    rimraf(abcd, function () { console.log("done"); });
+
+                    return ProductReviewFileUpload.destroy({
+                        where: where
+                    }).then(resultFile => {
+                        resolve(resultFile);
+                    }).catch(error => reject(error));
+                    
+                }else{
+                    resolve(result);
+                }
+
+                })
+                .catch(error => resolve(error));
+ 
+            }).catch(error => reject(error));
+        })
+            .catch(err => {
+                reject(err.message)
+            })
+    }
 }
 
 module.exports = product_reviewService

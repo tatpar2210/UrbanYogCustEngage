@@ -85,7 +85,44 @@ class product_review_file_uploadService{
         return productReview_fileUploadModel.create(data)
     }
 
-    
+    deleteImage(req, res) {
+        return new Promise((resolve, reject) => {
+
+            let cnd = {
+                where: {
+                    file_id: req.body.fileId,
+                }
+            }
+            let where = {};
+
+            if (req.body.fileId) {
+                where.file_id = req.body.fileId;
+            }
+
+            return ProductReviewFileUpload.findOne(cnd).then((result) => {
+                let ImagePath =  result.file_path.replace("http://localhost:4200", '');
+                let str = "D:/Customer Engmnt/custoengage-backend/"+ImagePath
+                fs.unlink(str, function (err) {
+                    if (err){
+                        console.log(err);
+                    }else{
+                        console.log('File deleted!');
+                    }
+                   
+                });
+
+                return ProductReviewFileUpload.destroy({
+                    where: where
+                }).then(resultdelete => {
+                    resolve(resultdelete);
+                }).catch(error => reject(error)); 
+
+            }).catch(error => reject(error));
+        })
+            .catch(err => {
+                reject(err.message)
+            })
+    }
 }
 
 

@@ -203,5 +203,116 @@ module.exports = {
             data: [review_array, review_array]
         })
 
+    },
+
+    updateProductReview: async function(req, res){
+        const data = req.body;
+        const schema = Joi.object().keys({
+
+            reviewId: Joi.number().required().error(new Error('Provide reviewId(number)')),
+            status: Joi.number().error(new Error('Provide status(number)')),
+            pId: Joi.number().error(new Error('Provide pId(number)')),
+            review: Joi.string().error(new Error('Provide review(string)')),
+            reviewTitle: Joi.string().error(new Error('Provide reviewTitle(string)')),
+            starCount: Joi.number().error(new Error('Provide starCount(number)')),
+            custName: Joi.string().error(new Error('Provide custName(string)')),
+            custEmail: Joi.string().error(new Error('Provide custEmail(string)')),
+            adminReply: Joi.string().error(new Error('Provide adminReply(string)')),
+            reviewDate: Joi.string().error(new Error('Provide reviewDate(string)')),
+
+        });
+
+        const schemaResult = schema.validate(data)
+        if (schemaResult.error){
+            // if validation fails
+            console.log(schemaResult.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schemaResult.error.message
+                });
+        }else {
+            product_reviewService
+              .updateProductReview(req, res)
+              .then((data) => {
+                if (data[0] > 0) {
+                  res.status(200).send({
+                    statusCode: 100,
+                    status: true,
+                    message: "Record updated successfully",
+                    data: [],
+                  });
+                } else {
+                  res.status(200).send({
+                    statusCode: 101,
+                    status: false,
+                    message: "Record not updated",
+                    data: [],
+                  });
+                }
+              })
+              .catch((err) => {
+                res.status(200).send({
+                  statusCode: 101,
+                  status: false,
+                  message: err,
+                  data: [],
+                });
+              });
+          }
+
+    },
+
+    deleteProductReview: async function(req, res){
+        const data = req.body;
+
+        const schema = Joi.object().keys({
+
+            reviewId: Joi.number().required().error(new Error('Provide reviewId(number)')),
+
+        });
+
+        const schemaResult = schema.validate(data)
+        if (schemaResult.error){
+            // if validation fails
+            console.log(schemaResult.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schemaResult.error.message
+                });
+        }else {
+            product_reviewService
+              .deleteProductReview(req, res)
+              .then((data) => {
+                if (data > 0) {
+                  res.status(200).send({
+                    statusCode: 100,
+                    status: true,
+                    message: "Product Review deleted successfully",
+                    data: [],
+                  });
+                } else {
+                  res.status(200).send({
+                    statusCode: 101,
+                    status: false,
+                    message: "Failed to delete record",
+                    data: [],
+                  });
+                }
+              })
+              .catch((err) => {
+                res.status(200).send({
+                  statusCode: 101,
+                  status: false,
+                  message: err,
+                  data: [],
+                });
+              });
+          }
     }
+
+
 }

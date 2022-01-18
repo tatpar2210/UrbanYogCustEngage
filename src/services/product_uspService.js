@@ -56,6 +56,67 @@ class product_uspService{
     storeUSP(data){
         return product_usp.create(data)
     }
+
+    updateUsp(req, res) {
+
+        var date = new Date();
+        var dateStr =
+            ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("00" + date.getDate()).slice(-2) + "-" +
+            date.getFullYear() + " " +
+            ("00" + date.getHours()).slice(-2) + ":" +
+            ("00" + date.getMinutes()).slice(-2) + ":" +
+            ("00" + date.getSeconds()).slice(-2);
+
+        return new Promise((resolve, reject) => {
+
+            let where = {};
+            let data = {};
+
+            if (req.body.uspId) {
+                where.prod_usp_id = req.body.uspId;
+            }
+
+            if (req.body.uspTitle) {
+                data.usp_title = req.body.uspTitle;
+            }
+
+            if (req.body.pid) {
+                data.pid = req.body.pid;
+            }
+
+
+            data.updated_at = dateStr;
+
+            return product_usp.update(data, {
+                where: where,
+
+            }).then(result => resolve(result))
+                .catch(error => reject(error));
+        })
+            .catch(err => {
+                return (err.message)
+            })
+    }
+
+    deleteUsp(req, res) {
+        return new Promise((resolve, reject) => {
+
+            let where = {};
+
+            if (req.body.uspId) {
+                where.prod_usp_id = req.body.uspId;
+            }
+
+            return product_usp.destroy({
+                where: where
+            }).then(result => resolve(result))
+                .catch(error => reject(error));
+        })
+            .catch(err => {
+                return (err.message)
+            })
+    }
 }
 
 module.exports = product_uspService

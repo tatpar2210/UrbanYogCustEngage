@@ -170,6 +170,51 @@ module.exports = {
         }
     },
 
+
+    deleteProduct: async function(req, res){
+        const data = req.body;
+        const schema = Joi.object().keys({
+            pId: Joi.number().required().error(new Error('Provide pId(number)'))
+        }); 
+
+        const prod_rev_schema_result = schema.validate(data)
+
+        if (prod_rev_schema_result.error){
+            res.status(400).json({
+                statusCode: 100,
+                status: 'error',
+                message: 'Invalid request data',
+                data: prod_rev_schema_result.error.message
+              });
+        }else {
+            product_masterService.deleteProduct(req, res).then(data => {
+                if (data > 0) {
+                    res.status(200).send({
+                        statusCode: 100,
+                        status: true,
+                        message: 'Product deleted successfully',
+                        data: []
+                    })
+                } else {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: 'Failed to delete record',
+                        data: []
+                    })
+                }
+            })
+                .catch(err => {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: err,
+                        data: []
+                    })
+                })
+        }
+    },
+
     findByshopifyProdId: async function(req, res){
         const shopifyID = req.params.id
 

@@ -69,6 +69,25 @@ class productMasterModelService{
         return productMasterModel.create(data)
     }
 
+    deleteProduct(req, res) {
+        return new Promise((resolve, reject) => {
+          let where = {};
+    
+          if (req.body.pId) {
+            where.pid = req.body.pId;
+          }
+    
+          return productMasterModel.destroy({
+            where: where,
+          })
+            .then((result) => resolve(result))
+            .catch((error) => reject(error));
+        }).catch((err) => {
+          return err.message;
+        });
+      }
+
+
     addMissingProduct(data){
         return productMasterModel.create(data)
     }

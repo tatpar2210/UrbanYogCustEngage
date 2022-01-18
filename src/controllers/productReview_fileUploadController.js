@@ -198,5 +198,50 @@ module.exports = {
             }
         })
 
+    },
+
+    deleteImage: async function(req, res){
+        const data = req.body;
+        const schema = Joi.object().keys({
+            fileId: Joi.number().error(new Error('Provide fileId(number)')),
+        });
+
+        const schema_result = schema.validate(data)
+        if (schema_result.error){
+            console.log(schema_result.error.message)
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+                });
+        }else {
+            product_review_file_uploadService.deleteImage(req, res).then(data => {
+      
+              if (data > 0) {
+                res.status(200).send({
+                  statusCode: 100,
+                  status: true,
+                  message: 'File Deleted Successfully!',
+                  data: data
+                })
+              } else {
+                res.status(200).send({
+                  statusCode: 101,
+                  status: false,
+                  message: 'File Not Deleted Successfully!',
+                  data: data
+                })
+              }
+            })
+              .catch(err => {
+                res.status(200).send({
+                  statusCode: 101,
+                  status: false,
+                  message: err,
+                  data: []
+                })
+              })
+          }
     }
 }

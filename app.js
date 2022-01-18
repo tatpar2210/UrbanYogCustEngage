@@ -77,7 +77,7 @@ app.use((req, res, next) => {
 
 //aut API
 app.post("/login", authmaster.genrateAuthToken)
-app.post('/verifyToken', jwtauth.verifyToken, (req, res)=>{
+app.post('/verifyToken', (req, res)=>{
     res.status(200).send({
         statusCode: 100,
         status: 'true',
@@ -99,6 +99,9 @@ app.post("/getProductReview/all", ProductReviewController.getAllReviews);
 app.post("/getProductReview/:id", ProductReviewController.getAllReviewsByPID);
 app.post("/postProductReview/:id", ProductReviewController.postReviews)
 app.post("/getProductReviewStarCount/:id", ProductReviewController.getReviewStarCount)
+app.post('/updateProductReview', ProductReviewController.updateProductReview);
+app.post('/deleteProductReview', ProductReviewController.deleteProductReview);
+
 app.post("/getProductReviewImg/all", ProductReview_fileUploadController.getProductReview_fileUpload)
 app.post("/postProductReviewImg/:id", ProductReview_fileUploadController.postProductReview_fileUpload)
 app.post("/postSingleProductReviewImg/:id", ProductReview_fileUploadController.postSingleRevImg)
@@ -134,6 +137,7 @@ app.post("/getPid", ProductMasterController.getPid)
 app.post("/getProductsMaster/all", ProductMasterController.getAllProducts)
 app.post("/getProductsMaster/:id", ProductMasterController.findByPid)
 app.post("/addProduct", ProductMasterController.createProduct)
+app.post('/deleteProduct', ProductMasterController.deleteProduct);
 
 //product-varient master
 app.post("/getProductVarientMaster/all", product_varientController.getAllVarients)
@@ -141,6 +145,8 @@ app.post("/getProductVarientMaster/all", product_varientController.getAllVarient
 //product-usp
 app.post("/getProductUSP/all", product_uspController.getAllProductUsp)
 app.post("/postProductUSP", product_uspController.createUsp)
+app.post('/updateUsp', product_uspController.updateUsp);
+app.post('/deleteUsp', product_uspController.deleteUsp);
 
 //product-suggestion
 app.post("/getProductSuggestion/all", productSuggestionController.getAllProductSuggestion)
@@ -154,6 +160,7 @@ app.post('/getFrequentlyBroughtCounter', productSuggestionController.getFrequent
 //product-review-img
 app.post("/postProductReview_img/:id", productReview_fileUploadController.postProductReview_fileUpload)
 app.post("/getProductReviewImages", productReview_fileUploadController.getProductReviewImages)
+// app.post('/deleteImage', productReview_fileUploadController.deleteImage);
 
 //product-faq
 app.post("/getProductFAQ/all", product_faqController.getAll_Product_Faq)
@@ -177,6 +184,8 @@ app.post("/getUserMaster/all", userMasterController.findAllUserMaster)
 app.post("/getUserMaster/id/:id", userMasterController.findById)
 app.post("/getUserMaster/email/:email", userMasterController.findByEmail)
 app.post("/addUser", userMasterController.addUser)
+app.post('/updateUser', userMasterController.updateUser);
+app.post('/deleteUser', userMasterController.deleteUser);
 
 //TPM controller endpoints
 app.post('/getTPMDetails', tpmController.gettpmDetails);

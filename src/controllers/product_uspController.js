@@ -106,6 +106,97 @@ module.exports = {
                 res.status(400).json({err})
             })
         }
+    },
+
+    updateUsp: async function(req, res){
+        const data = req.body;
+        const schema = Joi.object().keys({
+            uspId: Joi.number().required().error(new Error('Provide uspId(number)')),
+            uspTitle: Joi.string().error(new Error('Provide uspTitle(string)')),
+            pid: Joi.number().error(new Error('Provide pid(number)'))
+        });
+
+        const schema_result = schema.validate(data)
+        if (schema_result.error){
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+              });
+        }else {
+            product_usp_service.updateUsp(req, res)
+                .then((data) => {
+                    if (data[0] > 0) {
+                        res.status(200).send({
+                            statusCode: 100,
+                            status: true,
+                            message: "Record updated successfully",
+                            data: [],
+                        });
+                    } else {
+                        res.status(200).send({
+                            statusCode: 101,
+                            status: false,
+                            message: "Record not updated",
+                            data: [],
+                        });
+                    }
+                })
+                .catch((err) => {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: err,
+                        data: [],
+                    });
+                });
+        }
+    },
+
+    deleteUsp: async function(req, res){
+        const data = req.body;
+
+        const schema = Joi.object().keys({
+            uspId: Joi.number().required().error(new Error("Provide uspId(number)")),
+        });
+
+        const schema_result = schema.validate(data)
+        if (schema_result.error){
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+              });
+        } else {
+            product_usp_service.deleteUsp(req, res)
+                .then((data) => {
+                    if (data > 0) {
+                        res.status(200).send({
+                            statusCode: 100,
+                            status: true,
+                            message: "Product USP deleted successfully",
+                            data: [],
+                        });
+                    } else {
+                        res.status(200).send({
+                            statusCode: 101,
+                            status: false,
+                            message: "Failed to delete product USP",
+                            data: [],
+                        });
+                    }
+                })
+                .catch((err) => {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: err,
+                        data: [],
+                    });
+                });
+        }
     }
 
 }
