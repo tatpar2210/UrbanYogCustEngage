@@ -72,6 +72,14 @@ class qrSerrvice {
         where.status = data.status;
       }
 
+    if (data.created_at) {
+    where.created_at = {[Op.like]: `%${data.created_at}%`};
+    }
+
+    if (data.updated_at) {
+    where.updated_at = {[Op.like]: `%${data.updated_at}%`};
+    }
+
     if (data.qrCode) {
       where.qr_code = { [Op.like]: `%${data.qrCode}%` };
     }

@@ -55,6 +55,58 @@ module.exports = {
         }
     },
 
+    async getCount_cust_qrscanned_order(req, res){
+        const req_data = req.body
+
+        const schema = Joi.object().keys({
+            call_req_id: Joi.number().optional().error(new Error("Provide call_req_id(number)")),
+            cust_name: Joi.string().optional().allow("").error(new Error("Provide cust_name(string)")),
+            cust_email: Joi.string().email().optional().allow("").error(new Error("Provide cust_email(string | email)")),
+            cust_number: Joi.number().optional().error(new Error("Provide cust_number(number)")),
+            bought_product_pid: Joi.number().optional().allow("").error(new Error("Provide bought_product_pid(number)")),
+            bought_product: Joi.string().optional().allow("").error(new Error("Provide bought_product(string)")),
+            bought_from: Joi.string().optional().allow("").error(new Error("Provide bought_from(string)")),
+            created_at: Joi.string().optional().allow("").error(new Error("Provide created_at(string)")),
+            updated_at: Joi.string().optional().allow("").error(new Error("Provide updated_at(string)")),
+        })
+
+        const schema_result = schema.validate(req_data)
+
+        if(schema_result.error){
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+            });
+        }else{
+            await cust_qr_scan_order_service.getCount_cust_qr_scan_order(req_data).then(data => {
+                if (data > 0) {
+                    res.status(200).send({
+                        statusCode: 100,
+                        status: true,
+                        message: 'Qr Scanned data',
+                        data: data
+                    })
+                } else {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: 'QR scanned data not found',
+                        data: data
+                    })
+                }
+            }).catch(err => {
+                res.status(200).send({
+                    statusCode: 101,
+                    status: false,
+                    message: err,
+                    data: []
+                })
+            })
+        }
+    },
+
     async create_cust_qr_scanned_order(req, res){
         const req_data = req.body
 

@@ -87,6 +87,7 @@ app.post('/verifyToken', (req, res)=>{
 // dashboard API's
 app.post('/getCustomerCount', customerController.getCustomerCount);
 app.post('/getQrCount', qrController.getQrCount);
+app.post('/getCust_qr_scan_orderCount', cust_qr_scan_orderController.getCount_cust_qrscanned_order);
 app.post("/getProductsCount", ProductMasterController.getAllProducts)
 app.post("/getUserCount", userMasterController.findAllUserMaster)
 

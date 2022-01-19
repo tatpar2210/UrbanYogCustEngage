@@ -157,6 +157,8 @@ exports.getQrBatchDetails = (req, res) => {
       pId: Joi.number().error(new Error("Provide pId(number)")),
       offset: Joi.number().error(new Error("Provide offset(number)")),
       limit: Joi.number().error(new Error("Provide limit(number)")),
+      created_at: Joi.string().error(new Error("Provide created_at(string)")),
+      updated_at: Joi.string().error(new Error("Provide updated_at(string)")),
     });
   
     const schema_result = schema.validate(data)
