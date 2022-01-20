@@ -45,7 +45,7 @@ module.exports = {
                 statusCode: 422,
                 status: 'error',
                 message: 'Invalid request data',
-                data: error.message
+                data: schema_result.error.message
             });
         }else{
             product_suggestion_master.getProductSuggestionByPid(req, res).then(data => {
@@ -96,7 +96,7 @@ module.exports = {
                 statusCode: 422,
                 status: 'error',
                 message: 'Invalid request data',
-                data: error.message
+                data: schema_result.error.message
             });
         }else {
             product_suggestion_master.getFrequentlyBroughtCounter(req, res).then(data => {
@@ -153,11 +153,12 @@ module.exports = {
                 statusCode: 422,
                 status: 'error',
                 message: 'Invalid request data',
-                data: error.message
+                data: schema_result.error.message
             });
         }else {
             product_suggestion_master.createProductSuggestionDetails(req, res).then(data => {
                 if (data.dataValues) {
+                    console.log(data.dataValues)
                     res.status(200).send({
                         statusCode: 100,
                         status: true,
@@ -208,7 +209,7 @@ module.exports = {
                 statusCode: 422,
                 status: 'error',
                 message: 'Invalid request data',
-                data: error.message
+                data: schema_result.error.message
             });
         }else {
             product_suggestion_master.createFrequentlyBroughtCounter(req, res).then(data => {
@@ -258,7 +259,7 @@ module.exports = {
                 statusCode: 422,
                 status: 'error',
                 message: 'Invalid request data',
-                data: error.message
+                data: schema_result.error.message
             });
         }else {
             product_suggestion_master.updateProductSuggestionDetails(req, res).then(data => {
@@ -303,7 +304,7 @@ module.exports = {
                 statusCode: 422,
                 status: 'error',
                 message: 'Invalid request data',
-                data: error.message
+                data: schema_result.error.message
             });
         }else {
             

@@ -115,46 +115,46 @@ exports.getDiscountInfo = (req, res) => {
             endDate: Joi.string().required().error(new Error('Provide endDate(string)')),
             status: Joi.number().error(new Error('Provide status(number)'))
         });
-        Joi.validate(data, schema, (error, value) => {
-            if (error) {
-                // send a 422 error response if validation fails
-                res.status(422).json({
-                    statusCode: 422,
-                    status: 'error',
-                    message: 'Invalid request data',
-                    data: error.message
-                });
-            } else {
-                discountservice.createDiscountCode(req, res).then(data => {
-                    if (data && data.dataValues) {
 
-                        res.status(200).send({
-                            statusCode: 100,
-                            status: true,
-                            message: 'Discount created successfully',
-                            data: data.dataValues
-                        })
-                    } else if (data.statusCode == 101) {
-                        res.status(200).send(data)
-                    } else {
-                        res.status(200).send({
-                            statusCode: 101,
-                            status: false,
-                            message: 'Failed to create discount code',
-                            data: data
-                        })
-                    }
-                })
-                    .catch(err => {
-                        res.status(200).send({
-                            statusCode: 101,
-                            status: false,
-                            message: err,
-                            data: []
-                        })
+        const schema_result = schema.validate(data)
+
+        if(schema_result.error){
+            res.status(422).json({
+                statusCode: 422,
+                status: 'error',
+                message: 'Invalid request data',
+                data: schema_result.error.message
+            });
+        }else {
+            discountservice.createDiscountCode(req, res).then(data => {
+                if (data && data.dataValues) {
+
+                    res.status(200).send({
+                        statusCode: 100,
+                        status: true,
+                        message: 'Discount created successfully',
+                        data: data.dataValues
                     })
-            }
-        })
+                } else if (data.statusCode == 101) {
+                    res.status(200).send(data)
+                } else {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: 'Failed to create discount code',
+                        data: data
+                    })
+                }
+            })
+                .catch(err => {
+                    res.status(200).send({
+                        statusCode: 101,
+                        status: false,
+                        message: err,
+                        data: []
+                    })
+                })
+        }
     }
 
 exports.updateDiscountCode = (req, res) => {
