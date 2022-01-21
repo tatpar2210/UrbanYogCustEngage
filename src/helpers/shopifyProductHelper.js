@@ -13,8 +13,7 @@ class productHelper {
         ).toString("base64");
 
       const productOptions = {
-        url:
-          "https://urbangabru-mens-lifestyle.myshopify.com/admin/api/2020-07/products.json",
+        url: "https://urbangabru-mens-lifestyle.myshopify.com/admin/api/2020-07/products.json",
         method: "GET",
         headers: {
           "Content-Type": "application/json",

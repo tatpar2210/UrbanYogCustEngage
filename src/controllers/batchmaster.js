@@ -12,42 +12,42 @@ exports.getBatchDetails = (req, res) => {
     offset: Joi.number().error(new Error("Provide offset(number)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: schema_result.error.message,
-      }); 
-  }else{
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
+    });
+  } else {
     batchService
-    .getBatchDetails(req, res)
-    .then((data) => {
-      if (data.count > 0) {
-        res.status(200).send({
-          statusCode: 100,
-          status: true,
-          message: "Batch details",
-          data: data,
-        });
-      } else {
+      .getBatchDetails(req, res)
+      .then((data) => {
+        if (data.count > 0) {
+          res.status(200).send({
+            statusCode: 100,
+            status: true,
+            message: "Batch details",
+            data: data,
+          });
+        } else {
+          res.status(200).send({
+            statusCode: 101,
+            status: false,
+            message: "Batch details not found",
+            data: data,
+          });
+        }
+      })
+      .catch((err) => {
         res.status(200).send({
           statusCode: 101,
           status: false,
-          message: "Batch details not found",
-          data: data,
+          message: err,
+          data: [],
         });
-      }
-    })
-    .catch((err) => {
-      res.status(200).send({
-        statusCode: 101,
-        status: false,
-        message: err,
-        data: [],
       });
-    });
   }
 };

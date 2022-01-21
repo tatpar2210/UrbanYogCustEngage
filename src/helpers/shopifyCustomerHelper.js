@@ -87,8 +87,11 @@ class CustomerHelper {
       customer.customer = obj;
       let shopUrl = process.env.shopifyStoreURL + "customers.json";
 
-      const auth = "Basic " + Buffer.from(process.env.shopifyApiKey + ":" + process.env.shopifyApiPassword
-      ).toString("base64");
+      const auth =
+        "Basic " +
+        Buffer.from(
+          process.env.shopifyApiKey + ":" + process.env.shopifyApiPassword
+        ).toString("base64");
 
       const customerOptions = {
         url: shopUrl,
@@ -130,78 +133,85 @@ class CustomerHelper {
       let obj = {};
       let customer = {};
 
-      return getCntryProvCode(req.body.countryName, req.body.province).then(cntryProvData => {
-        if (cntryProvData) {
-          let countryCode = cntryProvData.dataValues.country_code;
-          let provinceCode = cntryProvData.dataValues.shopify_province_master.dataValues.province_code
+      return getCntryProvCode(req.body.countryName, req.body.province)
+        .then((cntryProvData) => {
+          if (cntryProvData) {
+            let countryCode = cntryProvData.dataValues.country_code;
+            let provinceCode =
+              cntryProvData.dataValues.shopify_province_master.dataValues
+                .province_code;
 
-          if (req.body.shopifyCustomerId) {
-            obj.address1 = req.body.address1;
-            obj.address2 = req.body.address2;
-            obj.city = req.body.city;
-            obj.company = req.body.landMark;
-            obj.first_name = req.body.first_name;
-            obj.last_name = req.body.lastName;
-            obj.phone = req.body.phone;
-            obj.province = req.body.province;
-            obj.country = req.body.country;
-            obj.zip = req.body.zip;
-            obj.name = req.body.firstName + " " + req.body.lastName;
-            obj.provinceCode = provinceCode;
-            obj.countryCode = countryCode;
-            obj.countryName = req.body.countryName;
-          } else {
-            let data = { "statusCode": 101 };
-            return data;
-          }
-
-
-          customer.address = obj;
-
-          let shopUrl = process.env.shopifyStoreURL + "customers/" + req.body.shopifyCustomerId + "/addresses.json";
-          const auth = "Basic " + Buffer.from(process.env.shopifyApiKey + ":" + process.env.shopifyApiPassword
-          ).toString("base64");
-
-          const customerOptions = {
-            url: shopUrl,
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: auth,
-            },
-            body: customer,
-            json: true,
-          };
-
-          request(customerOptions, (err, res, body) => {
-            if (err) {
-              reject(err);
-            }
-            if (body) {
-              if (body.errors) {
-                reject(body.errors);
-              } else {
-                resolve(body);
-              }
+            if (req.body.shopifyCustomerId) {
+              obj.address1 = req.body.address1;
+              obj.address2 = req.body.address2;
+              obj.city = req.body.city;
+              obj.company = req.body.landMark;
+              obj.first_name = req.body.first_name;
+              obj.last_name = req.body.lastName;
+              obj.phone = req.body.phone;
+              obj.province = req.body.province;
+              obj.country = req.body.country;
+              obj.zip = req.body.zip;
+              obj.name = req.body.firstName + " " + req.body.lastName;
+              obj.provinceCode = provinceCode;
+              obj.countryCode = countryCode;
+              obj.countryName = req.body.countryName;
             } else {
-              resolve([]);
+              let data = { statusCode: 101 };
+              return data;
             }
-          });
 
-        } else {
-          let result = {
-            statusCode: 101,
-            status: false,
-            message: 'Failed add address',
-            data: []
-          };
-          reject(result)
-        }
-      }).catch(err => {
-        console.log(err);
-      })
+            customer.address = obj;
 
+            let shopUrl =
+              process.env.shopifyStoreURL +
+              "customers/" +
+              req.body.shopifyCustomerId +
+              "/addresses.json";
+            const auth =
+              "Basic " +
+              Buffer.from(
+                process.env.shopifyApiKey + ":" + process.env.shopifyApiPassword
+              ).toString("base64");
 
+            const customerOptions = {
+              url: shopUrl,
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: auth,
+              },
+              body: customer,
+              json: true,
+            };
+
+            request(customerOptions, (err, res, body) => {
+              if (err) {
+                reject(err);
+              }
+              if (body) {
+                if (body.errors) {
+                  reject(body.errors);
+                } else {
+                  resolve(body);
+                }
+              } else {
+                resolve([]);
+              }
+            });
+          } else {
+            let result = {
+              statusCode: 101,
+              status: false,
+              message: "Failed add address",
+              data: [],
+            };
+            reject(result);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }).catch((err) => {
       if (err) {
         return err;
@@ -211,7 +221,13 @@ class CustomerHelper {
 
   deleteCustAddress(body) {
     return new Promise((resolve, reject) => {
-      let shopUrl = process.env.shopifyStoreURL + "customers/" + body.shopifyCustomerId + "/addresses/" + body.shopifyAddressId + ".json";
+      let shopUrl =
+        process.env.shopifyStoreURL +
+        "customers/" +
+        body.shopifyCustomerId +
+        "/addresses/" +
+        body.shopifyAddressId +
+        ".json";
       const auth =
         "Basic " +
         Buffer.from(
@@ -255,11 +271,14 @@ class CustomerHelper {
     });
   }
 
-
   changeCustomerPassword(body) {
     console.log(body);
     return new Promise((resolve, reject) => {
-      let shopUrl = process.env.shopifyStoreURL + "customers/" + body.shopifyCustomerId + ".json";
+      let shopUrl =
+        process.env.shopifyStoreURL +
+        "customers/" +
+        body.shopifyCustomerId +
+        ".json";
       shopUrl = shopUrl.trim();
       const auth =
         "Basic " +
@@ -268,13 +287,13 @@ class CustomerHelper {
         ).toString("base64");
 
       let passData = {
-        "id": parseInt(body.shopifyCustomerId),
-        "password": body.password,
-        "password_confirmation": body.password,
-        "send_email_welcome": false
-      }
+        id: parseInt(body.shopifyCustomerId),
+        password: body.password,
+        password_confirmation: body.password,
+        send_email_welcome: false,
+      };
       console.log(passData);
-      console.log(shopUrl)
+      console.log(shopUrl);
       const customerOptions = {
         url: shopUrl,
         method: "PUT",
@@ -286,18 +305,16 @@ class CustomerHelper {
         json: true,
       };
 
-
       request(customerOptions, (err, res, body) => {
-        let result = '';
+        let result = "";
         if (err) {
           reject(err);
           console.log("Done");
           return false;
         } else if (body) {
-          if (typeof body === 'object')
-            result = body; // dont parse if its object
-          else if (typeof userData === 'string')
-            result = JSON.parse(body);
+          if (typeof body === "object") result = body;
+          // dont parse if its object
+          else if (typeof userData === "string") result = JSON.parse(body);
 
           // let result = JSON.parse(body);
           console.log(result);
@@ -316,7 +333,6 @@ class CustomerHelper {
       }
     });
   }
-
 }
 
 var custHelper = new CustomerHelper();
@@ -360,7 +376,6 @@ function getNextLink(str) {
   }
 }
 
-
 function addCustomer(body) {
   // console.log(body);
   var date = new Date();
@@ -399,20 +414,21 @@ function addCustomer(body) {
             last_name: body.last_name,
             email: body.email,
             phone: contact,
-            gender: '',
-            dob: '',
+            gender: "",
+            dob: "",
             created_at: dateStr,
           })
             .then((newCustData) => {
               awaitEach(body.addresses, async function (item) {
                 await addCustAdresses(item, newCustData);
-              }).then(function (responses) {
-                resolve(responses);
-
-              }).catch(err => {
-                console.log(err);
-                reject(err);
-              });
+              })
+                .then(function (responses) {
+                  resolve(responses);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  reject(err);
+                });
             })
             .catch((error) => {
               reject(error);
@@ -435,13 +451,14 @@ function addCustomer(body) {
             .then((result) => {
               awaitEach(body.addresses, async function (item) {
                 await addCustAdresses(item, customerData[0]);
-              }).then(function (responses) {
-                resolve(responses);
-
-              }).catch(err => {
-                console.log(err);
-                reject(err);
-              });
+              })
+                .then(function (responses) {
+                  resolve(responses);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  reject(err);
+                });
             })
             .catch((error) => {
               reject(error);
@@ -457,12 +474,10 @@ function addCustomer(body) {
   });
 }
 
-
 function addCustAdresses(custData, body) {
   // console.log('here====================');
   // console.log(custData);
   // console.log(body);
-
 
   var date = new Date();
   var dateStr =
@@ -507,8 +522,8 @@ function addCustAdresses(custData, body) {
             country_code: custData.country_code,
             country_name: custData.country_name,
             default: custData.default,
-            address_type: 'Default',
-            created_at: dateStr
+            address_type: "Default",
+            created_at: dateStr,
           })
             .then((custAddressAdded) => {
               resolve(custAddressAdded);
@@ -553,17 +568,15 @@ function addCustAdresses(custData, body) {
               reject(error);
             });
         }
-
       })
       .catch((error) => {
-        reject(error)
+        reject(error);
       });
   }).catch((err) => {
     console.log(err);
     return err.message;
   });
 }
-
 
 function getCntryProvCode(countryName, provinceName) {
   return new Promise((resolve, reject) => {
@@ -574,25 +587,19 @@ function getCntryProvCode(countryName, provinceName) {
     whereProvince.province_name = provinceName;
 
     ShopifyCountryMaster.belongsTo(ShopifyProvinceMaster, {
-      foreignKey: "country_id", targetKey: "country_id"
+      foreignKey: "country_id",
+      targetKey: "country_id",
     });
-
 
     return ShopifyCountryMaster.findOne({
       where: whereCountry,
-      attributes: [
-        "country_name",
-        "country_code"
-      ],
+      attributes: ["country_name", "country_code"],
       include: [
         {
           model: ShopifyProvinceMaster,
           where: whereProvince,
           required: true,
-          attributes: [
-            "province_name",
-            "province_code"
-          ],
+          attributes: ["province_name", "province_code"],
         },
       ],
     })
@@ -601,12 +608,12 @@ function getCntryProvCode(countryName, provinceName) {
       })
       .catch((error) => {
         console.log(error);
-        reject(error)
+        reject(error);
       });
   }).catch((error) => {
     console.log(error);
 
-    return error
+    return error;
   });
 }
 module.exports = CustomerHelper;

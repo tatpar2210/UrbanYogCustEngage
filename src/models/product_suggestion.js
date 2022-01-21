@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const product_suggestion_master = sequelize.define(
     "product_suggestion",
     {
-        sugst_id: {
+      sugst_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,

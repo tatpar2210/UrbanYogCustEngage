@@ -1,18 +1,19 @@
-const product_variant_master = require("../models").product_variant_master
+const product_variant_master = require("../models").product_variant_master;
 
-class product_variantService{
-    getAll_ProductVarients(req, res){
-        let where = {};
+class product_variantService {
+  getAll_ProductVarients(req, res) {
+    let where = {};
 
-      if (req.body.pId) {
-        where.pid = req.body.pId;
-      }
+    if (req.body.pId) {
+      where.pid = req.body.pId;
+    }
 
-      if (req.body.variantId) {
-        where.variant_id = req.body.variantId;
-      }
+    if (req.body.variantId) {
+      where.variant_id = req.body.variantId;
+    }
 
-      return product_variant_master.findAndCountAll({
+    return product_variant_master
+      .findAndCountAll({
         where: where,
         offset: req.body.offset || 0,
         limit: req.body.limit || 50,
@@ -28,17 +29,15 @@ class product_variantService{
           "variant_img_url",
           "created_at",
           "updated_at",
-        ]
+        ],
       })
-        .then((result) => {
-          return result;
-        })
-        .catch((error) => {
-            return error
-        });
-    }
-
-    
+      .then((result) => {
+        return result;
+      })
+      .catch((error) => {
+        return error;
+      });
+  }
 }
 
-module.exports = product_variantService
+module.exports = product_variantService;

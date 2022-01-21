@@ -5,42 +5,42 @@ const CustomerProfileImg = require("../models").customer_profile_img;
 const Op = require("sequelize").Op;
 
 class customerMasterService {
-    getCustomerCount(data) {
-        return new Promise((resolve, reject) => {
-          let where = {};
-    
-          if (data.custId) {
-            where.cust_id = data.custId;
-          }
-    
-          if (data.custEmail) {
-            // where.email = req.body.custEmail;
-            where.email = data.custEmail
-          }
-    
-          if (data.custName) {
-            where.first_name = data.custName
-          }
-    
-          if (data.custMoNo) {
-            where.phone = data.custMoNo
-          }
-          return CustomerMaster.count({
-            where: where,
-          })
-            .then((result) => {
-              resolve(result);
-            })
-            .catch((error) => {
-              console.log(error);
-              reject(error)
-            });
-        }).catch((err) => {
-          console.log(err);
-          return err;
-        });
+  getCustomerCount(data) {
+    return new Promise((resolve, reject) => {
+      let where = {};
+
+      if (data.custId) {
+        where.cust_id = data.custId;
       }
-    
+
+      if (data.custEmail) {
+        // where.email = req.body.custEmail;
+        where.email = data.custEmail;
+      }
+
+      if (data.custName) {
+        where.first_name = data.custName;
+      }
+
+      if (data.custMoNo) {
+        where.phone = data.custMoNo;
+      }
+      return CustomerMaster.count({
+        where: where,
+      })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    }).catch((err) => {
+      console.log(err);
+      return err;
+    });
+  }
+
   getCustomerDetails(req, res) {
     return new Promise((resolve, reject) => {
       let where = {};
@@ -62,8 +62,14 @@ class customerMasterService {
         where.phone = { [Op.like]: `%${req.body.custMoNo}%` };
       }
 
-      CustomerMaster.hasMany(CustomerAddressMaster, { foreignKey: 'cust_id', targetKey: 'cust_id' })
-      CustomerMaster.belongsTo(CustomerProfileImg, { foreignKey: 'shopify_customer_id', targetKey: 'store_cust_id' })
+      CustomerMaster.hasMany(CustomerAddressMaster, {
+        foreignKey: "cust_id",
+        targetKey: "cust_id",
+      });
+      CustomerMaster.belongsTo(CustomerProfileImg, {
+        foreignKey: "shopify_customer_id",
+        targetKey: "store_cust_id",
+      });
 
       return CustomerMaster.findAndCountAll({
         where: where,
@@ -80,24 +86,25 @@ class customerMasterService {
           "created_at",
           "updated_at",
         ],
-        include: [{
-          model: CustomerAddressMaster,
-          required: false,
-          // attributes: ['product_name']
-        },
-        {
-          model: CustomerProfileImg,
-          required: false,
-          // attributes: ['weight', 'selling_price', 'base_price']
-        }
-      ]
+        include: [
+          {
+            model: CustomerAddressMaster,
+            required: false,
+            // attributes: ['product_name']
+          },
+          {
+            model: CustomerProfileImg,
+            required: false,
+            // attributes: ['weight', 'selling_price', 'base_price']
+          },
+        ],
       })
         .then((result) => {
           resolve(result);
         })
         .catch((error) => {
           console.log(error);
-          reject(error)
+          reject(error);
         });
     }).catch((err) => {
       console.log(err);
@@ -122,12 +129,7 @@ class customerMasterService {
         offset: req.body.offset || 0,
         limit: req.body.limit || 50,
         order: [["first_name", "ASC"]],
-        attributes: [
-          "email",
-          "phone",
-          "gender",
-          "dob"
-        ],
+        attributes: ["email", "phone", "gender", "dob"],
       })
         .then((result) => {
           resolve(result);
@@ -142,11 +144,16 @@ class customerMasterService {
     return new Promise((resolve, reject) => {
       var date = new Date();
       var dateStr =
-        ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
-        ("00" + date.getDate()).slice(-2) + "-" +
-        date.getFullYear() + " " +
-        ("00" + date.getHours()).slice(-2) + ":" +
-        ("00" + date.getMinutes()).slice(-2) + ":" +
+        ("00" + (date.getMonth() + 1)).slice(-2) +
+        "-" +
+        ("00" + date.getDate()).slice(-2) +
+        "-" +
+        date.getFullYear() +
+        " " +
+        ("00" + date.getHours()).slice(-2) +
+        ":" +
+        ("00" + date.getMinutes()).slice(-2) +
+        ":" +
         ("00" + date.getSeconds()).slice(-2);
 
       let where = {};
@@ -168,23 +175,28 @@ class customerMasterService {
 
       return CustomerMaster.update(data, {
         where: where,
-
-      }).then(result => resolve(result))
-        .catch(error => reject(error));
-    }).catch(err => {
-      return (err.message);
-    })
+      })
+        .then((result) => resolve(result))
+        .catch((error) => reject(error));
+    }).catch((err) => {
+      return err.message;
+    });
   }
 
   uploadCustProfileImg(store_cust_id, imgFolderPath, res) {
     return new Promise((resolve, reject) => {
       var date = new Date();
       var dateStr =
-        ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
-        ("00" + date.getDate()).slice(-2) + "-" +
-        date.getFullYear() + " " +
-        ("00" + date.getHours()).slice(-2) + ":" +
-        ("00" + date.getMinutes()).slice(-2) + ":" +
+        ("00" + (date.getMonth() + 1)).slice(-2) +
+        "-" +
+        ("00" + date.getDate()).slice(-2) +
+        "-" +
+        date.getFullYear() +
+        " " +
+        ("00" + date.getHours()).slice(-2) +
+        ":" +
+        ("00" + date.getMinutes()).slice(-2) +
+        ":" +
         ("00" + date.getSeconds()).slice(-2);
       let custAddressCnd = {
         where: {
@@ -201,7 +213,7 @@ class customerMasterService {
               created_at: dateStr,
             })
               .then((uploadData) => {
-                resolve(uploadData)
+                resolve(uploadData);
               })
               .catch((error) => {
                 console.log(error);
@@ -252,14 +264,13 @@ class customerMasterService {
         })
         .catch((error) => {
           console.log(error);
-          reject(error)
+          reject(error);
         });
     }).catch((err) => {
       console.log(err);
       return err;
     });
   }
-
 }
 
 module.exports = customerMasterService;

@@ -24,5 +24,4 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
   };
   return seo_meta_keyword;
-
 };

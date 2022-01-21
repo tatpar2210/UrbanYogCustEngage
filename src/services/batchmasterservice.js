@@ -43,23 +43,24 @@ class BatchMasterService {
           "created_at",
           "updated_at",
         ],
-        include: [{
-          model: ProductMaster,
-          required: true,
-          attributes: ['product_name']
-        },
-        {
-          model: ProductVariantMaster,
-          required: true,
-          attributes: ['weight', 'selling_price', 'base_price']
-        }
-      ]
+        include: [
+          {
+            model: ProductMaster,
+            required: true,
+            attributes: ["product_name"],
+          },
+          {
+            model: ProductVariantMaster,
+            required: true,
+            attributes: ["weight", "selling_price", "base_price"],
+          },
+        ],
       })
         .then((result) => {
           resolve(result);
         })
         .catch((error) => {
-          reject(error)
+          reject(error);
         });
     }).catch((err) => {
       return err;

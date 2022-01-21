@@ -1,116 +1,114 @@
-const productMasterModel = require("../models").product_master
-const productVarientModel = require("../models").product_variant_master
+const productMasterModel = require("../models").product_master;
+const productVarientModel = require("../models").product_variant_master;
 
-class productMasterModelService{
-    getPidFromDatabae(shopify_pr_id){
+class productMasterModelService {
+  getPidFromDatabae(shopify_pr_id) {
+    productMasterModel.hasMany(productVarientModel, {
+      foreignKey: "pid",
+    });
 
-        productMasterModel.hasMany(productVarientModel, {
-            foreignKey: "pid"
-        })
+    return productMasterModel.findAndCountAll({
+      where: {
+        product_id: shopify_pr_id,
+      },
+      include: { model: productVarientModel },
+    });
+  }
 
-        return productMasterModel.findAndCountAll({where: {
-            product_id: shopify_pr_id
-        },
-        include: {model: productVarientModel}
-    })
+  findAll(req_data) {
+    var where = {};
+
+    if (req_data.p_id) {
+      where.pid = req_data.p_id;
     }
 
-    findAll(req_data){
-
-        var where = {}
-
-        if(req_data.p_id){
-            where.pid = req_data.p_id
-        }
-
-        if (req_data.prod_name){
-            where.product_name = req_data.prod_name
-        }
-
-        if (req_data.prod_cat){
-            where.product_category = req_data.prod_cat
-        }
-
-        if (req_data.prod_handle){
-            where.product_handle = req_data.prod_handle
-        }
-
-        var limit = req_data.limit || 12
-        var offset = req_data.offset || 0
-
-        return productMasterModel.findAndCountAll({
-            where: where,
-            order: [
-                ['created_at', 'DESC']
-            ],
-            limit: limit,
-            offset: offset
-        })
+    if (req_data.prod_name) {
+      where.product_name = req_data.prod_name;
     }
 
-    findOneByPID(p_id){
-
-        return productMasterModel.findOne({
-            where: {
-                pid: p_id
-            }
-        })
+    if (req_data.prod_cat) {
+      where.product_category = req_data.prod_cat;
     }
 
-    findOneByShopifyID(prod_id){
-        return productMasterModel.findOne({
-            where: {
-                product_id: prod_id
-            }
-        })
+    if (req_data.prod_handle) {
+      where.product_handle = req_data.prod_handle;
     }
 
-    addProduct(data){
-        return productMasterModel.create(data)
-    }
+    var limit = req_data.limit || 12;
+    var offset = req_data.offset || 0;
 
-    deleteProduct(req, res) {
-        return new Promise((resolve, reject) => {
-          let where = {};
-    
-          if (req.body.pId) {
-            where.pid = req.body.pId;
-          }
-    
-          return productMasterModel.destroy({
-            where: where,
-          })
-            .then((result) => resolve(result))
-            .catch((error) => reject(error));
-        }).catch((err) => {
-          return err.message;
-        });
+    return productMasterModel.findAndCountAll({
+      where: where,
+      order: [["created_at", "DESC"]],
+      limit: limit,
+      offset: offset,
+    });
+  }
+
+  findOneByPID(p_id) {
+    return productMasterModel.findOne({
+      where: {
+        pid: p_id,
+      },
+    });
+  }
+
+  findOneByShopifyID(prod_id) {
+    return productMasterModel.findOne({
+      where: {
+        product_id: prod_id,
+      },
+    });
+  }
+
+  addProduct(data) {
+    return productMasterModel.create(data);
+  }
+
+  deleteProduct(req, res) {
+    return new Promise((resolve, reject) => {
+      let where = {};
+
+      if (req.body.pId) {
+        where.pid = req.body.pId;
       }
 
+      return productMasterModel
+        .destroy({
+          where: where,
+        })
+        .then((result) => resolve(result))
+        .catch((error) => reject(error));
+    }).catch((err) => {
+      return err.message;
+    });
+  }
 
-    addMissingProduct(data){
-        return productMasterModel.create(data)
+  addMissingProduct(data) {
+    return productMasterModel.create(data);
+  }
+
+  async checkForMissingData(array) {
+    const shopify_prod_arr = array;
+    var msg = "";
+    var missing_data = [];
+
+    for (var i = 0; i < shopify_prod_arr.length; i++) {
+      await this.findOneByShopifyID(shopify_prod_arr[i].product_id).then(
+        (result) => {
+          if (!result) {
+            missing_data.push(shopify_prod_arr[i]);
+            //insert in database
+            this.addMissingProduct(shopify_prod_arr[i]);
+          } else {
+            msg = "No missing data found";
+          }
+        }
+      );
     }
-
-    async checkForMissingData(array){
-        const shopify_prod_arr = array
-        var msg = ""
-        var missing_data = []
-
-            for (var i = 0; i < shopify_prod_arr.length; i++){
-                await this.findOneByShopifyID(shopify_prod_arr[i].product_id).then((result)=>{
-                    if (!result){
-                        missing_data.push(shopify_prod_arr[i])
-                        //insert in database
-                        this.addMissingProduct(shopify_prod_arr[i])
-                    }else{
-                        msg = "No missing data found"
-                    }
-                })
-            }
-            console.log(missing_data)
-            return missing_data
-    }
+    console.log(missing_data);
+    return missing_data;
+  }
 }
 
-module.exports = productMasterModelService
+module.exports = productMasterModelService;

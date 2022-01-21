@@ -9,25 +9,34 @@ const orderHelper = new shopifyOrderHelper();
 exports.cancelOrderWebsite = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    storeOrderId: Joi.number().required().error(new Error("Provide storeOrderId(number)")),
-    storeOrderNumber: Joi.number().required().error(new Error("Provide storeOrderNumber(number)")),
-    storeCustId: Joi.number().required().error(new Error("Provide storeCustId(number)")),
-    cancelReason: Joi.string().required().error(new Error("Provide cancelReason(string)")),
-    storeId: Joi.number().required().error(new Error("Provide storeId(number)"))
+    storeOrderId: Joi.number()
+      .required()
+      .error(new Error("Provide storeOrderId(number)")),
+    storeOrderNumber: Joi.number()
+      .required()
+      .error(new Error("Provide storeOrderNumber(number)")),
+    storeCustId: Joi.number()
+      .required()
+      .error(new Error("Provide storeCustId(number)")),
+    cancelReason: Joi.string()
+      .required()
+      .error(new Error("Provide cancelReason(string)")),
+    storeId: Joi.number()
+      .required()
+      .error(new Error("Provide storeId(number)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: schema_result.error.message,
-      }); 
-  }else {
-    OrderService
-      .cancelOrderWebsite(req, res)
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
+    });
+  } else {
+    OrderService.cancelOrderWebsite(req, res)
       .then((data) => {
         if (data == 1) {
           res.status(200).send({
@@ -61,8 +70,12 @@ exports.cancelOrderWebsite = (req, res) => {
 exports.getCancelOrderDetails = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    cancelOrderId: Joi.number().error(new Error("Provide cancelOrderId(number)")),
-    storeOrderNumber: Joi.number().error(new Error("Provide storeOrderNumber(number)")),
+    cancelOrderId: Joi.number().error(
+      new Error("Provide cancelOrderId(number)")
+    ),
+    storeOrderNumber: Joi.number().error(
+      new Error("Provide storeOrderNumber(number)")
+    ),
     cancelReason: Joi.string().error(new Error("Provide cancelReason(string)")),
     custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
     custMoNo: Joi.string().error(new Error("Provide custMoNo(string)")),
@@ -71,18 +84,17 @@ exports.getCancelOrderDetails = (req, res) => {
     offset: Joi.number().error(new Error("Provide offset(number)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: schema_result.error.message,
-      });
-  }else {
-    OrderService
-      .getCancelOrderDetails(req, res)
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
+    });
+  } else {
+    OrderService.getCancelOrderDetails(req, res)
       .then((data) => {
         if (data.count > 0) {
           res.status(200).send({

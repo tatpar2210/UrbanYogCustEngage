@@ -4,7 +4,8 @@
   "description": "Backend node-server for UrbanYog Custoengage app.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "pretty": "prettier --write \"./**/*.{js,jsx,json}\""
   },
   "repository": {
     "type": "git",
@@ -44,6 +45,7 @@
     "node-pre-gyp": "^0.17.0",
     "nodemon": "^2.0.14",
     "pdfmake": "^0.2.3",
+    "prettier": "^2.5.1",
     "qrcode": "^1.4.4",
     "request": "^2.88.2",
     "rimraf": "^3.0.2",

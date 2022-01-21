@@ -3,9 +3,9 @@ const customerMasterService = require("../services/customerservice");
 const shopifyCustomerHelper = require("../helpers/shopifyCustomerHelper");
 const customerService = new customerMasterService();
 const customerHelper = new shopifyCustomerHelper();
-const path = require('path');
+const path = require("path");
 const fs = require("fs");
-const Busboy = require('busboy');
+const Busboy = require("busboy");
 const { log } = require("console");
 const imgPath = path.join(__dirname, "../../public/cust_profile_img/");
 
@@ -17,58 +17,56 @@ fs.mkdir(imgPath, { recursive: true }, function (err) {
   }
 });
 
-
 exports.getCustomerCount = (req, res) => {
-    const data = req.body;
-    const schema = Joi.object().keys({
-      custId: Joi.number().error(new Error("Provide custId(number)")),
-      custName: Joi.string().error(new Error("Provide custName(string)")),
-      custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-      custMoNo: Joi.string().error(new Error("Provide custMoNo(number)")),
-      limit: Joi.number().error(new Error("Provide limit(number)")),
-      offset: Joi.number().error(new Error("Provide offset(number)")),
+  const data = req.body;
+  const schema = Joi.object().keys({
+    custId: Joi.number().error(new Error("Provide custId(number)")),
+    custName: Joi.string().error(new Error("Provide custName(string)")),
+    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
+    custMoNo: Joi.string().error(new Error("Provide custMoNo(number)")),
+    limit: Joi.number().error(new Error("Provide limit(number)")),
+    offset: Joi.number().error(new Error("Provide offset(number)")),
+  });
+
+  const schema_result = schema.validate(data);
+
+  if (schema_result.error) {
+    res.status(422).json({
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
     });
-  
-    const schema_result = schema.validate(data)
-  
-    if(schema_result.error){
-      res.status(422).json({
-          statusCode: 422,
-          status: "error",
-          message: "Invalid request data",
-          data: schema_result.error.message,
-        });
-    }else {
-      customerService
-        .getCustomerCount(data)
-        .then((data) => {
-          if (data > 0) {
-            res.status(200).send({
-              statusCode: 100,
-              status: true,
-              message: "Customer details",
-              data: data,
-            });
-          } else {
-            res.status(200).send({
-              statusCode: 101,
-              status: false,
-              message: "Customer details not found",
-              data: data,
-            });
-          }
-        })
-        .catch((err) => {
+  } else {
+    customerService
+      .getCustomerCount(data)
+      .then((data) => {
+        if (data > 0) {
+          res.status(200).send({
+            statusCode: 100,
+            status: true,
+            message: "Customer details",
+            data: data,
+          });
+        } else {
           res.status(200).send({
             statusCode: 101,
             status: false,
-            message: err,
-            data: [],
+            message: "Customer details not found",
+            data: data,
           });
+        }
+      })
+      .catch((err) => {
+        res.status(200).send({
+          statusCode: 101,
+          status: false,
+          message: err,
+          data: [],
         });
-    }
-  };
-  
+      });
+  }
+};
 
 exports.getCustomerDetails = (req, res) => {
   const data = req.body;
@@ -81,16 +79,16 @@ exports.getCustomerDetails = (req, res) => {
     offset: Joi.number().error(new Error("Provide offset(number)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: schema_result.error.message,
-      });
-  }else {
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
+    });
+  } else {
     customerService
       .getCustomerDetails(req, res)
       .then((data) => {
@@ -124,20 +122,22 @@ exports.getCustomerDetails = (req, res) => {
 exports.getCustomerDetailsForWebsite = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    shopifyCustomerId: Joi.number().required().error(new Error("Provide custId(number)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)"))
+    shopifyCustomerId: Joi.number()
+      .required()
+      .error(new Error("Provide custId(number)")),
+    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: schema_result.error.message,
-      });
-  }else {
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
+    });
+  } else {
     customerService
       .getCustomerDetailsForWebsite(req, res)
       .then((data) => {
@@ -171,21 +171,23 @@ exports.getCustomerDetailsForWebsite = (req, res) => {
 exports.updateCustomerWebsite = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    shopifyCustomerId: Joi.number().required().error(new Error("Provide shopifyCustomerId(number)")),
+    shopifyCustomerId: Joi.number()
+      .required()
+      .error(new Error("Provide shopifyCustomerId(number)")),
     gender: Joi.string().error(new Error("Provide gender(string)")),
-    dob: Joi.string().error(new Error("Provide dob(string)"))
+    dob: Joi.string().error(new Error("Provide dob(string)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: schema_result.error.message,
-      });
-  }else {
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
+    });
+  } else {
     customerService
       .updateCustomerWebsite(req, res)
       .then((data) => {
@@ -269,18 +271,24 @@ exports.addCustomer = (req, res) => {
     phone: Joi.string().required().error(new Error("Provide phone(string)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: schema_result.error.message,
-      });
-  }else {
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
+    });
+  } else {
     customerHelper
-      .addCustomersToShopify(req.body.firstName, req.body.lastName, req.body.email, req.body.phone, res)
+      .addCustomersToShopify(
+        req.body.firstName,
+        req.body.lastName,
+        req.body.email,
+        req.body.phone,
+        res
+      )
       .then((data) => {
         if (data.statusCode == 100) {
           res.status(200).send({
@@ -309,21 +317,30 @@ exports.addCustomer = (req, res) => {
   }
 };
 
-
 exports.uploadCustProfileImg = (req, res) => {
   try {
     let imgFolderPath, store_cust_id, imgSrc;
     var busboy = new Busboy({ headers: req.headers });
 
     var formData = new Map();
-    busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
-      // console.log('Field [' + fieldname + ']: value: ' + val);
-      formData.set(fieldname, val);
-    });
+    busboy.on(
+      "field",
+      function (
+        fieldname,
+        val,
+        fieldnameTruncated,
+        valTruncated,
+        encoding,
+        mimetype
+      ) {
+        // console.log('Field [' + fieldname + ']: value: ' + val);
+        formData.set(fieldname, val);
+      }
+    );
 
-    console.log('here');
-    busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-      store_cust_id = formData.get('id')
+    console.log("here");
+    busboy.on("file", function (fieldname, file, filename, encoding, mimetype) {
+      store_cust_id = formData.get("id");
       console.log(store_cust_id);
       let folderPath = imgPath + store_cust_id + "/";
       fs.mkdirSync(folderPath, { recursive: true }, function (err) {
@@ -335,34 +352,55 @@ exports.uploadCustProfileImg = (req, res) => {
       });
       console.log(mimetype);
       // console.log( fieldname, mimetype, encoding)
-      if (mimetype !== 'image/png' && mimetype !== 'image/jpg' && mimetype !== 'image/jpeg') {
-        res.send('Upload only image');
+      if (
+        mimetype !== "image/png" &&
+        mimetype !== "image/jpg" &&
+        mimetype !== "image/jpeg"
+      ) {
+        res.send("Upload only image");
         return false;
       }
       var saveTo = path.join(folderPath, path.basename(store_cust_id));
-      let ext = '';
+      let ext = "";
       switch (mimetype) {
-        case 'image/png':
-          ext = 'png';
+        case "image/png":
+          ext = "png";
           break;
-        case 'image/jpg':
-          ext = 'jpg';
+        case "image/jpg":
+          ext = "jpg";
           break;
-        case 'image/jpeg':
-          ext = 'jpeg';
+        case "image/jpeg":
+          ext = "jpeg";
           break;
-        default: 'jpeg'
+        default:
+          "jpeg";
           break;
       }
       console.log(saveTo, ext);
       if (req.headers.host != "localhost:4500") {
-        imgSrc = "https://" + req.headers.host + "/public/cust_profile_img/" + store_cust_id + "/" + store_cust_id + "." + ext;
+        imgSrc =
+          "https://" +
+          req.headers.host +
+          "/public/cust_profile_img/" +
+          store_cust_id +
+          "/" +
+          store_cust_id +
+          "." +
+          ext;
         imgFolderPath = saveTo + "." + ext;
       } else {
         // imgFolderPath = saveTo + "." + ext;
         // imgSrc = imgFolderPath;
 
-        imgSrc = "http://" + req.headers.host + "/public/cust_profile_img/" + store_cust_id + "/" + store_cust_id + "." + ext;
+        imgSrc =
+          "http://" +
+          req.headers.host +
+          "/public/cust_profile_img/" +
+          store_cust_id +
+          "/" +
+          store_cust_id +
+          "." +
+          ext;
         imgFolderPath = saveTo + "." + ext;
       }
       var outStream = fs.createWriteStream(imgFolderPath);
@@ -372,7 +410,7 @@ exports.uploadCustProfileImg = (req, res) => {
 
     req.pipe(busboy);
 
-    busboy.on('finish', function () {
+    busboy.on("finish", function () {
       customerService
         .uploadCustProfileImg(store_cust_id, imgSrc, res)
         .then((data) => {
@@ -423,61 +461,62 @@ exports.uploadCustProfileImg = (req, res) => {
       res.status(200).send({
         statusCode: 101,
         status: false,
-        message: 'ReferenceError',
+        message: "ReferenceError",
         data: [],
       });
     } else if (error instanceof TypeError) {
       res.status(200).send({
         statusCode: 101,
         status: false,
-        message: 'TypeError',
+        message: "TypeError",
         data: [],
       });
     } else if (error instanceof RangeError) {
       res.status(200).send({
         statusCode: 101,
         status: false,
-        message: 'RangeError',
+        message: "RangeError",
         data: [],
       });
     } else if (error instanceof EvalError) {
       res.status(200).send({
         statusCode: 101,
         status: false,
-        message: 'EvalError',
+        message: "EvalError",
         data: [],
       });
     } else {
       res.status(200).send({
         statusCode: 101,
         status: false,
-        message: 'Something went wrong!!!',
+        message: "Something went wrong!!!",
         data: [],
       });
     }
-
   }
 };
 
 exports.getProfilePhoto = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    shopifyCustomerId: Joi.number().required().error(new Error("Provide shopifyCustomerId(number)"))
+    shopifyCustomerId: Joi.number()
+      .required()
+      .error(new Error("Provide shopifyCustomerId(number)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: error.message,
-      });
-  }else {
-    customerService.getProfilePhoto(req, req.body.phone, res)
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: error.message,
+    });
+  } else {
+    customerService
+      .getProfilePhoto(req, req.body.phone, res)
       .then((data) => {
-
         if (data && data.count > 0) {
           res.status(200).send({
             statusCode: 100,
@@ -508,21 +547,26 @@ exports.getProfilePhoto = (req, res) => {
 exports.changeCustomerPassword = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    shopifyCustomerId: Joi.string().required().error(new Error("Provide shopifyCustomerId(string)")),
-    password: Joi.string().required().error(new Error("Provide password(string)"))
+    shopifyCustomerId: Joi.string()
+      .required()
+      .error(new Error("Provide shopifyCustomerId(string)")),
+    password: Joi.string()
+      .required()
+      .error(new Error("Provide password(string)")),
   });
 
-  const schema_result = schema.validate(data)
+  const schema_result = schema.validate(data);
 
-  if(schema_result.error){
+  if (schema_result.error) {
     res.status(422).json({
-        statusCode: 422,
-        status: "error",
-        message: "Invalid request data",
-        data: error.message,
-      });
-  }else {
-    customerHelper.changeCustomerPassword(req.body, res)
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: error.message,
+    });
+  } else {
+    customerHelper
+      .changeCustomerPassword(req.body, res)
       .then((shopfiyRes) => {
         console.log(shopfiyRes);
         if (shopfiyRes.errors) {
