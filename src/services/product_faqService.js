@@ -1,24 +1,20 @@
 const product_faq = require("../models").product_faq;
 const ProductMaster = require("../models").product_master;
-
+const Op = require("sequelize").Op
 class product_faqService {
   getAll_productFaq(req, res) {
     let where = {};
 
     if (req.body.faqId) {
-      where.faq_id = req.body.faqId;
+      where.faq_id = {[Op.like]: `%${req.body.faqId}%`};
     }
 
     if (req.body.pId) {
-      where.pid = req.body.pId;
+      where.pid = {[Op.like]: `%${req.body.pId}%`};
     }
 
     if (req.body.question) {
       where.question = { [Op.like]: `%${req.body.question}%` };
-    }
-
-    if (req.body.pId == 0) {
-      where.pid = 0;
     }
 
     product_faq.belongsTo(ProductMaster, {
@@ -133,23 +129,23 @@ class product_faqService {
       let data = {};
 
       if (req.body.faqId) {
-        where.faq_id = req.body.faqId;
+        where.faq_id = {[Op.like]: `%${req.body.faqId}%`};
       }
 
       if (req.body.faqId) {
-        data.faq_id = req.body.faqId;
+        data.faq_id = {[Op.like]: `%${req.body.faqId}%`};
       }
 
       if (req.body.pId) {
-        data.pid = req.body.pId;
+        data.pid = {[Op.like]: `%${req.body.pId}%`};
       }
 
       if (req.body.question) {
-        data.question = req.body.question;
+        data.question = {[Op.like]: `%${req.body.question}%`};
       }
 
       if (req.body.answer) {
-        data.answer = req.body.answer;
+        data.answer = {[Op.like]: `%${req.body.answer}%`};
       }
 
       data.updated_at = dateStr;
@@ -170,7 +166,7 @@ class product_faqService {
       let where = {};
 
       if (req.body.faqId) {
-        where.faq_id = req.body.faqId;
+        where.faq_id = {[Op.like]: `%${req.body.faqId}%`};
       }
 
       return product_faq

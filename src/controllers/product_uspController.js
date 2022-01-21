@@ -6,12 +6,12 @@ module.exports = {
   getAllProductUsp: async function (req, res) {
     const data = req.body;
     const schema = Joi.object().keys({
-      product_id: Joi.number().error(new Error("Provide product_id(number)")),
-      uspId: Joi.number().error(new Error("Provide uspId(number)")),
-      uspTitle: Joi.string().error(new Error("Provide uspTitle(string)")),
-      pid: Joi.number().error(new Error("Provide pid(number)")),
-      limit: Joi.number().error(new Error("Provide limit(number)")),
-      offset: Joi.number().error(new Error("Provide offset(number)")),
+      product_id: Joi.number().optional().allow("").error(new Error("Provide product_id(number)")),
+      uspId: Joi.number().optional().allow("").error(new Error("Provide uspId(number)")),
+      uspTitle: Joi.string().optional().allow("").error(new Error("Provide uspTitle(string)")),
+      pid: Joi.number().optional().allow("").error(new Error("Provide pid(number)")),
+      limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+      offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
     });
 
     const schema_result = schema.validate(data);
@@ -21,7 +21,7 @@ module.exports = {
         statusCode: 422,
         status: "error",
         message: "Invalid request data",
-        data: error.message,
+        data: schema_result.error.message,
       });
     } else {
       product_usp_service
@@ -92,10 +92,10 @@ module.exports = {
       product_id: Joi.number()
         .required()
         .error(new Error("Provide product_id(number)")),
-      created_at: Joi.string().error(
+      created_at: Joi.string().optional().allow("").error(
         new Error("Provide created_at(date | string)")
       ),
-      updated_at: Joi.string().error(
+      updated_at: Joi.string().optional().allow("").error(
         new Error("Provide created_at(date | string)")
       ),
     });
@@ -128,8 +128,8 @@ module.exports = {
     const data = req.body;
     const schema = Joi.object().keys({
       uspId: Joi.number().required().error(new Error("Provide uspId(number)")),
-      uspTitle: Joi.string().error(new Error("Provide uspTitle(string)")),
-      pid: Joi.number().error(new Error("Provide pid(number)")),
+      uspTitle: Joi.string().optional().allow("").error(new Error("Provide uspTitle(string)")),
+      pid: Joi.number().optional().allow("").error(new Error("Provide pid(number)")),
     });
 
     const schema_result = schema.validate(data);

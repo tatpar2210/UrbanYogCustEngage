@@ -8,15 +8,15 @@ const tpmreview = new tpmReview();
 exports.getTPMReview = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    tpReviewId: Joi.number().error(new Error("Provide tpReviewId(number)")),
-    tpId: Joi.number().error(new Error("Provide tpId(number)")),
-    pId: Joi.number().error(new Error("Provide pId(number)")),
-    tpmProductUrl: Joi.string().error(
+    tpReviewId: Joi.number().optional().allow("").error(new Error("Provide tpReviewId(number)")),
+    tpId: Joi.number().optional().allow("").error(new Error("Provide tpId(number)")),
+    pId: Joi.number().optional().allow("").error(new Error("Provide pId(number)")),
+    tpmProductUrl: Joi.string().optional().allow("").error(
       new Error("Provide tpmProductUrl(number)")
     ),
 
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schemaresult = schema.validate(data);
@@ -130,9 +130,9 @@ exports.updateTPMReview = (req, res) => {
     tpReviewId: Joi.number()
       .required()
       .error(new Error("Provide tpReviewId(number)")),
-    tpId: Joi.number().error(new Error("Provide tpId(number)")),
-    pId: Joi.number().error(new Error("Provide pId(number)")),
-    tpmProductUrl: Joi.string().error(
+    tpId: Joi.number().optional().allow("").error(new Error("Provide tpId(number)")),
+    pId: Joi.number().optional().allow("").error(new Error("Provide pId(number)")),
+    tpmProductUrl: Joi.string().optional().allow("").error(
       new Error("Provide tpmProductUrl(number)")
     ),
   });

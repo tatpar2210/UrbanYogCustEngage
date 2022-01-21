@@ -1,19 +1,19 @@
 const product_video = require("../models").product_video;
-
+const Op = require("sequelize").Op
 class product_videoService {
   getAll_ProductVideos(req_data) {
     var where = {};
 
     if (req_data.p_id) {
-      where.pid = req_data.p_id;
+      where.pid ={ [Op.like]: `%${req_data.p_id}%`};
     }
 
     if (req_data.video_id) {
-      where.video_id = req_data.video_id;
+      where.video_id ={ [Op.like]: `%${req_data.video_id}%`};
     }
 
     if (req_data.video_type) {
-      where.video_type = req_data.video_type;
+      where.video_type ={ [Op.like]: `%${req_data.video_type}%`};
     }
 
     return product_video.findAndCountAll({

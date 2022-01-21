@@ -5,15 +5,15 @@ const custFeedbackService = new CustFeedbackService();
 exports.getCustFeedback = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    cutFeedbackId: Joi.number().error(
+    cutFeedbackId: Joi.number().optional().allow("").error(
       new Error("Provide cutFeedbackId(number)")
     ),
-    email: Joi.string().error(new Error("Provide email(string)")),
-    name: Joi.string().error(new Error("Provide name(string)")),
-    phone: Joi.number().error(new Error("Provide phone(number)")),
-    feedback: Joi.string().error(new Error("Provide feedback(string)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    email: Joi.string().optional().allow("").error(new Error("Provide email(string)")),
+    name: Joi.string().optional().allow("").error(new Error("Provide name(string)")),
+    phone: Joi.number().optional().allow("").error(new Error("Provide phone(number)")),
+    feedback: Joi.string().optional().allow("").error(new Error("Provide feedback(string)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
   const schema_result = schema.validate(data);
   if (schema_result.error) {
@@ -58,7 +58,7 @@ exports.getCustFeedback = (req, res) => {
 exports.createCustFeedback = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    email: Joi.string().required().email(),
+    email: Joi.string().required().error(new Error("Provide email(string)")),
     name: Joi.string().required().error(new Error("Provide name(string)")),
     phone: Joi.number().required().error(new Error("Provide phone(number)")),
     feedback: Joi.string()

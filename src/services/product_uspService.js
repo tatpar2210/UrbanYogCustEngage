@@ -1,24 +1,24 @@
 const product_usp = require("../models").product_usp;
 const Productmaster = require("../models").product_master;
-
+const Op = require("sequelize").Op
 class product_uspService {
   getAll_usp(req, res) {
     let where = {};
 
     if (req.body.uspId) {
-      where.prod_usp_id = req.body.uspId;
+      where.prod_usp_id = {[Op.like]: `%${req.body.uspId}%`};
     }
 
     if (req.body.pid) {
-      where.pid = req.body.pid;
+      where.pid = {[Op.like]: `%${req.body.pid}%`};
     }
 
     if (req.body.product_id) {
-      where.product_id = req.body.product_id;
+      where.product_id = {[Op.like]: `%${req.body.product_id}%`};
     }
 
     if (req.body.uspTitle) {
-      where.usp_title = req.body.uspTitle;
+      where.usp_title = {[Op.like]: `%${req.body.uspTitle}%`};
     }
 
     product_usp.belongsTo(Productmaster, {
@@ -29,7 +29,7 @@ class product_uspService {
       .findAndCountAll({
         where: where,
         offset: req.body.offset || 0,
-        limit: req.body.limit || 50,
+        limit: req.body.limit || 12,
         attributes: [
           "prod_usp_id",
           "usp_title",
@@ -83,15 +83,15 @@ class product_uspService {
       let data = {};
 
       if (req.body.uspId) {
-        where.prod_usp_id = req.body.uspId;
+        where.prod_usp_id = {[Op.like]: `%${req.body.uspId}%`};
       }
 
       if (req.body.uspTitle) {
-        data.usp_title = req.body.uspTitle;
+        data.usp_title = {[Op.like]: `%${req.body.uspTitle}%`};
       }
 
       if (req.body.pid) {
-        data.pid = req.body.pid;
+        data.pid = {[Op.like]: `%${req.body.pid}%`};
       }
 
       data.updated_at = dateStr;
@@ -112,7 +112,7 @@ class product_uspService {
       let where = {};
 
       if (req.body.uspId) {
-        where.prod_usp_id = req.body.uspId;
+        where.prod_usp_id = {[Op.like]: `%${req.body.uspId}%`};
       }
 
       return product_usp

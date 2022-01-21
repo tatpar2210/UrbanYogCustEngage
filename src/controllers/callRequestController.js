@@ -8,13 +8,13 @@ const callrequest = new callRequest();
 exports.getCallRequest = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    callReqId: Joi.number().error(new Error("Provide callReqId(number)")),
-    custName: Joi.string().error(new Error("Provide custName(string)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    contactNo: Joi.string().error(new Error("Provide contactNo(number)")),
-    status: Joi.number().error(new Error("Provide status(number)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    callReqId: Joi.number().allow("").optional().error(new Error("Provide callReqId(number)")),
+    custName: Joi.string().allow("").optional().error(new Error("Provide custName(string)")),
+    custEmail: Joi.string().allow("").optional().error(new Error("Provide custEmail(string)")),
+    contactNo: Joi.string().allow("").optional().error(new Error("Provide contactNo(number)")),
+    status: Joi.number().allow("").optional().error(new Error("Provide status(number)")),
+    limit: Joi.number().allow("").optional().error(new Error("Provide limit(number)")),
+    offset: Joi.number().allow("").optional().error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);
@@ -24,7 +24,7 @@ exports.getCallRequest = (req, res) => {
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     callrequest
@@ -82,7 +82,7 @@ exports.createCallRequest = (req, res) => {
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     callrequest
@@ -126,9 +126,9 @@ exports.updateCallRequest = (req, res) => {
     callReqId: Joi.number()
       .required()
       .error(new Error("Provide callReqId(number)")),
-    custName: Joi.string().error(new Error("Provide custName(string)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    status: Joi.number().error(new Error("Provide status(number)")),
+    custName: Joi.string().allow("").optional().error(new Error("Provide custName(string)")),
+    custEmail: Joi.string().allow("").optional().error(new Error("Provide custEmail(string)")),
+    status: Joi.number().allow("").optional().error(new Error("Provide status(number)")),
     contactNo: Joi.string()
       .min(10)
       .max(13)
@@ -144,7 +144,7 @@ exports.updateCallRequest = (req, res) => {
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     callrequest
@@ -193,7 +193,7 @@ exports.deleteCallRequest = (req, res) => {
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     callrequest

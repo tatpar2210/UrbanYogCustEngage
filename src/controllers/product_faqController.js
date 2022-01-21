@@ -6,11 +6,11 @@ module.exports = {
   getAll_Product_Faq: async function (req, res) {
     const data = req.body;
     const schema = Joi.object().keys({
-      faqId: Joi.number().error(new Error("Provide faqId(number)")),
-      pId: Joi.number().error(new Error("Provide pId(number)")),
-      question: Joi.string().error(new Error("Provide question(string)")),
-      limit: Joi.number().error(new Error("Provide limit(number)")),
-      offset: Joi.number().error(new Error("Provide offset(number)")),
+      faqId: Joi.number().optional().allow("").error(new Error("Provide faqId(number)")),
+      pId: Joi.number().optional().allow("").error(new Error("Provide pId(number)")),
+      question: Joi.string().optional().allow("").error(new Error("Provide question(string)")),
+      limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+      offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
     });
 
     const schema_result = schema.validate(data);
@@ -109,10 +109,10 @@ module.exports = {
   updateProductFAQs: async function (req, res) {
     const data = req.body;
     const schema = Joi.object().keys({
-      faqId: Joi.number().error(new Error("Provide faqId(number)")),
-      pId: Joi.number().error(new Error("Provide pId(number)")),
-      question: Joi.string().error(new Error("Provide question(string)")),
-      answer: Joi.string().error(new Error("Provide answer(string)")),
+      faqId: Joi.number().optional().allow("").error(new Error("Provide faqId(number)")),
+      pId: Joi.number().optional().allow("").error(new Error("Provide pId(number)")),
+      question: Joi.string().optional().allow("").error(new Error("Provide question(string)")),
+      answer: Joi.string().optional().allow("").error(new Error("Provide answer(string)")),
     });
 
     const schema_result = schema.validate(data);

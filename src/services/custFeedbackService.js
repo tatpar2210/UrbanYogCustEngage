@@ -7,11 +7,11 @@ class CustFeedbackService {
       let where = {};
 
       if (req.body.cutFeedbackId) {
-        where.cust_feedack_id = req.body.cutFeedbackId;
+        where.cust_feedack_id = {[Op.like] : `%${req.body.cutFeedbackId}%`};
       }
 
       if (req.body.email) {
-        where.email = req.body.email;
+        where.email = {[Op.like] : `%${req.body.email}%`};
       }
 
       if (req.body.name) {
@@ -72,8 +72,8 @@ class CustFeedbackService {
       let where = {};
 
       if (req.body.feedback && req.body.email) {
-        where.feedback = req.body.feedback;
-        where.email = req.body.email;
+        where.feedback = {[Op.like] : `%${req.body.feedback}%`};
+        where.email = {[Op.like] : `%${req.body.email}%`};
       }
 
       return CustFeedback.findAll({ where: where })

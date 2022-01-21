@@ -6,16 +6,16 @@ const custWallet = new CustomerWalletService();
 exports.getWalletDetails = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    walletId: Joi.number().error(new Error("Provide walletId(number)")),
-    custId: Joi.number().error(new Error("Provide custId(number)")),
-    storeCustId: Joi.number().error(new Error("Provide storeCustId(number)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    custContactNo: Joi.number().error(
+    walletId: Joi.number().optional().allow("").error(new Error("Provide walletId(number)")),
+    custId: Joi.number().optional().allow("").error(new Error("Provide custId(number)")),
+    storeCustId: Joi.number().optional().allow("").error(new Error("Provide storeCustId(number)")),
+    custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
+    custContactNo: Joi.number().optional().allow("").error(
       new Error("Provide custContactNo(number)")
     ),
-    clubId: Joi.number().error(new Error("Provide clubId(number)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    clubId: Joi.number().optional().allow("").error(new Error("Provide clubId(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);
@@ -61,17 +61,17 @@ exports.getWalletDetails = (req, res) => {
 exports.getWalletCustomerDetails = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    walletId: Joi.number().error(new Error("Provide walletId(number)")),
-    custId: Joi.number().error(new Error("Provide custId(number)")),
-    storeCustId: Joi.number().error(new Error("Provide storeCustId(number)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    custContactNo: Joi.number().error(
+    walletId: Joi.number().optional().allow("").error(new Error("Provide walletId(number)")),
+    custId: Joi.number().optional().allow("").error(new Error("Provide custId(number)")),
+    storeCustId: Joi.number().optional().allow("").error(new Error("Provide storeCustId(number)")),
+    custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
+    custContactNo: Joi.number().optional().allow("").error(
       new Error("Provide custContactNo(number)")
     ),
-    custName: Joi.string().error(new Error("Provide storeCustId(string)")),
-    clubId: Joi.number().error(new Error("Provide clubId(number)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    custName: Joi.string().optional().allow("").error(new Error("Provide storeCustId(string)")),
+    clubId: Joi.number().optional().allow("").error(new Error("Provide clubId(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);
@@ -175,9 +175,9 @@ exports.updateWallet = (req, res) => {
     walletId: Joi.number()
       .required()
       .error(new Error("Provide walletId(number)")),
-    totalAmount: Joi.number().error(new Error("Provide totalAmount(number)")),
-    clubId: Joi.number().error(new Error("Provide clubId(number)")),
-    status: Joi.number().error(new Error("Provide status(number)")),
+    totalAmount: Joi.number().optional().allow("").error(new Error("Provide totalAmount(number)")),
+    clubId: Joi.number().optional().allow("").error(new Error("Provide clubId(number)")),
+    status: Joi.number().optional().allow("").error(new Error("Provide status(number)")),
   });
 
   const schema_result = schema.validate(data);

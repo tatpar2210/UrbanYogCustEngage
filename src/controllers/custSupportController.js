@@ -5,14 +5,14 @@ const custSupport = new custSupportService();
 exports.getSupportDetails = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    supportId: Joi.number().error(new Error("Provide supportId(number)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    storeOrderId: Joi.number().error(new Error("Provide orderId(number)")),
-    storeOrderNumber: Joi.number().error(
+    supportId: Joi.number().optional().allow("").error(new Error("Provide supportId(number)")),
+    custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
+    storeOrderId: Joi.number().optional().allow("").error(new Error("Provide orderId(number)")),
+    storeOrderNumber: Joi.number().optional().allow("").error(
       new Error("Provide orderNumber(number)")
     ),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);

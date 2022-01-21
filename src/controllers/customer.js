@@ -20,12 +20,12 @@ fs.mkdir(imgPath, { recursive: true }, function (err) {
 exports.getCustomerCount = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    custId: Joi.number().error(new Error("Provide custId(number)")),
-    custName: Joi.string().error(new Error("Provide custName(string)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    custMoNo: Joi.string().error(new Error("Provide custMoNo(number)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    custId: Joi.number().optional().allow("").error(new Error("Provide custId(number)")),
+    custName: Joi.string().optional().allow("").error(new Error("Provide custName(string)")),
+    custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
+    custMoNo: Joi.string().optional().allow("").error(new Error("Provide custMoNo(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);
@@ -71,12 +71,12 @@ exports.getCustomerCount = (req, res) => {
 exports.getCustomerDetails = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    custId: Joi.number().error(new Error("Provide custId(number)")),
-    custName: Joi.string().error(new Error("Provide custName(string)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    custMoNo: Joi.string().error(new Error("Provide custMoNo(number)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    custId: Joi.number().optional().allow("").error(new Error("Provide custId(number)")),
+    custName: Joi.string().optional().allow("").error(new Error("Provide custName(string)")),
+    custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
+    custMoNo: Joi.string().optional().allow("").error(new Error("Provide custMoNo(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);
@@ -125,7 +125,7 @@ exports.getCustomerDetailsForWebsite = (req, res) => {
     shopifyCustomerId: Joi.number()
       .required()
       .error(new Error("Provide custId(number)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
+    custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
   });
 
   const schema_result = schema.validate(data);
@@ -174,8 +174,8 @@ exports.updateCustomerWebsite = (req, res) => {
     shopifyCustomerId: Joi.number()
       .required()
       .error(new Error("Provide shopifyCustomerId(number)")),
-    gender: Joi.string().error(new Error("Provide gender(string)")),
-    dob: Joi.string().error(new Error("Provide dob(string)")),
+    gender: Joi.string().optional().allow("").error(new Error("Provide gender(string)")),
+    dob: Joi.string().optional().allow("").error(new Error("Provide dob(string)")),
   });
 
   const schema_result = schema.validate(data);
@@ -511,7 +511,7 @@ exports.getProfilePhoto = (req, res) => {
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     customerService
@@ -562,7 +562,7 @@ exports.changeCustomerPassword = (req, res) => {
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     customerHelper

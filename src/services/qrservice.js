@@ -19,21 +19,21 @@ class qrSerrvice {
       let where = {};
 
       if (req.body.batchId) {
-        where.batch_id = req.body.batchId;
+        where.batch_id = {[Op.like] : `%${req.body.batchId}%`};
       }
 
       if (req.body.qrId) {
-        where.qr_id = req.body.qrId;
+        where.qr_id = {[Op.like] : `%${req.body.qrId}%`};
       }
 
       if (req.body.qrBatchId) {
-        where.qr_batch_id = req.body.qrBatchId;
+        where.qr_batch_id = {[Op.like] : `%${req.body.qrBatchId}%`};
       }
 
       return QRBatchMaster.findAndCountAll({
         where: where,
         offset: req.body.offset || 0,
-        limit: req.body.limit || 50,
+        limit: req.body.limit || 12,
         order: [["qr_id", "ASC"]],
         include: { model: BatchMaster },
       })
@@ -50,27 +50,27 @@ class qrSerrvice {
     var where = {};
 
     if (data.batchId) {
-      where.batch_id = data.batchId;
+      where.batch_id = {[Op.like]: `%${data.batchId}%`};
     }
 
     if (data.qrId) {
-      where.qr_id = data.qrId;
+      where.qr_id = {[Op.like]: `%${data.qrId}%`};
     }
 
     if (data.qrCode) {
-      where.qr_code = data.qrCode;
+      where.qr_code = {[Op.like]: `%${data.qrCode}%`};
     }
 
     if (data.qrBatchId) {
-      where.qr_batch_id = data.qrBatchId;
+      where.qr_batch_id = {[Op.like]: `%${data.qrBatchId}%`};
     }
 
     if (data.pId) {
-      where.pid = data.pId;
+      where.pid = {[Op.like]: `%${data.pId}%`};
     }
 
     if (data.status) {
-      where.status = data.status;
+      where.status = {[Op.like]: `%${data.status}%`};
     }
 
     if (data.created_at) {
@@ -94,27 +94,27 @@ class qrSerrvice {
     var where = {};
 
     if (data.batchId) {
-      where.batch_id = data.batchId;
+      where.batch_id = {[Op.like]: `%${data.batchId}%`};
     }
 
     if (data.qrId) {
-      where.qr_id = data.qrId;
+      where.qr_id = {[Op.like]: `%${data.qrId}%`};
     }
 
     if (data.qrCode) {
-      where.qr_code = data.qrCode;
+      where.qr_code = {[Op.like]: `%${data.qrCode}%`};
     }
 
     if (data.qrBatchId) {
-      where.qr_batch_id = data.qrBatchId;
+      where.qr_batch_id = {[Op.like]: `%${data.qrBatchId}%`};
     }
 
     if (data.pId) {
-      where.pid = data.pId;
+      where.pid = {[Op.like]: `%${data.pId}%`};
     }
 
     if (data.status) {
-      where.status = data.status;
+      where.status = {[Op.like]: `%${data.status}%`};
     }
 
     if (data.qrCode) {
@@ -136,8 +136,8 @@ class qrSerrvice {
     return QRMaster.findAndCountAll({
       where: where,
       order: [["qr_id", "DESC"]],
-      offset: data.offset || 0,
-      limit: data.limit || 50,
+      offset: data.limit || 0,
+      limit: data.offset || 12,
       attributes: [
         "qr_id",
         "qr_code",

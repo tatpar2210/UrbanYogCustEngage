@@ -1,21 +1,23 @@
 const productReview_fileUploadModel =
   require("../models").product_review_file_upload;
 
+const Op = require("sequelize").Op
+
 class product_review_file_uploadService {
   getFiles(req_data) {
     //console.log("from serviede: ", id)
     var where = {};
 
     if (req_data.p_id) {
-      where.pid = req_data.p_id;
+      where.pid = {[Op.like] : `%${req_data.p_id}%`};
     }
 
     if (req_data.review_id) {
-      where.review_id = req_data.review_id;
+      where.review_id = {[Op.like] : `%${req_data.review_id}%`};
     }
 
     if (req_data.file_id) {
-      where.file_id = req_data.file_id;
+      where.file_id = {[Op.like] : `%${req_data.file_id}%`};
     }
 
     var limit = req_data.limit || 12;

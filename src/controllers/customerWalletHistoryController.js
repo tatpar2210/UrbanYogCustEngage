@@ -6,18 +6,18 @@ const custWalletHistory = new CustomerWalletHistoryService();
 exports.getWalletHistoryDetails = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    walletHistoryId: Joi.number().error(
+    walletHistoryId: Joi.number().optional().allow("").error(
       new Error("Provide walletHistoryId(number)")
     ),
-    walletId: Joi.number().error(new Error("Provide walletId(number)")),
-    custId: Joi.number().error(new Error("Provide custId(number)")),
-    storeCustId: Joi.number().error(new Error("Provide storeCustId(number)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    custContactNo: Joi.number().error(
+    walletId: Joi.number().optional().allow("").error(new Error("Provide walletId(number)")),
+    custId: Joi.number().optional().allow("").error(new Error("Provide custId(number)")),
+    storeCustId: Joi.number().optional().allow("").error(new Error("Provide storeCustId(number)")),
+    custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
+    custContactNo: Joi.number().optional().allow("").error(
       new Error("Provide custContactNo(number)")
     ),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);
@@ -85,7 +85,7 @@ exports.addWalletHistory = (req, res) => {
     discountId: Joi.number()
       .required()
       .error(new Error("Provide discountId(number)")),
-    pid: Joi.number().error(new Error("Provide pid(number)")),
+    pid: Joi.number().optional().allow("").error(new Error("Provide pid(number)")),
     transcationNote: Joi.string()
       .required()
       .error(new Error("Provide transcationNote(string)")),
@@ -142,13 +142,13 @@ exports.updateWalletHistory = (req, res) => {
     walletHistoryId: Joi.number()
       .required()
       .error(new Error("walletHistoryId clubId(number)")),
-    transactionAmount: Joi.number().error(
+    transactionAmount: Joi.number().optional().allow("").error(
       new Error("Provide transactionAmount(number)")
     ),
-    transactionStatus: Joi.number().error(
+    transactionStatus: Joi.number().optional().allow("").error(
       new Error("Provide transactionStatus(number)")
     ),
-    status: Joi.number().error(new Error("Provide status(number)")),
+    status: Joi.number().optional().allow("").error(new Error("Provide status(number)")),
   });
 
   const schema_result = schema.validate(data);

@@ -7,19 +7,19 @@ class CallRequestService {
       let where = {};
 
       if (req.body.callReqId) {
-        where.call_req_id = req.body.callReqId;
+        where.call_req_id = {[Op.like] : `%${req.body.callReqId}%`};
       }
 
       if (req.body.custName) {
-        where.cust_name = req.body.custName;
+        where.cust_name = {[Op.like] : `%${req.body.custName}%`};
       }
 
       if (req.body.custEmail) {
-        where.cust_email = req.body.custEmail;
+        where.cust_email = {[Op.like] : `%${req.body.custEmail}%`};
       }
 
       if (req.body.contactNo) {
-        where.contact_no = req.body.contactNo;
+        where.contact_no = {[Op.like] : `%${req.body.contactNo}%`};
       }
 
       return CallRequest.findAndCountAll({
@@ -105,23 +105,23 @@ class CallRequestService {
       let data = {};
 
       if (req.body.callReqId) {
-        where.call_req_id = req.body.callReqId;
+        where.call_req_id = {[Op.like] : `%${req.body.callReqId}%`};
       }
 
       if (req.body.custName) {
-        data.cust_name = req.body.custName;
+        data.cust_name = {[Op.like] : `%${req.body.custName}%`};
       }
 
       if (req.body.custEmail) {
-        data.cust_email = req.body.custEmail;
+        data.cust_email = {[Op.like] : `%${req.body.custEmail}%`};
       }
 
       if (req.body.contactNo) {
-        data.contact_no = req.body.contactNo;
+        data.contact_no = {[Op.like] : `%${req.body.contactNo}%`};
       }
 
       if (req.body.status) {
-        data.status = req.body.status;
+        data.status = {[Op.like] : `%${req.body.status}%`};
       } else {
         data.status = 0;
       }
@@ -143,7 +143,7 @@ class CallRequestService {
       let where = {};
 
       if (req.body.callReqId) {
-        where.call_req_id = req.body.callReqId;
+        where.call_req_id = {[Op.like] : `%${req.body.callReqId}%`};
       }
 
       return CallRequest.destroy({
