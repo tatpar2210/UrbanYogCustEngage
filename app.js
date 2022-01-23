@@ -39,7 +39,7 @@ const customerWalletOrderController = require("./src/controllers/customerWalletO
 const websiteWalletController = require("./src/controllers/websiteWalletController");
 const custFeedbackController = require("./src/controllers/custFeedbackController");
 const seoMetaKeywordController = require("./src/controllers/seoMetaKeywordController");
-
+const dashboardWalletController = require("./src/controllers/dashboadWalletContoller")
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
@@ -88,6 +88,7 @@ app.post("/verifyToken", (req, res) => {
 // dashboard API's
 app.post("/getCustomerCount", customerController.getCustomerCount);
 app.post("/getQrCount", qrController.getQrCount);
+app.post('/getWalletCount', dashboardWalletController.getWalletCount);
 app.post(
   "/getCust_qr_scan_orderCount",
   cust_qr_scan_orderController.getCount_cust_qrscanned_order
@@ -147,6 +148,7 @@ app.post("/addCustAddress", customerAddressController.addCustAddress);
 app.post("/deletCustAddress", customerAddressController.deletCustAddress);
 
 //generate qr controller end points
+app.post('/generateQRText', qrController.generateQRText);
 app.post("/getQrBatchDetails", qrController.getQrBatchDetails);
 app.post("/getQrDetails", qrController.getQrDetails);
 app.post("/updateQRDetails", qrController.updateQRDetails);
