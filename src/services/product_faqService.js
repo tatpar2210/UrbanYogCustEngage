@@ -129,23 +129,23 @@ class product_faqService {
       let data = {};
 
       if (req.body.faqId) {
-        where.faq_id = {[Op.like]: `%${req.body.faqId}%`};
+        where.faq_id = req.body.faqId;
       }
 
       if (req.body.faqId) {
-        data.faq_id = {[Op.like]: `%${req.body.faqId}%`};
+        data.faq_id = req.body.faqId;
       }
 
       if (req.body.pId) {
-        data.pid = {[Op.like]: `%${req.body.pId}%`};
+        data.pid = req.body.pId;
       }
 
       if (req.body.question) {
-        data.question = {[Op.like]: `%${req.body.question}%`};
+        data.question = req.body.question;
       }
 
       if (req.body.answer) {
-        data.answer = {[Op.like]: `%${req.body.answer}%`};
+        data.answer = req.body.answer;
       }
 
       data.updated_at = dateStr;

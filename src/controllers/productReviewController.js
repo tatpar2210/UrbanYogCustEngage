@@ -317,15 +317,15 @@ module.exports = {
       reviewId: Joi.number()
         .required()
         .error(new Error("Provide reviewId(number)")),
-      status: Joi.number().error(new Error("Provide status(number)")),
-      pId: Joi.number().error(new Error("Provide pId(number)")),
-      review: Joi.string().error(new Error("Provide review(string)")),
-      reviewTitle: Joi.string().error(new Error("Provide reviewTitle(string)")),
-      starCount: Joi.number().error(new Error("Provide starCount(number)")),
-      custName: Joi.string().error(new Error("Provide custName(string)")),
-      custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-      adminReply: Joi.string().error(new Error("Provide adminReply(string)")),
-      reviewDate: Joi.string().error(new Error("Provide reviewDate(string)")),
+      status: Joi.number().optional().allow("").error(new Error("Provide status(number)")),
+      pId: Joi.number().optional().allow("").error(new Error("Provide pId(number)")),
+      review: Joi.string().optional().allow("").error(new Error("Provide review(string)")),
+      reviewTitle: Joi.string().optional().allow("").error(new Error("Provide reviewTitle(string)")),
+      starCount: Joi.number().optional().allow("").error(new Error("Provide starCount(number)")),
+      custName: Joi.string().optional().allow("").error(new Error("Provide custName(string)")),
+      custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
+      adminReply: Joi.string().optional().allow("").error(new Error("Provide adminReply(string)")),
+      reviewDate: Joi.string().optional().allow("").error(new Error("Provide reviewDate(string)")),
     });
 
     const schemaResult = schema.validate(data);

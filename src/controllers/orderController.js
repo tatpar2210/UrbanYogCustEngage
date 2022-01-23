@@ -70,18 +70,18 @@ exports.cancelOrderWebsite = (req, res) => {
 exports.getCancelOrderDetails = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    cancelOrderId: Joi.number().error(
+    cancelOrderId: Joi.number().optional().allow("").error(
       new Error("Provide cancelOrderId(number)")
     ),
-    storeOrderNumber: Joi.number().error(
+    storeOrderNumber: Joi.number().optional().allow("").error(
       new Error("Provide storeOrderNumber(number)")
     ),
-    cancelReason: Joi.string().error(new Error("Provide cancelReason(string)")),
-    custEmail: Joi.string().error(new Error("Provide custEmail(string)")),
-    custMoNo: Joi.string().error(new Error("Provide custMoNo(string)")),
-    storeId: Joi.number().error(new Error("Provide storeId(number)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    cancelReason: Joi.string().optional().allow("").error(new Error("Provide cancelReason(string)")),
+    custEmail: Joi.string().optional().allow("").error(new Error("Provide custEmail(string)")),
+    custMoNo: Joi.string().optional().allow("").error(new Error("Provide custMoNo(string)")),
+    storeId: Joi.number().optional().allow("").error(new Error("Provide storeId(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);

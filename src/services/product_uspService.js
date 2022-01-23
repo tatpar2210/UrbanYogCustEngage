@@ -83,15 +83,15 @@ class product_uspService {
       let data = {};
 
       if (req.body.uspId) {
-        where.prod_usp_id = {[Op.like]: `%${req.body.uspId}%`};
+        where.prod_usp_id = req.body.uspId;
       }
 
       if (req.body.uspTitle) {
-        data.usp_title = {[Op.like]: `%${req.body.uspTitle}%`};
+        data.usp_title = req.body.uspTitle;
       }
 
       if (req.body.pid) {
-        data.pid = {[Op.like]: `%${req.body.pid}%`};
+        data.pid = req.body.pid;
       }
 
       data.updated_at = dateStr;

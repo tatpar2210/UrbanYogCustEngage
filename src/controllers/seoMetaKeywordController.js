@@ -8,11 +8,11 @@ const seoMetaKeyword = new SeoMetaKeywordService();
 exports.getMetaKeyword = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    keywordId: Joi.number().error(new Error("Provide keywordId(number)")),
-    keyword: Joi.string().error(new Error("Provide keyword(string)")),
-    pId: Joi.number().error(new Error("Provide pid(number)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    keywordId: Joi.number().optional().allow("").error(new Error("Provide keywordId(number)")),
+    keyword: Joi.string().optional().allow("").error(new Error("Provide keyword(string)")),
+    pId: Joi.number().optional().allow("").error(new Error("Provide pid(number)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
   const schema_result = schema.validate(data);
 

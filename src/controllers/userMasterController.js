@@ -134,6 +134,10 @@ module.exports = {
         contact_no: Joi.number()
           .required()
           .error(new Error("Provide Contact no.")),
+        status: Joi.number()
+            .optional()
+            .allow("")
+            .error(new Error("Provide status(number)")),
         created_at: Joi.string()
           .optional()
           .allow("")
