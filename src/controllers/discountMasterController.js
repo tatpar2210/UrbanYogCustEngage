@@ -5,14 +5,14 @@ const discountservice = new discountService();
 (exports.getDiscountInfo = (req, res) => {
   const data = req.body;
   const schema = Joi.object().keys({
-    discountId: Joi.number().error(new Error("Provide discountId(number)")),
-    discountCode: Joi.string().error(new Error("Provide discountCode(string)")),
-    discountTitle: Joi.string().error(
+    discountId: Joi.number().optional().allow("").error(new Error("Provide discountId(number)")),
+    discountCode: Joi.string().optional().allow("").error(new Error("Provide discountCode(string)")),
+    discountTitle: Joi.string().optional().allow("").error(
       new Error("Provide discountTitle(string)")
     ),
-    discountType: Joi.string().error(new Error("Provide discountType(string)")),
-    limit: Joi.number().error(new Error("Provide limit(number)")),
-    offset: Joi.number().error(new Error("Provide offset(number)")),
+    discountType: Joi.string().optional().allow("").error(new Error("Provide discountType(string)")),
+    limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+    offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
   });
 
   const schema_result = schema.validate(data);
@@ -22,7 +22,7 @@ const discountservice = new discountService();
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     discountservice
@@ -57,18 +57,18 @@ const discountservice = new discountService();
   (exports.getDiscountDetails = (req, res) => {
     const data = req.body;
     const schema = Joi.object().keys({
-      discountId: Joi.number().error(new Error("Provide discountId(number)")),
-      discountCode: Joi.string().error(
+      discountId: Joi.number().optional().allow("").error(new Error("Provide discountId(number)")),
+      discountCode: Joi.string().optional().allow("").error(
         new Error("Provide discountCode(string)")
       ),
-      discountTitle: Joi.string().error(
+      discountTitle: Joi.string().optional().allow("").error(
         new Error("Provide discountTitle(string)")
       ),
-      discountType: Joi.string().error(
+      discountType: Joi.string().optional().allow("").error(
         new Error("Provide discountType(string)")
       ),
-      limit: Joi.number().error(new Error("Provide limit(number)")),
-      offset: Joi.number().error(new Error("Provide offset(number)")),
+      limit: Joi.number().optional().allow("").error(new Error("Provide limit(number)")),
+      offset: Joi.number().optional().allow("").error(new Error("Provide offset(number)")),
     });
 
     const schema_result = schema.validate(data);
@@ -78,7 +78,7 @@ const discountservice = new discountService();
         statusCode: 422,
         status: "error",
         message: "Invalid request data",
-        data: error.message,
+        data: schema_result.error.message,
       });
     } else {
       discountservice
@@ -126,23 +126,23 @@ const discountservice = new discountService();
         .required()
         .required()
         .error(new Error("Provide discountValue(number)")),
-      minimumRequirement: Joi.string().error(
+      minimumRequirement: Joi.string().optional().allow("").error(
         new Error("Provide minimumRequirement(string)")
       ),
-      minimumQuantity: Joi.number().error(
+      minimumQuantity: Joi.number().optional().allow("").error(
         new Error("Provide minimumQuantity(string)")
       ),
-      minimumAmount: Joi.number().error(
+      minimumAmount: Joi.number().optional().allow("").error(
         new Error("Provide minimumAmount(string)")
       ),
-      usageLimit: Joi.number().error(new Error("Provide usagelimit(number)")),
+      usageLimit: Joi.number().optional().allow("").error(new Error("Provide usagelimit(number)")),
       startDate: Joi.string()
         .required()
         .error(new Error("Provide startDate(string)")),
       endDate: Joi.string()
         .required()
         .error(new Error("Provide endDate(string)")),
-      status: Joi.number().error(new Error("Provide status(number)")),
+      status: Joi.number().optional().allow("").error(new Error("Provide status(number)")),
     });
 
     const schema_result = schema.validate(data);
@@ -194,27 +194,27 @@ exports.updateDiscountCode = (req, res) => {
     discountId: Joi.number()
       .required()
       .error(new Error("Provide discountId(number)")),
-    discountCode: Joi.string().error(new Error("Provide discountCode(string)")),
-    discountTitle: Joi.string().error(
+    discountCode: Joi.string().optional().allow("").error(new Error("Provide discountCode(string)")),
+    discountTitle: Joi.string().optional().allow("").error(
       new Error("Provide discountTitle(string)")
     ),
-    discountType: Joi.string().error(new Error("Provide discountType(string)")),
-    discountValue: Joi.number().error(
+    discountType: Joi.string().optional().allow("").error(new Error("Provide discountType(string)")),
+    discountValue: Joi.number().optional().allow("").error(
       new Error("Provide discountValue(number)")
     ),
-    minimumRequirement: Joi.string().error(
+    minimumRequirement: Joi.string().optional().allow("").error(
       new Error("Provide minimumRequirement(string)")
     ),
-    minimumQuantity: Joi.number().error(
+    minimumQuantity: Joi.number().optional().allow("").error(
       new Error("Provide minimumQuantity(string)")
     ),
-    minimumAmount: Joi.number().error(
+    minimumAmount: Joi.number().optional().allow("").error(
       new Error("Provide minimumAmount(string)")
     ),
-    usageLimit: Joi.number().error(new Error("Provide usagelimit(number)")),
-    startDate: Joi.string().error(new Error("Provide startDate(string)")),
-    endDate: Joi.string().error(new Error("Provide endDate(string)")),
-    status: Joi.number().error(new Error("Provide status(number)")),
+    usageLimit: Joi.number().optional().allow("").error(new Error("Provide usagelimit(number)")),
+    startDate: Joi.string().optional().allow("").error(new Error("Provide startDate(string)")),
+    endDate: Joi.string().optional().allow("").error(new Error("Provide endDate(string)")),
+    status: Joi.number().optional().allow("").error(new Error("Provide status(number)")),
   });
 
   const schema_result = schema.validate(data);
@@ -224,7 +224,7 @@ exports.updateDiscountCode = (req, res) => {
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     discountservice
@@ -273,7 +273,7 @@ exports.deleteDiscountCode = (req, res) => {
       statusCode: 422,
       status: "error",
       message: "Invalid request data",
-      data: error.message,
+      data: schema_result.error.message,
     });
   } else {
     discountservice

@@ -1,6 +1,6 @@
 const productMasterModel = require("../models").product_master;
 const productVarientModel = require("../models").product_variant_master;
-
+const Op = require("sequelize").Op
 class productMasterModelService {
   getPidFromDatabae(shopify_pr_id) {
     productMasterModel.hasMany(productVarientModel, {
@@ -23,7 +23,7 @@ class productMasterModelService {
     }
 
     if (req_data.prod_name) {
-      where.product_name = req_data.prod_name;
+      where.product_name = {[Op.like] : `%${req_data.prod_name}%`};
     }
 
     if (req_data.prod_cat) {

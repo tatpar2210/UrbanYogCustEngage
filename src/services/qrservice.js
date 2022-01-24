@@ -235,6 +235,51 @@ class qrSerrvice {
     });
   }
 
+  getQrCount(data) {
+    var where = {};
+
+    if (data.batchId) {
+      where.batch_id = {[Op.like]: `%${data.batchId}%`};
+    }
+
+    if (data.qrId) {
+      where.qr_id = {[Op.like]: `%${data.qrId}%`};
+    }
+
+    if (data.qrCode) {
+      where.qr_code = {[Op.like]: `%${data.qrCode}%`};
+    }
+
+    if (data.qrBatchId) {
+      where.qr_batch_id = {[Op.like]: `%${data.qrBatchId}%`};
+    }
+
+    if (data.pId) {
+      where.pid = {[Op.like]: `%${data.pId}%`};
+    }
+
+    if (data.status) {
+      where.status = {[Op.like]: `%${data.status}%`};
+    }
+
+    if (data.created_at) {
+      where.created_at = { [Op.like]: `%${data.created_at}%` };
+    }
+
+    if (data.updated_at) {
+      where.updated_at = { [Op.like]: `%${data.updated_at}%` };
+    }
+
+    if (data.qrCode) {
+      where.qr_code = { [Op.like]: `%${data.qrCode}%` };
+    }
+
+    return QRMaster.count({
+      where: where,
+    });
+  }
+
+
 
   getQrDetails(data) {
     var where = {};
