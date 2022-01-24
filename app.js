@@ -77,14 +77,15 @@ app.use((req, res, next) => {
 });
 
 //aut API
-app.post("/login", authmaster.genrateAuthToken);
-app.post("/verifyToken", (req, res) => {
-  res.status(200).send({
-    statusCode: 100,
-    status: "true",
-    message: "Token verified",
-  });
+app.post("/login", authmaster.genrateAuthToken)
+app.post('/verifyToken', jwtauth.verifyToken, (req, res)=>{
+    res.status(200).send({
+        statusCode: 100,
+        status: 'true',
+        message: 'Token verified'
+    });
 });
+
 // dashboard API's
 app.post("/getCustomerCount", customerController.getCustomerCount);
 app.post("/getQrCount", qrController.getQrCount);

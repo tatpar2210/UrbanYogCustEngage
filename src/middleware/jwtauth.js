@@ -4,7 +4,7 @@ var config = require("../config/config.json");
 module.exports = {
   async verifyToken(req, res, next) {
     var token = req.headers.authorization;
-    console.log(token);
+    console.log("token: ", token);
 
     if (!token) {
       return res.status(401).send({
