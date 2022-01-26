@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "uglifest_custoengage_urbanyog",
-    "password": "urbanyog123",
-    "database": "uglifest_custoengage_urbanyog",
-    "host": "localhost",
+    "username": "admin",
+    "password": "Password123#",
+    "database": "urbanyog_custengage",
+    "host": "urbanyogdbinstance.cqhwct7dpags.ap-south-1.rds.amazonaws.com",
     "dialect": "mysql"
   },
 
