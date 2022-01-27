@@ -1,25 +1,26 @@
 {
-  "development": {
-    "username": "admin",
-    "password": "Password123#",
-    "database": "urbanyog_custengage",
-    "host": "urbanyogdbinstance.cqhwct7dpags.ap-south-1.rds.amazonaws.com",
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "uglifest_cust_engage",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "admin",
-    "password": "Password123#",
-    "database": "urbanyog_custengage",
-    "host": "urbanyogdbinstance.cqhwct7dpags.ap-south-1.rds.amazonaws.com",
-    "dialect": "mysql"
-  },
-
-  "secret": "thisisDeaDKilleRwhomadethisbackend"
-}
+    "development": {
+      "username": "root",
+      "password": "",
+      "database": "uglifest_custoengage_ii",
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+    "test": {
+      "username": "root",
+      "password": null,
+      "database": "uglifest_cust_engage",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    },
+    "production": {
+      "username": "uglifest_custoengage_urbanyog",
+      "password": "urbanyog123",
+      "database": "uglifest_custoengage_urbanyog",
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+  
+    "secret": "thisisDeaDKilleRwhomadethisbackend"
+  }
+  
