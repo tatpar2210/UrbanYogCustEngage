@@ -149,7 +149,7 @@ app.post("/addCustAddress", customerAddressController.addCustAddress);
 app.post("/deletCustAddress", customerAddressController.deletCustAddress);
 
 //generate qr controller end points
-app.post('/generateQRText', qrController.generateQRText);
+// app.post('/generateQRText', qrController.generateQRText);
 app.post("/getQrBatchDetails", qrController.getQrBatchDetails);
 app.post("/getQrDetails", qrController.getQrDetails);
 app.post("/updateQRDetails", qrController.updateQRDetails);
@@ -266,6 +266,8 @@ app.post(
   "/fetch-from-shopify/products",
   ProductMasterController.fetchFromShopify
 );
+app.post("/fetch-from-shopify/single-product",ProductMasterController.fetchFromShopify_Single_Prod)
+
 
 // Call Request Controller Endpoints
 app.post("/getCallRequest", CallRequestController.getCallRequest);

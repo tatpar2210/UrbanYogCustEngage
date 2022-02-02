@@ -3,46 +3,46 @@ const qrSerrvice = require("../services/qrservice");
 const qrserrvice = new qrSerrvice();
 const fs = require("fs");
 
-exports.generateQRText = (req, res) => {
-    const data = req.body;
-    const schema = Joi.object().keys({
-      pId: Joi.number().required().error(new Error("Provide pId(number)")),
-      variantId: Joi.number().required().error(new Error("Provide variantId(number)")),
-      batchName: Joi.string().required().min(4),
-      qrPosition: Joi.string().valid('right', 'bottom').required(),
-      createdBy: Joi.string().required().error(new Error("Provide createdBy(string)")),
-      quantity: Joi.number().required().min(1).max(10000),
-    });
+// exports.generateQRText = (req, res) => {
+//     const data = req.body;
+//     const schema = Joi.object().keys({
+//       pId: Joi.number().required().error(new Error("Provide pId(number)")),
+//       variantId: Joi.number().required().error(new Error("Provide variantId(number)")),
+//       batchName: Joi.string().required().min(4),
+//       qrPosition: Joi.string().valid('right', 'bottom').required(),
+//       createdBy: Joi.string().required().error(new Error("Provide createdBy(string)")),
+//       quantity: Joi.number().required().min(1).max(10000),
+//     });
   
-    const schema_result = schema.validate(data)
+//     const schema_result = schema.validate(data)
   
-    if(schema_result.error){
-      res.status(422).json({
-          statusCode: 422,
-          status: "error",
-          message: "Invalid request data",
-          data: schema_result.error.message,
-        });
-    }else{
-      qrserrvice
-      .generateQRWithText(req, res)
-      .then((data) => {
-        if (data.statusCode == 100) {
-          res.status(200).send(data);
-        } else {
-          res.status(200).send(data);
-        }
-      })
-      .catch((err) => {
-        res.status(400).send({
-          statusCode: 101,
-          status: false,
-          message: err,
-          data: [],
-        });
-      });
-    }
-  };
+//     if(schema_result.error){
+//       res.status(422).json({
+//           statusCode: 422,
+//           status: "error",
+//           message: "Invalid request data",
+//           data: schema_result.error.message,
+//         });
+//     }else{
+//       qrserrvice
+//       .generateQRWithText(req, res)
+//       .then((data) => {
+//         if (data.statusCode == 100) {
+//           res.status(200).send(data);
+//         } else {
+//           res.status(200).send(data);
+//         }
+//       })
+//       .catch((err) => {
+//         res.status(400).send({
+//           statusCode: 101,
+//           status: false,
+//           message: err,
+//           data: [],
+//         });
+//       });
+//     }
+//   };
 
 exports.downloadPDF = (req, res) => {
   var path = require("path");

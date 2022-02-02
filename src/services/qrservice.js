@@ -10,8 +10,8 @@ const awaitEach = require("await-each");
 const fs = require("fs");
 var path = require("path");
 const QRCode = require("qrcode");
-const ImageDataURI = require("image-data-uri");
-const { createCanvas, Image } = require("canvas");
+// const ImageDataURI = require("image-data-uri");
+// const { createCanvas, Image } = require("canvas");
 const PdfPrinter = require("pdfmake");
 const imgPath = path.join(__dirname, "../../assets/img/");
 const pdfPath = path.join(__dirname, "../../assets/pdf/");
@@ -34,171 +34,171 @@ const pdfPath = path.join(__dirname, "../../assets/pdf/");
 // });
 
 class qrSerrvice {
-  async generateQRWithText(req, res) {
-    // const WIDTH = 180;
-    // const HEIGHT = 140;
-    const WIDTH = 90;
-    const HEIGHT = 95;
-    const canvas = createCanvas(WIDTH, HEIGHT);
-    var context = canvas.getContext("2d");
+//   async generateQRWithText(req, res) {
+//     // const WIDTH = 180;
+//     // const HEIGHT = 140;
+//     const WIDTH = 90;
+//     const HEIGHT = 95;
+//     const canvas = createCanvas(WIDTH, HEIGHT);
+//     var context = canvas.getContext("2d");
 
-    return new Promise((resolve, reject) => {
-      var date = new Date();
-      var dateStr =
-        date.getFullYear() +
-        "-" +
-        ("00" + (date.getMonth() + 1)).slice(-2) +
-        "-" +
-        ("00" + date.getDate()).slice(-2) +
-        " " +
-        ("00" + date.getHours()).slice(-2) +
-        ":" +
-        ("00" + date.getMinutes()).slice(-2) +
-        ":" +
-        ("00" + date.getSeconds()).slice(-2);
+//     return new Promise((resolve, reject) => {
+//       var date = new Date();
+//       var dateStr =
+//         date.getFullYear() +
+//         "-" +
+//         ("00" + (date.getMonth() + 1)).slice(-2) +
+//         "-" +
+//         ("00" + date.getDate()).slice(-2) +
+//         " " +
+//         ("00" + date.getHours()).slice(-2) +
+//         ":" +
+//         ("00" + date.getMinutes()).slice(-2) +
+//         ":" +
+//         ("00" + date.getSeconds()).slice(-2);
 
-      let cnd = {
-        where: {
-          batch_name: req.body.batchName,
-        },
-      };
-      return BatchMaster.findAll(cnd)
-        .then((result) => {
-          if (result.length <= 0) {
-            let folderPath = pdfPath + req.body.batchName + "/";
-            fs.mkdir(folderPath, { recursive: true }, function (err) {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log(folderPath + " successfully created.");
-              }
-            });
+//       let cnd = {
+//         where: {
+//           batch_name: req.body.batchName,
+//         },
+//       };
+//       return BatchMaster.findAll(cnd)
+//         .then((result) => {
+//           if (result.length <= 0) {
+//             let folderPath = pdfPath + req.body.batchName + "/";
+//             fs.mkdir(folderPath, { recursive: true }, function (err) {
+//               if (err) {
+//                 console.log(err);
+//               } else {
+//                 console.log(folderPath + " successfully created.");
+//               }
+//             });
 
-            return BatchMaster.create({
-              batch_name: req.body.batchName,
-              batch_quantity: req.body.quantity,
-              pid: req.body.pId,
-              variant_id: req.body.variantId,
-              created_by: req.body.createdBy,
-              created_at: dateStr,
-            })
-              .then((batchResult) => {
-                let obj = {};
-                let QRarr = [];
-                console.log(batchResult);
-                for (let i = 0; i < req.body.quantity; i++) {
-                  obj.batchName = batchResult.dataValues.batch_name;
-                  obj.batchId = batchResult.dataValues.batch_id;
-                  obj.pId = req.body.pId;
-                  obj.variantId = req.body.variantId;
-                  QRarr.push(obj);
-                }
-                awaitEach(QRarr, async function (item) {
-                  await qrMake(item, context, canvas, WIDTH, HEIGHT);
-                }).then((responses) => {
-                  setTimeout(() => {
-                    generateQrPDF(batchResult, folderPath, req.body.qrPosition);
-                  }, 100);
-                  resolve({
-                    statusCode: 100,
-                    status: true,
-                    message: "Batch is ready",
-                    data: responses,
-                  });
-                });
-              })
-              .catch((error) => reject(error));
-          } else {
-            let errResp = {
-              statusCode: 101,
-              status: false,
-              message: "Batch name already present",
-              data: result,
-            };
-            reject(errResp);
-          }
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    }).catch((err) => {
-      return err;
-    });
-  }
+//             return BatchMaster.create({
+//               batch_name: req.body.batchName,
+//               batch_quantity: req.body.quantity,
+//               pid: req.body.pId,
+//               variant_id: req.body.variantId,
+//               created_by: req.body.createdBy,
+//               created_at: dateStr,
+//             })
+//               .then((batchResult) => {
+//                 let obj = {};
+//                 let QRarr = [];
+//                 console.log(batchResult);
+//                 for (let i = 0; i < req.body.quantity; i++) {
+//                   obj.batchName = batchResult.dataValues.batch_name;
+//                   obj.batchId = batchResult.dataValues.batch_id;
+//                   obj.pId = req.body.pId;
+//                   obj.variantId = req.body.variantId;
+//                   QRarr.push(obj);
+//                 }
+//                 awaitEach(QRarr, async function (item) {
+//                   await qrMake(item, context, canvas, WIDTH, HEIGHT);
+//                 }).then((responses) => {
+//                   setTimeout(() => {
+//                     generateQrPDF(batchResult, folderPath, req.body.qrPosition);
+//                   }, 100);
+//                   resolve({
+//                     statusCode: 100,
+//                     status: true,
+//                     message: "Batch is ready",
+//                     data: responses,
+//                   });
+//                 });
+//               })
+//               .catch((error) => reject(error));
+//           } else {
+//             let errResp = {
+//               statusCode: 101,
+//               status: false,
+//               message: "Batch name already present",
+//               data: result,
+//             };
+//             reject(errResp);
+//           }
+//         })
+//         .catch((error) => {
+//           reject(error);
+//         });
+//     }).catch((err) => {
+//       return err;
+//     });
+//   }
 
-  generateQRWithProductImg(req, res) {
-    return new Promise((resolve, reject) => {
-      const WIDTH = 400;
-      const HEIGHT = 400;
+//   generateQRWithProductImg(req, res) {
+//     return new Promise((resolve, reject) => {
+//       const WIDTH = 400;
+//       const HEIGHT = 400;
 
-      const canvas = createCanvas(WIDTH, HEIGHT);
-      const ctx = canvas.getContext("2d");
+//       const canvas = createCanvas(WIDTH, HEIGHT);
+//       const ctx = canvas.getContext("2d");
 
-      ctx.fillStyle = "#fff";
-      ctx.font = "10px Georgia Bold";
-      ctx.textAlign = "left";
+//       ctx.fillStyle = "#fff";
+//       ctx.font = "10px Georgia Bold";
+//       ctx.textAlign = "left";
 
-      ctx.fillRect(0, 0, WIDTH, HEIGHT);
-      ctx.fillStyle = "#000";
-      ctx.fillText(
-        `   1. Scan bellow QR for product authentication.
-        2. Or Visit https://urbanyog.com/pages/verify 
-        and enter id 223322
-        3. Or Give us missed call on 02071531413`,
-        5,
-        25,
-        400
-      );
+//       ctx.fillRect(0, 0, WIDTH, HEIGHT);
+//       ctx.fillStyle = "#000";
+//       ctx.fillText(
+//         `   1. Scan bellow QR for product authentication.
+//         2. Or Visit https://urbanyog.com/pages/verify 
+//         and enter id 223322
+//         3. Or Give us missed call on 02071531413`,
+//         5,
+//         25,
+//         400
+//       );
 
-      // console.log(canvas.toDataURL());
+//       // console.log(canvas.toDataURL());
 
-      const buffer = canvas.toBuffer("image/png");
-      fs.writeFileSync(imgPath + "test.png", buffer);
+//       const buffer = canvas.toBuffer("image/png");
+//       fs.writeFileSync(imgPath + "test.png", buffer);
 
-      QRCode.toDataURL(
-        "https://www.urbanyog.com/pages/verify?qrid=",
-        {
-          errorCorrectionLevel: "H",
-          scale: 4.3,
-          margin: 2,
-        },
-        function (err, url) {
-          if (err) {
-            console.error(err);
-          }
-          let dataURI = url;
-          let fileName = imgPath + "qr.png";
-          ImageDataURI.outputFile(dataURI, fileName).then((res) =>
-            console.log(res)
-          );
-        }
-      );
+//       QRCode.toDataURL(
+//         "https://www.urbanyog.com/pages/verify?qrid=",
+//         {
+//           errorCorrectionLevel: "H",
+//           scale: 4.3,
+//           margin: 2,
+//         },
+//         function (err, url) {
+//           if (err) {
+//             console.error(err);
+//           }
+//           let dataURI = url;
+//           let fileName = imgPath + "qr.png";
+//           ImageDataURI.outputFile(dataURI, fileName).then((res) =>
+//             console.log(res)
+//           );
+//         }
+//       );
 
-      sharp(imgPath + "qr.png").resize(150);
+//       sharp(imgPath + "qr.png").resize(150);
 
-      setTimeout(() => {
-        generateImg();
-      }, 100);
+//       setTimeout(() => {
+//         generateImg();
+//       }, 100);
 
-      function generateImg() {
-        sharp(imgPath + "QR product.png")
-          .resize(500, 500)
-          .composite([
-            {
-              input: imgPath + "qr.png",
-              gravity: "center",
-              left: 180,
-              top: 215,
-            },
-          ])
-          .sharpen()
-          .withMetadata()
-          .toFile(imgPath + "productQr.png");
-      }
-    }).catch((err) => {
-      return err;
-    });
-  }
+//       function generateImg() {
+//         sharp(imgPath + "QR product.png")
+//           .resize(500, 500)
+//           .composite([
+//             {
+//               input: imgPath + "qr.png",
+//               gravity: "center",
+//               left: 180,
+//               top: 215,
+//             },
+//           ])
+//           .sharpen()
+//           .withMetadata()
+//           .toFile(imgPath + "productQr.png");
+//       }
+//     }).catch((err) => {
+//       return err;
+//     });
+//   }
 
   async getQrBatchDetails(req, res) {
     return new Promise((resolve, reject) => {
@@ -781,99 +781,99 @@ function divideByFive(num) {
 }
 
 //function to generate final image data uri by merging text and qr img using canvas on the fly
-function qrMake(batchObj, context, canvas, WIDTH, HEIGHT) {
-  context.fillStyle = "#fff";
-  context.font = "11px Arial";
-  context.textAlign = "left";
+// function qrMake(batchObj, context, canvas, WIDTH, HEIGHT) {
+//   context.fillStyle = "#fff";
+//   context.font = "11px Arial";
+//   context.textAlign = "left";
 
-  //draw text on image with border on canvas width, height
-  context.fillRect(0, 0, WIDTH, HEIGHT);
-  context.fillStyle = "#000";
+//   //draw text on image with border on canvas width, height
+//   context.fillRect(0, 0, WIDTH, HEIGHT);
+//   context.fillStyle = "#000";
 
-  var date = new Date();
-  var dateStr =
-    date.getFullYear() +
-    "-" +
-    ("00" + (date.getMonth() + 1)).slice(-2) +
-    "-" +
-    ("00" + date.getDate()).slice(-2) +
-    " " +
-    ("00" + date.getHours()).slice(-2) +
-    ":" +
-    ("00" + date.getMinutes()).slice(-2) +
-    ":" +
-    ("00" + date.getSeconds()).slice(-2);
-  return new Promise((resolve, reject) => {
-    db.sequelize
-      .query(`SELECT LEFT(REPLACE(UUID(), '-', ''), 9) as qrCode`, {
-        type: QueryTypes.SELECT,
-      })
-      .then((qrNumber) => {
-        let qrCode = "";
-        if (qrNumber) {
-          qrCode = qrNumber[0].qrCode;
-        }
-        return QRMaster.create({
-          qr_code: qrCode,
-          pid: batchObj.pId,
-          variant_id: batchObj.variantId,
-          status: 0,
-          created_at: dateStr,
-        })
-          .then((qrResult) => {
-            context.fillText(`${qrCode}`, 10, 15);
+//   var date = new Date();
+//   var dateStr =
+//     date.getFullYear() +
+//     "-" +
+//     ("00" + (date.getMonth() + 1)).slice(-2) +
+//     "-" +
+//     ("00" + date.getDate()).slice(-2) +
+//     " " +
+//     ("00" + date.getHours()).slice(-2) +
+//     ":" +
+//     ("00" + date.getMinutes()).slice(-2) +
+//     ":" +
+//     ("00" + date.getSeconds()).slice(-2);
+//   return new Promise((resolve, reject) => {
+//     db.sequelize
+//       .query(`SELECT LEFT(REPLACE(UUID(), '-', ''), 9) as qrCode`, {
+//         type: QueryTypes.SELECT,
+//       })
+//       .then((qrNumber) => {
+//         let qrCode = "";
+//         if (qrNumber) {
+//           qrCode = qrNumber[0].qrCode;
+//         }
+//         return QRMaster.create({
+//           qr_code: qrCode,
+//           pid: batchObj.pId,
+//           variant_id: batchObj.variantId,
+//           status: 0,
+//           created_at: dateStr,
+//         })
+//           .then((qrResult) => {
+//             context.fillText(`${qrCode}`, 10, 15);
 
-            QRCode.toDataURL(
-              "https://www.urbanyog.com/pages/verify?qrid=" + qrCode,
-              {
-                errorCorrectionLevel: "H",
-                scale: 1.4,
-                margin: 1,
-              },
+//             QRCode.toDataURL(
+//               "https://www.urbanyog.com/pages/verify?qrid=" + qrCode,
+//               {
+//                 errorCorrectionLevel: "H",
+//                 scale: 1.4,
+//                 margin: 1,
+//               },
 
-              function (err, url) {
-                if (err) {
-                  reject(err);
-                } else {
-                  //generate a qr code data uri
-                  var image2 = new Image();
-                  image2.src = url;
+//               function (err, url) {
+//                 if (err) {
+//                   reject(err);
+//                 } else {
+//                   //generate a qr code data uri
+//                   var image2 = new Image();
+//                   image2.src = url;
 
-                  //generate a text image data uri
-                  var image1 = new Image();
-                  image1.src = canvas.toDataURL();
+//                   //generate a text image data uri
+//                   var image1 = new Image();
+//                   image1.src = canvas.toDataURL();
 
-                  context.drawImage(image1, 0, 0);
-                  context.drawImage(image2, 11, 20);
+//                   context.drawImage(image1, 0, 0);
+//                   context.drawImage(image2, 11, 20);
 
-                  //get combined image uri
-                  let combinedUri = canvas.toDataURL();
+//                   //get combined image uri
+//                   let combinedUri = canvas.toDataURL();
 
-                  return QRBatchMaster.create({
-                    batch_id: batchObj.batchId,
-                    qr_id: qrResult.dataValues.qr_id,
-                    qr_img: "",
-                    qr_img_uri: combinedUri,
-                    created_at: dateStr,
-                  })
-                    .then((qrBatchResult) => {
-                      resolve(qrBatchResult);
-                    })
-                    .catch((err) => {
-                      reject(err);
-                    });
-                }
-              }
-            );
-          })
-          .catch((err) => {
-            return err;
-          });
-      })
-      .catch((err) => {
-        return err;
-      });
-  });
-}
+//                   return QRBatchMaster.create({
+//                     batch_id: batchObj.batchId,
+//                     qr_id: qrResult.dataValues.qr_id,
+//                     qr_img: "",
+//                     qr_img_uri: combinedUri,
+//                     created_at: dateStr,
+//                   })
+//                     .then((qrBatchResult) => {
+//                       resolve(qrBatchResult);
+//                     })
+//                     .catch((err) => {
+//                       reject(err);
+//                     });
+//                 }
+//               }
+//             );
+//           })
+//           .catch((err) => {
+//             return err;
+//           });
+//       })
+//       .catch((err) => {
+//         return err;
+//       });
+//   });
+// }
 
 module.exports = qrSerrvice;
