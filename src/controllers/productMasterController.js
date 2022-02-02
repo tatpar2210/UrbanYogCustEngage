@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const Shopify = require("@shopify/shopify-api")
 const productMasterService = require("../services/productMasterService");
 const product_masterService = new productMasterService();
 
@@ -303,9 +304,32 @@ module.exports = {
   },
 
   fetchFromShopify: async function (req, res) {
-    const productArr = req.body;
 
-    const result = await product_masterService.checkForMissingData(productArr);
+    const client = new Shopify.Shopify.Clients.Rest(process.env.shopify_url, process.env.shopify_admin_access_token);
+    const data = await client.get({
+        path: 'products',
+    });
+    console.log(data.body.products)
+    // res.status(200).json(data)
+    var prod_list = data.body.products
+    var new_prod_list = []
+    for(var i=0; i<prod_list.length; i++){
+        var prod_json = {
+            product_id: prod_list[i].id,
+            product_name: prod_list[i].title,
+            product_handle: prod_list[i].handle,
+            product_category: prod_list[i].product_type,
+            product_img_url: prod_list[i].images[0].src,
+            store_name: prod_list[i].vendor,
+            created_at: prod_list[i].created_at,
+            updated_at: prod_list[i].updated_at,
+        }
+
+        new_prod_list.push(prod_json)
+    }
+
+
+    const result = await product_masterService.checkForMissingData(new_prod_list);
     if (result.length === 0) {
       res.status(200).json({
         statusCode: 200,
@@ -317,6 +341,7 @@ module.exports = {
       res.status(200).json({
         statusCode: 200,
         missingData: true,
+        count: result.length,
         message: "missing data found",
         data: result,
       });

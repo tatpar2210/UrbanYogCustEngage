@@ -2,7 +2,7 @@
     "development": {
       "username": "root",
       "password": "",
-      "database": "uglifest_custoengage_ii",
+      "database": "uglifest_custoengage_urbanyog",
       "host": "localhost",
       "dialect": "mysql"
     },

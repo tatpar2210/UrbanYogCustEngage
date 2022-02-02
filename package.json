@@ -19,6 +19,7 @@
   "homepage": "https://gitlab.com/urban-yog/custoengage-backend#readme",
   "dependencies": {
     "@mapbox/node-pre-gyp": "^1.0.8",
+    "@shopify/shopify-api": "^2.0.0",
     "app-root-path": "^3.0.0",
     "async": "^3.2.2",
     "await-each": "^1.1.0",

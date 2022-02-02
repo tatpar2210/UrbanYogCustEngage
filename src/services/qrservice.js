@@ -2,8 +2,8 @@ const BatchMaster = require("../models").batch_master;
 const QRMaster = require("../models").qr_master;
 const QRBatchMaster = require("../models").qr_batch_master;
 const Productmaster = require("../models").product_master;
-const { QueryTypes } = require('sequelize');
-const db = require('../models');
+const { QueryTypes } = require("sequelize");
+const db = require("../models");
 
 const Op = require("sequelize").Op;
 const awaitEach = require("await-each");
@@ -12,11 +12,10 @@ var path = require("path");
 const QRCode = require("qrcode");
 const ImageDataURI = require("image-data-uri");
 const { createCanvas, Image } = require("canvas");
-const PdfPrinter = require('pdfmake');
+const PdfPrinter = require("pdfmake");
 const imgPath = path.join(__dirname, "../../assets/img/");
 const pdfPath = path.join(__dirname, "../../assets/pdf/");
 // console.log("path = ", pdfPath)
-
 
 // fs.mkdir(imgPath, { recursive: true }, function (err) {
 //   if (err) {
@@ -36,13 +35,12 @@ const pdfPath = path.join(__dirname, "../../assets/pdf/");
 
 class qrSerrvice {
   async generateQRWithText(req, res) {
-
     // const WIDTH = 180;
     // const HEIGHT = 140;
     const WIDTH = 90;
     const HEIGHT = 95;
     const canvas = createCanvas(WIDTH, HEIGHT);
-    var context = canvas.getContext('2d');
+    var context = canvas.getContext("2d");
 
     return new Promise((resolve, reject) => {
       var date = new Date();
@@ -67,7 +65,6 @@ class qrSerrvice {
       return BatchMaster.findAll(cnd)
         .then((result) => {
           if (result.length <= 0) {
-            
             let folderPath = pdfPath + req.body.batchName + "/";
             fs.mkdir(folderPath, { recursive: true }, function (err) {
               if (err) {
@@ -88,7 +85,7 @@ class qrSerrvice {
               .then((batchResult) => {
                 let obj = {};
                 let QRarr = [];
-                console.log(batchResult)
+                console.log(batchResult);
                 for (let i = 0; i < req.body.quantity; i++) {
                   obj.batchName = batchResult.dataValues.batch_name;
                   obj.batchId = batchResult.dataValues.batch_id;
@@ -100,7 +97,7 @@ class qrSerrvice {
                   await qrMake(item, context, canvas, WIDTH, HEIGHT);
                 }).then((responses) => {
                   setTimeout(() => {
-                    generateQrPDF(batchResult, folderPath, req.body.qrPosition)
+                    generateQrPDF(batchResult, folderPath, req.body.qrPosition);
                   }, 100);
                   resolve({
                     statusCode: 100,
@@ -157,7 +154,6 @@ class qrSerrvice {
 
       const buffer = canvas.toBuffer("image/png");
       fs.writeFileSync(imgPath + "test.png", buffer);
-
 
       QRCode.toDataURL(
         "https://www.urbanyog.com/pages/verify?qrid=",
@@ -220,11 +216,10 @@ class qrSerrvice {
         where.qr_batch_id = req.body.qrBatchId;
       }
 
-
       return QRBatchMaster.findAndCountAll({
         where: where,
         order: [["qr_id", "ASC"]],
-        include: {model: BatchMaster}
+        include: { model: BatchMaster },
       })
         .then((result) => {
           resolve(result);
@@ -239,27 +234,27 @@ class qrSerrvice {
     var where = {};
 
     if (data.batchId) {
-      where.batch_id = {[Op.like]: `%${data.batchId}%`};
+      where.batch_id = { [Op.like]: `%${data.batchId}%` };
     }
 
     if (data.qrId) {
-      where.qr_id = {[Op.like]: `%${data.qrId}%`};
+      where.qr_id = { [Op.like]: `%${data.qrId}%` };
     }
 
     if (data.qrCode) {
-      where.qr_code = {[Op.like]: `%${data.qrCode}%`};
+      where.qr_code = { [Op.like]: `%${data.qrCode}%` };
     }
 
     if (data.qrBatchId) {
-      where.qr_batch_id = {[Op.like]: `%${data.qrBatchId}%`};
+      where.qr_batch_id = { [Op.like]: `%${data.qrBatchId}%` };
     }
 
     if (data.pId) {
-      where.pid = {[Op.like]: `%${data.pId}%`};
+      where.pid = { [Op.like]: `%${data.pId}%` };
     }
 
     if (data.status) {
-      where.status = {[Op.like]: `%${data.status}%`};
+      where.status = { [Op.like]: `%${data.status}%` };
     }
 
     if (data.created_at) {
@@ -278,8 +273,6 @@ class qrSerrvice {
       where: where,
     });
   }
-
-
 
   getQrDetails(data) {
     var where = {};
@@ -334,48 +327,48 @@ class qrSerrvice {
         "created_at",
         "updated_at",
       ],
-    //   include: [
-    //     {
-    //       model: Productmaster,
-    //       required: true,
-    //       attributes: [
-    //         "pid",
-    //         "product_name",
-    //         "product_category",
-    //         "product_img_url"
-    //       ],
-    //     },
-    //   ],
-    //   include: [
-    //     {
-    //       model: QRBatchMaster,
-    //       required: true,
-    //       attributes: [
-    //         "qr_id",
-    //         "batch_id",
-    //         "qr_img_uri"
-    //       ],
-    //       include: [
-    //         {
-    //           model: BatchMaster,
-    //           required: true,
-    //           attributes: [
-    //             "batch_id",
-    //             "batch_name"
-    //           ],
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       model: Productmaster,
-    //       required: true,
-    //       attributes: [
-    //         "pid",
-    //         "product_name"
-    //       ],
-    //     },
-    //   ]
-    })
+      //   include: [
+      //     {
+      //       model: Productmaster,
+      //       required: true,
+      //       attributes: [
+      //         "pid",
+      //         "product_name",
+      //         "product_category",
+      //         "product_img_url"
+      //       ],
+      //     },
+      //   ],
+      //   include: [
+      //     {
+      //       model: QRBatchMaster,
+      //       required: true,
+      //       attributes: [
+      //         "qr_id",
+      //         "batch_id",
+      //         "qr_img_uri"
+      //       ],
+      //       include: [
+      //         {
+      //           model: BatchMaster,
+      //           required: true,
+      //           attributes: [
+      //             "batch_id",
+      //             "batch_name"
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       model: Productmaster,
+      //       required: true,
+      //       attributes: [
+      //         "pid",
+      //         "product_name"
+      //       ],
+      //     },
+      //   ]
+    });
   }
 
   async createQRPDF(req, res) {
@@ -386,22 +379,58 @@ class qrSerrvice {
 
     let folderPath = pdfPath + req.body.batchName + "/";
     return new Promise((resolve, reject) => {
-      generateQrPDF(batchResult, folderPath, 'right').then(result => {
-        resolve(result);
-      }).catch((err) => {
-        reject(err);
-      });
+      generateQrPDF(batchResult, folderPath, "right")
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
     }).catch((err) => {
       return err;
     });
+  }
+
+  async updateQRDetails(update_data) {
+    var resp_data = {
+      msg: "",
+      data: {},
+    };
+
+    await QRMaster.findOne({
+      where: { qr_code: update_data.qrCode },
+    })
+      .then(async (result) => {
+        if (!result) {
+          resp_data.msg = "Provided QR Code not found.";
+        } else {
+          await QRMaster.update(
+            { status: 1, updated_at: update_data.updated_at },
+            { where: { qr_code: update_data.qrCode } }
+          )
+            .then((result) => {
+              resp_data.msg = "QR Status Changed to 1 successfully";
+              resp_data.data = result;
+              console.log(result);
+            })
+            .catch((err) => {
+              resp_data.msg = err;
+            });
+        }
+      })
+      .catch((err) => {
+        resp_data.msg = err;
+      });
+
+    return resp_data;
   }
 }
 
 //generate a data uri of final img to store int db
 function getDataUrl(imgPath) {
-  var fs = require('fs');
-  var imageAsBase64 = fs.readFileSync(imgPath, 'base64');
-  return 'data:image/png;base64,' + imageAsBase64;
+  var fs = require("fs");
+  var imageAsBase64 = fs.readFileSync(imgPath, "base64");
+  return "data:image/png;base64," + imageAsBase64;
 }
 
 //function to generate pdf of qr batch
@@ -409,22 +438,24 @@ function generateQrPDF(result, folderPath, qrPosition) {
   return new Promise((resolve, reject) => {
     var fonts = {
       Roboto: {
-        normal: path.resolve('./assets/fonts/Roboto-Regular.ttf'),
-        bold: path.resolve('./assets/fonts/Roboto-Medium.ttf'),
-        italics: path.resolve('./assets/fonts/Roboto-Italic.ttf'),
-        bolditalics: path.resolve('./assets/fonts/Roboto-MediumItalic.ttf')
-      }
+        normal: path.resolve("./assets/fonts/Roboto-Regular.ttf"),
+        bold: path.resolve("./assets/fonts/Roboto-Medium.ttf"),
+        italics: path.resolve("./assets/fonts/Roboto-Italic.ttf"),
+        bolditalics: path.resolve("./assets/fonts/Roboto-MediumItalic.ttf"),
+      },
     };
     var printer = new PdfPrinter(fonts);
     let where = {};
     where.batch_id = result.dataValues.batch_id;
 
     QRBatchMaster.belongsTo(QRMaster, {
-      foreignKey: "qr_id", targetKey: "qr_id"
+      foreignKey: "qr_id",
+      targetKey: "qr_id",
     });
 
     QRMaster.belongsTo(Productmaster, {
-      foreignKey: "pid", targetKey: "pid"
+      foreignKey: "pid",
+      targetKey: "pid",
     });
 
     return QRBatchMaster.findAll({
@@ -440,28 +471,22 @@ function generateQrPDF(result, folderPath, qrPosition) {
         {
           model: QRMaster,
           required: true,
-          attributes: [
-            "qr_id",
-            "qr_code"
-          ],
+          attributes: ["qr_id", "qr_code"],
           include: [
             {
               model: Productmaster,
               required: true,
-              attributes: [
-                "pid",
-                "product_name"
-              ],
+              attributes: ["pid", "product_name"],
             },
           ],
         },
       ],
     }).then((batchQrData) => {
-      console.log(batchQrData)
-      console.log(batchQrData.qr_master)
-      console.log("batchQrData length: ", batchQrData.length)  
+      console.log(batchQrData);
+      console.log(batchQrData.qr_master);
+      console.log("batchQrData length: ", batchQrData.length);
       let documentDefinition = {
-        pageSize: 'B3',
+        pageSize: "B3",
         pageMargins: [65, 50, 60, 0],
       };
 
@@ -490,7 +515,7 @@ function generateQrPDF(result, folderPath, qrPosition) {
       //create array of object of qr image data uri
       let pdfArr = [];
 
-      if (qrPosition == 'right') {
+      if (qrPosition == "right") {
         for (let i = 0; i < batchQrData.length; i++) {
           pdfArr.push({
             unbreakable: true,
@@ -498,33 +523,39 @@ function generateQrPDF(result, folderPath, qrPosition) {
               {
                 text: [
                   {
-                    text: batchQrData[0].qr_master.dataValues.product_master.dataValues.product_name + '\n',
+                    text:
+                      batchQrData[0].qr_master.dataValues.product_master
+                        .dataValues.product_name + "\n",
                     fontSize: 8,
                     bold: true,
-                    color: '#ba0000'
+                    color: "#ba0000",
                   },
                   {
-                    text: 'For Product Authentication: ' + '\n',
+                    text: "For Product Authentication: " + "\n",
                     fontSize: 8,
                     bold: true,
-                    color: '#096620'
-                  }, `1. Scan the QR for `, {
-                    text: 'Reward',
+                    color: "#096620",
+                  },
+                  `1. Scan the QR for `,
+                  {
+                    text: "Reward",
                     fontSize: 9,
                     bold: true,
-                    color: '#ba0000'
-                  }, `
+                    color: "#ba0000",
+                  },
+                  `
                   2. Or give us a missed 
                      call on 02071531413,
                   #QR Code: `,
                   {
-                    text: `${batchQrData[i].qr_master.dataValues.qr_code}` + '\n',
+                    text:
+                      `${batchQrData[i].qr_master.dataValues.qr_code}` + "\n",
                     fontSize: 10,
                     bold: true,
-                    color: '#096620'
+                    color: "#096620",
                   },
                 ],
-                alignment: 'left',
+                alignment: "left",
                 fontSize: 8,
               },
               // {
@@ -532,12 +563,14 @@ function generateQrPDF(result, folderPath, qrPosition) {
               //   alignment: 'left',
               // },
               {
-                qr: "https://www.urbanyog.com/pages/verify?qrid=" + batchQrData[i].qr_master.dataValues.qr_code,
-                fit: '80',
-                eccLevel: 'H',
-                margin: [118, -52, 5, 20]
-              }
-            ]
+                qr:
+                  "https://www.urbanyog.com/pages/verify?qrid=" +
+                  batchQrData[i].qr_master.dataValues.qr_code,
+                fit: "80",
+                eccLevel: "H",
+                margin: [118, -52, 5, 20],
+              },
+            ],
           });
         }
       } else {
@@ -548,28 +581,32 @@ function generateQrPDF(result, folderPath, qrPosition) {
               {
                 text: [
                   {
-                    text: batchQrData[0].qr_master.dataValues.product_master.dataValues.product_name + '\n',
+                    text:
+                      batchQrData[0].qr_master.dataValues.product_master
+                        .dataValues.product_name + "\n",
                     fontSize: 9,
                     bold: true,
-                    color: '#ba0000'
+                    color: "#ba0000",
                   },
                   {
-                    text: 'For Product Authentication -' + '\n',
+                    text: "For Product Authentication -" + "\n",
                     fontSize: 9,
                     bold: true,
-                    color: '#021ad1'
-                  }, `1. Scan the QR for Reward.
+                    color: "#021ad1",
+                  },
+                  `1. Scan the QR for Reward.
                   2. Or visit https://urbanyog.com/pages/verify 
                   and enter QR Code: `,
                   {
-                    text: `${batchQrData[i].qr_master.dataValues.qr_code}` + '\n',
+                    text:
+                      `${batchQrData[i].qr_master.dataValues.qr_code}` + "\n",
                     fontSize: 10,
                     bold: true,
-                    color: '#021ad1'
+                    color: "#021ad1",
                   },
-                  '3. Or give us a missed call on 02071531413',
+                  "3. Or give us a missed call on 02071531413",
                 ],
-                alignment: 'left',
+                alignment: "left",
                 fontSize: 8,
               },
               // {
@@ -577,12 +614,14 @@ function generateQrPDF(result, folderPath, qrPosition) {
               //   alignment: 'left',
               // },
               {
-                qr: "https://www.urbanyog.com/pages/verify?qrid=" + batchQrData[i].qr_master.dataValues.qr_code,
-                fit: '80',
-                eccLevel: 'H',
-                margin: [5, 5, 5, 15]
-              }
-            ]
+                qr:
+                  "https://www.urbanyog.com/pages/verify?qrid=" +
+                  batchQrData[i].qr_master.dataValues.qr_code,
+                fit: "80",
+                eccLevel: "H",
+                margin: [5, 5, 5, 15],
+              },
+            ],
           });
         }
       }
@@ -593,90 +632,102 @@ function generateQrPDF(result, folderPath, qrPosition) {
           pdfArr.push({
             stack: [
               {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
+                text: " ",
+                alignment: "left",
+                fontSize: 8,
+              },
+            ],
           });
         } else if (divideByFive(pdfArr.length) == 3) {
-          pdfArr.push({
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          }, {
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          });
+          pdfArr.push(
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            },
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            }
+          );
         } else if (divideByFive(pdfArr.length) == 2) {
-          pdfArr.push({
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          }, {
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          }, {
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          });
+          pdfArr.push(
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            },
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            },
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            }
+          );
         } else if (divideByFive(pdfArr.length) == 1) {
-          pdfArr.push({
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          }, {
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          }, {
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          }, {
-            stack: [
-              {
-                text: ' ',
-                alignment: 'left',
-                fontSize: 8
-              }
-            ]
-          });
+          pdfArr.push(
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            },
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            },
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            },
+            {
+              stack: [
+                {
+                  text: " ",
+                  alignment: "left",
+                  fontSize: 8,
+                },
+              ],
+            }
+          );
         }
       }
 
@@ -687,19 +738,18 @@ function generateQrPDF(result, folderPath, qrPosition) {
         qrTableArr.push(sliced);
       }
 
-      documentDefinition.content.push(
-        {
-          table: {
-            headerRows: 0,
-            widths: ['*', '*', '*', '*', '*'],
-            body: qrTableArr
-          },
-          layout: 'noBorders'
-        })
+      documentDefinition.content.push({
+        table: {
+          headerRows: 0,
+          widths: ["*", "*", "*", "*", "*"],
+          body: qrTableArr,
+        },
+        layout: "noBorders",
+      });
 
       var options = {
         // ...
-      }
+      };
 
       let documentName = folderPath + result.dataValues.batch_name + ".pdf";
       var pdfDoc = printer.createPdfKitDocument(documentDefinition, options);
@@ -712,22 +762,28 @@ function generateQrPDF(result, folderPath, qrPosition) {
       where.batch_id = result.dataValues.batch_id;
       data.batch_pdf_url = documentName;
       return BatchMaster.update(data, {
-        where: where
-      }).then(result => resolve(result))
-        .catch(error => resolve(error));
-    })
-  })
+        where: where,
+      })
+        .then((result) => resolve(result))
+        .catch((error) => resolve(error));
+    });
+  });
 }
 
-function isOdd(num) { return num % 2; }
-function divideByThree(num) { return num % 3; }
-function divideByFive(num) { return num % 5; }
+function isOdd(num) {
+  return num % 2;
+}
+function divideByThree(num) {
+  return num % 3;
+}
+function divideByFive(num) {
+  return num % 5;
+}
 
 //function to generate final image data uri by merging text and qr img using canvas on the fly
 function qrMake(batchObj, context, canvas, WIDTH, HEIGHT) {
-
   context.fillStyle = "#fff";
-  context.font = "11px Arial";;
+  context.font = "11px Arial";
   context.textAlign = "left";
 
   //draw text on image with border on canvas width, height
@@ -748,69 +804,76 @@ function qrMake(batchObj, context, canvas, WIDTH, HEIGHT) {
     ":" +
     ("00" + date.getSeconds()).slice(-2);
   return new Promise((resolve, reject) => {
-    db.sequelize.query(`SELECT LEFT(REPLACE(UUID(), '-', ''), 9) as qrCode`, { type: QueryTypes.SELECT }).then((qrNumber) => {
-      let qrCode = '';
-      if (qrNumber) {
-        qrCode = qrNumber[0].qrCode;
-      }
-      return QRMaster.create({
-        qr_code: qrCode,
-        pid: batchObj.pId,
-        variant_id: batchObj.variantId,
-        status: 0,
-        created_at: dateStr,
-      }).then((qrResult) => {
+    db.sequelize
+      .query(`SELECT LEFT(REPLACE(UUID(), '-', ''), 9) as qrCode`, {
+        type: QueryTypes.SELECT,
+      })
+      .then((qrNumber) => {
+        let qrCode = "";
+        if (qrNumber) {
+          qrCode = qrNumber[0].qrCode;
+        }
+        return QRMaster.create({
+          qr_code: qrCode,
+          pid: batchObj.pId,
+          variant_id: batchObj.variantId,
+          status: 0,
+          created_at: dateStr,
+        })
+          .then((qrResult) => {
+            context.fillText(`${qrCode}`, 10, 15);
 
-        context.fillText(`${qrCode}`, 10, 15);
+            QRCode.toDataURL(
+              "https://www.urbanyog.com/pages/verify?qrid=" + qrCode,
+              {
+                errorCorrectionLevel: "H",
+                scale: 1.4,
+                margin: 1,
+              },
 
-        QRCode.toDataURL(
-          "https://www.urbanyog.com/pages/verify?qrid=" + qrCode,
-          {
-            errorCorrectionLevel: "H",
-            scale: 1.4,
-            margin: 1,
-          },
-          
-          function (err, url) {
-            if (err) {
-              reject(err)
-            } else {
-              //generate a qr code data uri
-              var image2 = new Image;
-              image2.src = url;
+              function (err, url) {
+                if (err) {
+                  reject(err);
+                } else {
+                  //generate a qr code data uri
+                  var image2 = new Image();
+                  image2.src = url;
 
-              //generate a text image data uri
-              var image1 = new Image;
-              image1.src = canvas.toDataURL();
+                  //generate a text image data uri
+                  var image1 = new Image();
+                  image1.src = canvas.toDataURL();
 
-              context.drawImage(image1, 0, 0);
-              context.drawImage(image2, 11, 20);
+                  context.drawImage(image1, 0, 0);
+                  context.drawImage(image2, 11, 20);
 
-              //get combined image uri
-              let combinedUri = canvas.toDataURL();
+                  //get combined image uri
+                  let combinedUri = canvas.toDataURL();
 
-              return QRBatchMaster.create({
-                batch_id: batchObj.batchId,
-                qr_id: qrResult.dataValues.qr_id,
-                qr_img: '',
-                qr_img_uri: combinedUri,
-                created_at: dateStr,
-              }).then((qrBatchResult) => {
-                resolve(qrBatchResult);
-              }).catch((err) => {
-                reject(err);
-              });
-            }
-          }
-        );
-      }).catch((err) => {
+                  return QRBatchMaster.create({
+                    batch_id: batchObj.batchId,
+                    qr_id: qrResult.dataValues.qr_id,
+                    qr_img: "",
+                    qr_img_uri: combinedUri,
+                    created_at: dateStr,
+                  })
+                    .then((qrBatchResult) => {
+                      resolve(qrBatchResult);
+                    })
+                    .catch((err) => {
+                      reject(err);
+                    });
+                }
+              }
+            );
+          })
+          .catch((err) => {
+            return err;
+          });
+      })
+      .catch((err) => {
         return err;
       });
-    }).catch((err) => {
-      return err;
-    });
-  })
+  });
 }
-
 
 module.exports = qrSerrvice;
