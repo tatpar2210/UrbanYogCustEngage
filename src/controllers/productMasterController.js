@@ -302,7 +302,7 @@ module.exports = {
         });
     }
   },
-
+  
   fetchFromShopify_Single_Prod: async function(req, res){
     var body = req.body
     const client = new Shopify.Shopify.Clients.Rest(process.env.shopify_url, process.env.shopify_admin_access_token);
@@ -311,6 +311,15 @@ module.exports = {
     });
     res.status(200).json(data)
   },
+  
+  fetchFromShopify_All_Prod: async function(req, res){
+    const client = new Shopify.Shopify.Clients.Rest(process.env.shopify_url, process.env.shopify_admin_access_token);
+    const data = await client.get({
+        path: 'products',
+    });
+    res.status(200).json(data)
+  },
+
 
   fetchFromShopify: async function (req, res) {
 

@@ -267,6 +267,7 @@ app.post(
   ProductMasterController.fetchFromShopify
 );
 app.post("/fetch-from-shopify/single-product",ProductMasterController.fetchFromShopify_Single_Prod)
+app.post("/fetch-from-shopify/all-product",ProductMasterController.fetchFromShopify_All_Prod)
 
 
 // Call Request Controller Endpoints
