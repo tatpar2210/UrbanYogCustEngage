@@ -42,6 +42,35 @@ module.exports = {
     //console.log(shopify_pr_id.length, typeof(shopify_pr_id))
   },
 
+  getbulkProductDetails: async function(req, res){
+    const data = req.body;
+    product_masterService.getbulkProductDetails(req, res).then(data => {
+        if (data) {
+            res.status(200).send({
+                statusCode: 100,
+                status: true,
+                message: 'Product details',
+                data: data
+            })
+        } else {
+            res.status(200).send({
+                statusCode: 101,
+                status: false,
+                message: 'Product details not found',
+                data: data
+            })
+        }
+    })
+        .catch(err => {
+            res.status(200).send({
+                statusCode: 101,
+                status: false,
+                message: err,
+                data: []
+            })
+        })
+  },
+
   getAllProducts: async function (req, res) {
     const req_data = req.body;
     console.log("req_data: ", req_data);

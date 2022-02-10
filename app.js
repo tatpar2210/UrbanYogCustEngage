@@ -39,7 +39,8 @@ const customerWalletOrderController = require("./src/controllers/customerWalletO
 const websiteWalletController = require("./src/controllers/websiteWalletController");
 const custFeedbackController = require("./src/controllers/custFeedbackController");
 const seoMetaKeywordController = require("./src/controllers/seoMetaKeywordController");
-const dashboardWalletController = require("./src/controllers/dashboadWalletContoller")
+const dashboardWalletController = require("./src/controllers/dashboadWalletContoller");
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
@@ -157,6 +158,7 @@ app.post("/downloadPDF", qrController.downloadPDF);
 
 //product-master
 app.post("/getPid", ProductMasterController.getPid);
+app.post('/getbulkProductDetails', ProductMasterController.getbulkProductDetails);
 app.post("/getProductsMaster/all", ProductMasterController.getAllProducts);
 app.post("/getProductsMaster/:id", ProductMasterController.findByPid);
 app.post("/addProduct", ProductMasterController.createProduct);
