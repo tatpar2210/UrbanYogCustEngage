@@ -150,7 +150,7 @@ app.post("/addCustAddress", customerAddressController.addCustAddress);
 app.post("/deletCustAddress", customerAddressController.deletCustAddress);
 
 //generate qr controller end points
-// app.post('/generateQRText', qrController.generateQRText);
+app.post('/generateQRText', qrController.generateQRText);
 app.post("/getQrBatchDetails", qrController.getQrBatchDetails);
 app.post("/getQrDetails", qrController.getQrDetails);
 app.post("/updateQRDetails", qrController.updateQRDetails);
