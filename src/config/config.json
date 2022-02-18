@@ -17,7 +17,7 @@
       "username": "uglifest_custoengage_urbanyog",
       "password": "urbanyog123",
       "database": "uglifest_custoengage_urbanyog",
-      "host": "localhost",
+      "host": "rs-mbi.serverhostgroup.com",
       "dialect": "mysql"
     },
   
