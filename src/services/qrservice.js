@@ -2,6 +2,7 @@ const BatchMaster = require("../models").batch_master;
 const QRMaster = require("../models").qr_master;
 const QRBatchMaster = require("../models").qr_batch_master;
 const Productmaster = require("../models").product_master;
+const Variantmaster = require("../models").product_variant_master;
 const { QueryTypes } = require("sequelize");
 const db = require("../models");
 
@@ -278,16 +279,17 @@ class qrSerrvice {
     var where = {};
 
     if (data.batchId) {
-      where.batch_id = data.batchId;
+      where.batch_id = data.batchId
     }
 
     if (data.qrId) {
-      where.qr_id = data.qrId;
+      where.qr_id = { [Op.like]: `%${data.qrId}%` };
     }
 
-    if (data.qrCode) {
-      where.qr_code = data.qrCode;
-    }
+    if (data.status) {
+        where.status = data.status
+      }
+
 
     if (data.qrBatchId) {
       where.qr_batch_id = data.qrBatchId;
@@ -305,13 +307,17 @@ class qrSerrvice {
       foreignKey: "pid",
     });
 
+    Productmaster.belongsTo(Variantmaster, {
+      foreignKey: "pid",
+    });
+
     QRMaster.belongsTo(QRBatchMaster, {
       foreignKey: "qr_id",
     });
 
-    QRBatchMaster.belongsTo(BatchMaster, {
-      foreignKey: "batch_id",
-    });
+    // QRBatchMaster.belongsTo(BatchMaster, {
+    //   foreignKey: "batch_id",
+    // });
 
     return QRMaster.findAndCountAll({
       where: where,
@@ -327,47 +333,36 @@ class qrSerrvice {
         "created_at",
         "updated_at",
       ],
-      //   include: [
-      //     {
-      //       model: Productmaster,
-      //       required: true,
-      //       attributes: [
-      //         "pid",
-      //         "product_name",
-      //         "product_category",
-      //         "product_img_url"
-      //       ],
-      //     },
-      //   ],
-      //   include: [
-      //     {
-      //       model: QRBatchMaster,
-      //       required: true,
-      //       attributes: [
-      //         "qr_id",
-      //         "batch_id",
-      //         "qr_img_uri"
-      //       ],
-      //       include: [
-      //         {
-      //           model: BatchMaster,
-      //           required: true,
-      //           attributes: [
-      //             "batch_id",
-      //             "batch_name"
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //     {
-      //       model: Productmaster,
-      //       required: true,
-      //       attributes: [
-      //         "pid",
-      //         "product_name"
-      //       ],
-      //     },
-      //   ]
+      include: [
+        {
+          model: Productmaster,
+          attributes: [
+            "pid",
+            "product_name",
+            "product_category",
+            "product_img_url",
+          ],
+          include: [
+            {
+              model: Variantmaster,
+              attributes: ["variant_id", "pid", "weight"],
+            },
+          ],
+        },
+
+        // {
+        //   model: QRBatchMaster,
+        //   // include: [
+        //   //   {
+        //   //     model: BatchMaster,
+        //   //     attributes: [
+        //   //       "batch_id",
+        //   //       "batch_name"
+        //   //     ],
+        //   //   },
+        //   // ],
+        // },
+      ],
     });
   }
 
@@ -405,11 +400,11 @@ class qrSerrvice {
           resp_data.msg = "Provided QR Code not found.";
         } else {
           await QRMaster.update(
-            { status: 1, updated_at: update_data.updated_at },
+            { status: update_data.status, updated_at: update_data.updated_at },
             { where: { qr_code: update_data.qrCode } }
           )
             .then((result) => {
-              resp_data.msg = "QR Status Changed to 1 successfully";
+              resp_data.msg = "QR Status Changed successfully";
               resp_data.data = result;
               console.log(result);
             })

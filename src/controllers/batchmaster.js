@@ -51,3 +51,52 @@ exports.getBatchDetails = (req, res) => {
       });
   }
 };
+
+exports.DeleteBatch = async (req, res) => {
+  const data = req.body;
+  const schema = Joi.object().keys({
+    batchId: Joi.number().error(new Error("Provide batchId(number)")),
+    // pId: Joi.string().error(new Error("Provide pId(number)")),
+    // batchName: Joi.string().error(new Error("Provide batchName(string)")),
+  });
+
+  const schema_result = schema.validate(data);
+
+  if (schema_result.error) {
+    res.status(422).json({
+      statusCode: 422,
+      status: "error",
+      message: "Invalid request data",
+      data: schema_result.error.message,
+    });
+  } else {
+    await batchService
+      .DeleteBatch(req, res)
+      .then((result) => {
+        // console.log(result)
+        if (result === "No Batch Found") {
+          res.status(200).send({
+            statusCode: 101,
+            status: false,
+            message: "Batch details not found",
+            data: result,
+          });
+        } else if (result === "Batch deleted Successfully") {
+          res.status(200).send({
+            statusCode: 200,
+            status: false,
+            message: "Batch deleted Successfully",
+            data: result,
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(200).send({
+          statusCode: 101,
+          status: false,
+          message: err,
+          data: [],
+        });
+      });
+  }
+};

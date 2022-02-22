@@ -232,6 +232,7 @@ app.post("/deleteProductVideo", product_videoController.deleteProductVideo);
 
 //product-batchmaster
 app.post("/getBatchMaster", batchMasterController.getBatchDetails);
+app.post("/deleteBatch", batchMasterController.DeleteBatch);
 
 //user-master
 app.post("/getUserMaster/all", userMasterController.findAllUserMaster);
@@ -270,6 +271,7 @@ app.post(
 );
 app.post("/fetch-from-shopify/single-product",ProductMasterController.fetchFromShopify_Single_Prod)
 app.post("/fetch-from-shopify/all-product",ProductMasterController.fetchFromShopify_All_Prod)
+app.post("/fetch-from-shopify/update-product-data",ProductMasterController.updateData)
 
 
 // Call Request Controller Endpoints

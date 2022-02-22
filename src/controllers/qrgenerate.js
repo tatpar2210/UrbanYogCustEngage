@@ -328,6 +328,7 @@ exports.updateQRDetails = (req, res) => {
       .required()
       .error(new Error("qrCode(number) is required for updating data in DB.")),
     // pId: Joi.number().allow("").optional().error(new Error("Provide pId(number)")),
+    status: Joi.number().allow("").optional().error(new Error("Provide status(number)")),
     // created_at: Joi.string().allow("").optional().error(new Error("created_at(string)")),
     updated_at: Joi.string().allow("").optional().error(new Error("updated_at(string)")),
   });
@@ -372,5 +373,34 @@ exports.updateQRDetails = (req, res) => {
           data: [],
         });
       });
-  }
+  }  
 };
+
+// exports.DeleteQR = (req, res) => {
+//     const data = req.body;
+//   const schema = Joi.object().keys({
+//     qrBatchId: Joi.number().allow("").optional().error(new Error("Provide qrBatchId(number)")),
+//     batchId: Joi.number().allow("").optional().error(new Error("Provide batchId(number)")),
+//     status: Joi.number().allow("").optional().error(new Error("Provide status(0 or 1)")),
+//     qrId: Joi.string().allow("").optional().error(new Error("Provide qrId(number)")),
+//     qrCode: Joi.string().allow("").optional().error(new Error("Provide qrCode(number)")),
+//     pId: Joi.number().allow("").optional().error(new Error("Provide pId(number)")),
+//     offset: Joi.number().allow("").optional().error(new Error("Provide offset(number)")),
+//     limit: Joi.number().allow("").optional().error(new Error("Provide limit(number)")),
+//     created_at: Joi.string().allow("").optional().error(new Error("Provide created_at(string)")),
+//     updated_at: Joi.string().allow("").optional().error(new Error("Provide updated_at(string)")),
+//   });
+
+//   const schema_result = schema.validate(data);
+
+//   if (schema_result.error) {
+//     res.status(422).json({
+//       statusCode: 422,
+//       status: "error",
+//       message: "Invalid request data",
+//       data: schema_result.error.message,
+//     });
+//   } else {
+//     qrserrvice;
+//   }
+// }
