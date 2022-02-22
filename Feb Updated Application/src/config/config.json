@@ -1,0 +1,27 @@
+{
+    "development": {
+      "username": "root",
+      "password": "",
+      "database": "uglifest_custoengage_urbanyog",
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+    "test": {
+      "username": "root",
+      "password": null,
+      "database": "uglifest_cust_engage_ii",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    },
+    "production": {
+      "username": "uglifest_custoengage_urbanyog",
+      "password": "urbanyog123",
+      "database": "uglifest_custoengage_urbanyog",
+      "host": "rs-mbi.serverhostgroup.com",
+      "port": 3306,
+      "dialect": "mysql"
+    },
+  
+    "secret": "thisisDeaDKilleRwhomadethisbackend"
+  }
+  
